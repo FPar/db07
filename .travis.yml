@@ -7,7 +7,7 @@ before_install:
         - cmake ..
 
 script:
-        - cmake --build build
+        - cmake --build .
         - cd tests
         - ctest
 
