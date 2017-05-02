@@ -5,17 +5,20 @@
 #include<regex>
 #include<cctype>
 #include<list>
-#include "token_type.h"
+#include <memory>
+#include "token.h"
 
 namespace db07 {
     class Lexer {
     public:
-        void tokenize(std::string &, std::list<TokenType> &);
+        std::list<Token> tokenize(std::string &);
 
     private:
         bool is_delimiter(char chr);
 
-        TokenType recognize_token_type(std::string &);
+        TokenType recognize(std::string &);
+
+        Token evaluate(TokenType, std::string &);
     };
 }
 

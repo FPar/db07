@@ -1,35 +1,36 @@
 #include "lexer.h"
 
 namespace db07 {
-    void Lexer::tokenize(std::string &input, std::list<TokenType> &token_types) {
+    std::list<Token> Lexer::tokenize(std::string &input) {
+        std::list<Token> tokens;
         std::string token_string;
-        std::string::iterator input_iterator = input.begin();
-        while (input_iterator < input.end()) {
+        for (std::string::iterator input_iterator = input.begin();
+             input_iterator < input.end();
+             input_iterator++) {
             char chr = *input_iterator;
             if (is_delimiter(chr)) {
-                TokenType token_type = recognize_token_type(token_string);
-                token_types.push_back(token_type);
+                TokenType token_type = recognize(token_string);
+                Token token = evaluate(token_type, token_string);
+                tokens.push_back(token);
                 if (token_type == TokenType::UNRECOGNIZED) {
-                    return;
+                    return tokens;
                 }
                 token_string = {};
             } else {
                 token_string += chr;
             }
-            input_iterator++;
         }
-        TokenType token_type = recognize_token_type(token_string);
-        token_types.push_back(token_type);
-        if (token_type == TokenType::UNRECOGNIZED) {
-            return;
-        }
+        TokenType token_type = recognize(token_string);
+        Token token = evaluate(token_type, token_string);
+        tokens.push_back(token);
+        return tokens;
     }
 
     bool Lexer::is_delimiter(char chr) {
         return chr == ' ';
     }
 
-    TokenType Lexer::recognize_token_type(std::string &token_string) {
+    TokenType Lexer::recognize(std::string &token_string) {
         static const std::regex REGEX_INTEGER("[0-9]+", std::regex_constants::icase);
         static const std::regex REGEX_LITERAL("\'.*\'", std::regex_constants::icase);
         static const std::regex REGEX_IDENTIFIER("[a-z][a-z0-9_]*", std::regex_constants::icase);
@@ -52,5 +53,9 @@ namespace db07 {
             return TokenType::IDENTIFIER;
         }
         return TokenType::UNRECOGNIZED;
+    }
+
+    Token Lexer::evaluate(TokenType token_type, std::string &token_string) {
+        return Token(token_type);
     }
 }
