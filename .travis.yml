@@ -9,6 +9,7 @@ addons:
     packages:
       - g++-6
       - cmake
+      - cmake-data
 
 before_install:
   - mkdir build
