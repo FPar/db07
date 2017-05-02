@@ -7,18 +7,16 @@ addons:
       - ubuntu-toolchain-r-test
       - george-edison55-precise-backports
     packages:
-      - gcc-6
       - g++-6
       - cmake
       - cmake-data
+
+env: COMPILER='g++-6'
 
 before_install:
   - mkdir build
   - cd build
   - cmake ..
-
-before_script:
-  - export CXX="g++-6" CC="gcc-6"
 
 script:
   - cmake --build .
