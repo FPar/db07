@@ -1,13 +1,22 @@
 language: c++
 compiler: gcc
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - george-edison55-precise-backports
+    packages:
+      - g++-6
+      - cmake
+      - cmake-data
+
 before_install:
-        - mkdir build
-        - cd build
-        - cmake ..
+  - mkdir build
+  - cd build
+  - cmake ..
 
 script:
-        - cmake --build .
-        - cd tests
-        - ctest
-
+  - cmake --build .
+  - cd tests
+  - ctest
