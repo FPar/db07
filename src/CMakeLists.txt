@@ -6,6 +6,6 @@ set(SOURCES
 	db07/QueryEngine/parser.cpp
 
     main.cpp
-        parser/lexer.cpp parser/lexer.h)
+        parser/lexer.cpp parser/lexer.h parser/token_type.h)
 
 add_executable(db07 ${SOURCES})
