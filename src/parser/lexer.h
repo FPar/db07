@@ -15,10 +15,6 @@ namespace db07 {
 
     private:
         bool is_delimiter(char chr);
-
-        TokenType recognize(std::string &);
-
-        Token evaluate(TokenType, std::string &);
     };
 }
 
