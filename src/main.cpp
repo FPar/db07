@@ -7,7 +7,10 @@ int main(int argc, char **argv) {
     db07::Lexer lexer;
     std::list<db07::Token> tokens = lexer.tokenize(input);
     if (tokens.back().type() == db07::TokenType::UNRECOGNIZED) {
-        std::cout << "[FAILED] Lexical analysis: Unrecognized token\n";
+        const std::string &unrecognized_token_string = tokens.back().string_value();
+        std::cerr << "[FAILED] Lexical analysis: Unrecognized token '"
+                  << unrecognized_token_string
+                  << "'\n";
     } else {
         std::cout << "[ DONE ] Lexical analysis\n";
     }

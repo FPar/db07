@@ -56,6 +56,6 @@ namespace db07 {
     }
 
     Token Lexer::evaluate(TokenType token_type, std::string &token_string) {
-        return Token(token_type);
+        return TokenEvaluator::for_type(token_type)(token_string);
     }
 }
