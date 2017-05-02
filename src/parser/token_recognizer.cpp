@@ -6,9 +6,18 @@ namespace db07 {
     const std::regex TokenRecognizer::REGEX_IDENTIFIER{"[a-z][a-z0-9_]*", std::regex_constants::icase};
 
     const std::list<TokenRecognizer::Rule> TokenRecognizer::RULES = {
-            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("==") == 0; }, TokenType::OPERATOR_EQ},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("=") == 0; }, TokenType::OPERATOR_EQ},
             TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("!=") == 0; }, TokenType::OPERATOR_NEQ},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("<") == 0; }, TokenType::OPERATOR_LT},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("<=") == 0; }, TokenType::OPERATOR_LE},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare(">=") == 0; }, TokenType::OPERATOR_GE},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare(">") == 0; }, TokenType::OPERATOR_GT},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("AND") == 0; }, TokenType::OPERATOR_AND},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("OR") == 0; }, TokenType::OPERATOR_OR},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("NOT") == 0; }, TokenType::OPERATOR_NOT},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("IN") == 0; }, TokenType::OPERATOR_IN},
             TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("SELECT") == 0; }, TokenType::KEYWORD_SELECT},
+            TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("DISTINCT") == 0; }, TokenType::KEYWORD_DISTINCT},
             TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("FROM") == 0; }, TokenType::KEYWORD_FROM},
             TokenRecognizer::Rule {[](std::string &token_string) { return token_string.compare("WHERE") == 0; }, TokenType::KEYWORD_WHERE},
             TokenRecognizer::Rule {[](std::string &token_string) { return std::regex_match(token_string, TokenRecognizer::REGEX_INTEGER); }, TokenType::INTEGER},

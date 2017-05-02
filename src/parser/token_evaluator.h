@@ -11,7 +11,16 @@ namespace db07 {
             switch (token_type) {
                 case TokenType::OPERATOR_EQ:
                 case TokenType::OPERATOR_NEQ:
+                case TokenType::OPERATOR_LT:
+                case TokenType::OPERATOR_LE:
+                case TokenType::OPERATOR_GE:
+                case TokenType::OPERATOR_GT:
+                case TokenType::OPERATOR_AND:
+                case TokenType::OPERATOR_OR:
+                case TokenType::OPERATOR_NOT:
+                case TokenType::OPERATOR_IN:
                 case TokenType::KEYWORD_SELECT:
+                case TokenType::KEYWORD_DISTINCT:
                 case TokenType::KEYWORD_FROM:
                 case TokenType::KEYWORD_WHERE:
                     return [token_type](std::string &) { return Token(token_type); };
@@ -27,6 +36,7 @@ namespace db07 {
                     };
                 case TokenType::IDENTIFIER:
                 case TokenType::UNRECOGNIZED:
+                default:
                     return [token_type](std::string &token_string) { return Token(token_type, token_string); };
             }
         }
