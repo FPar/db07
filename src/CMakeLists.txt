@@ -12,6 +12,15 @@ set(SOURCES
 
     optimizer/Query_plan.h
 
+    parser/lexer.cpp
+    parser/lexer.h
+    parser/token_type.h
+    parser/token.h
+    parser/token.cpp
+    parser/token_evaluator.h
+    parser/token_recognizer.cpp
+    parser/token_recognizer.h
+
     storage_engine/Type.h
 
     main.cpp
