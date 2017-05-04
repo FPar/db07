@@ -1,4 +1,6 @@
 set(SOURCES
+    storage_engine/Type.h
+
     main.cpp
 )
 
