@@ -3,6 +3,15 @@ include_directories(
 )
 
 set(SOURCES
+    control/Destination_receiver.h
+
+    executor/Executor.h
+    executor/Executor.cpp
+    
+    nodes/cmdType.h
+
+    optimizer/Query_plan.h
+
     storage_engine/Type.h
 
     main.cpp
