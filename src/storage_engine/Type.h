@@ -4,24 +4,22 @@
 #include <string>
 
 namespace db07 {
-    using namespace std;
-
     /*
      * Definition of a data type.
      */
     struct Type {
-        Type(const string name, int length) :
+        Type(const std::string name, int length) :
             type_name(name),
             type_length(length) { }
 
-        string name() const;
+        std::string name() const;
         int length() const;
     private:
 
         /*
          * Name of the type.
          */
-        const string type_name;
+        const std::string type_name;
 
         /*
          * Length of the type in bytes for fixed length types.
