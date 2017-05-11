@@ -7,10 +7,13 @@ set(SOURCES
 
     executor/Executor.h
     executor/Executor.cpp
-    
+
     nodes/cmdType.h
 
+    optimizer/Query_data.h
+    optimizer/Query_data.cpp
     optimizer/Query_plan.h
+    optimizer/Query_condition.h
 
     parser/lexer.cpp
     parser/lexer.h
@@ -25,6 +28,6 @@ set(SOURCES
     storage_engine/Type.h
 
     main.cpp
-)
+        optimizer/Query_condition.cpp)
 
 add_executable(db07 ${SOURCES})
