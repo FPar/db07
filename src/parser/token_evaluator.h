@@ -36,7 +36,6 @@ namespace db07 {
                     };
                 case TokenType::IDENTIFIER:
                 case TokenType::UNRECOGNIZED:
-                default:
                     return [token_type](std::string &token_string) { return Token(token_type, token_string); };
             }
         }
