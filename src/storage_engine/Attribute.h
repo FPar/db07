@@ -2,6 +2,8 @@
 #define ATTRIBUTE
 
 #include <string>
+#include <vector>
+
 #include "storage_engine/Type.h"
 
 namespace db07 {
@@ -15,6 +17,8 @@ namespace db07 {
         int type_mod() const;
         bool not_null() const;
     };
+
+    typedef std::vector<Attribute> Tuple_description;
 }
 
 #endif // !ATTRIBUTE_H
