@@ -27,4 +27,5 @@ set(SOURCES
     main.cpp
 )
 
+add_library(db07_core ${SOURCES})
 add_executable(db07 ${SOURCES})

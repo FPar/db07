@@ -11,3 +11,4 @@ add_executable(db07_test ${TEST_SOURCES})
 
 enable_testing()
 add_test(db07_test db07_test)
+target_link_libraries(db07_test db07_core)
