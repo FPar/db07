@@ -3,6 +3,7 @@ include_directories(
 )
 
 set(SOURCES
+    control/Destination_receiver.cpp
     control/Destination_receiver.h
 
     executor/Executor.h

@@ -1,10 +1,13 @@
 #ifndef DESTINATION_RECEIVER_H
 #define DESTINATION_RECEIVER_H
 
+#include "storage_engine/Attribute.h"
+
 namespace db07 {
     class Destination_receiver {
     public:
-        virtual bool receive_slot() = 0;
+        bool receive_slot();
+        void startup(Tuple_description &tuple_desc);
     };
 }
 
