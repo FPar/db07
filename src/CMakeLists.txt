@@ -23,6 +23,7 @@ set(SOURCES
     parser/token_recognizer.h
 
     storage_engine/Attribute.h
+	storage_engine/Catalog.h
     storage_engine/Type.h
 
     main.cpp

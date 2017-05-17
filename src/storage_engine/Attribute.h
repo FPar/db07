@@ -10,18 +10,19 @@ namespace db07 {
     /*
      * Information about a table column.
      */
-    struct Attribute {
+    class Attribute {
+    private:
+        std::string m_name;
+
+    public:
         std::string name() const {
-            return attr_name;
+            return m_name;
         }
 
         Type type() const;
         bool has_type_mod() const;
         int type_mod() const;
         bool not_null() const;
-
-    private:
-        std::string attr_name;
     };
 
     typedef std::vector<Attribute> Tuple_description;
