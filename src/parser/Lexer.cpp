@@ -10,10 +10,10 @@ namespace db07 {
              input_iterator++) {
             char chr = *input_iterator;
             if (is_delimiter(chr)) {
-                TokenType token_type = TokenRecognizer::recognize(token_string);
-                Token token = TokenEvaluator::for_type(token_type)(token_string);
+                token_type token_type = Token_recognizer::recognize(token_string);
+                Token token = Token_evaluator::for_type(token_type)(token_string);
                 tokens.push_back(token);
-                if (token_type == TokenType::UNRECOGNIZED) {
+                if (token_type == token_type::UNRECOGNIZED) {
                     return tokens;
                 }
                 token_string = {};
@@ -21,8 +21,8 @@ namespace db07 {
                 token_string += chr;
             }
         }
-        TokenType token_type = TokenRecognizer::recognize(token_string);
-        Token token = TokenEvaluator::for_type(token_type)(token_string);
+        token_type token_type = Token_recognizer::recognize(token_string);
+        Token token = Token_evaluator::for_type(token_type)(token_string);
         tokens.push_back(token);
         return tokens;
     }

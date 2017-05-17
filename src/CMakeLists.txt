@@ -14,14 +14,14 @@ set(SOURCES
     optimizer/Query_data.h
     optimizer/Select_plan.h
 
-    parser/lexer.cpp
-    parser/lexer.h
+    parser/Lexer.cpp
+    parser/Lexer.h
+    parser/Token.cpp
+    parser/Token.h
+    parser/Token_evaluator.h
+    parser/Token_recognizer.cpp
+    parser/Token_recognizer.h
     parser/token_type.h
-    parser/token.h
-    parser/token.cpp
-    parser/token_evaluator.h
-    parser/token_recognizer.cpp
-    parser/token_recognizer.h
 
     storage_engine/Attribute.h
 	storage_engine/Global_catalog.h

@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
     bool quited = input.compare("q") == 0;
     while (!quited) {
         std::list<db07::Token> tokens = lexer.tokenize(input);
-        if (tokens.back().type() == db07::TokenType::UNRECOGNIZED) {
+        if (tokens.back().type() == db07::token_type::UNRECOGNIZED) {
             const std::string &unrecognized_token_string = tokens.back().string_value();
             std::cout << "Unrecognized token '"
                       << unrecognized_token_string
@@ -21,55 +21,55 @@ int main(int argc, char **argv) {
                  token != tokens.end();
                  token++) {
                 switch (token->type()) {
-                    case db07::TokenType::OPERATOR_EQ:
+                    case db07::token_type::OPERATOR_EQ:
                         std::cout << "EQUAL ";
                         break;
-                    case db07::TokenType::OPERATOR_NEQ:
+                    case db07::token_type::OPERATOR_NEQ:
                         std::cout << "NOT_EQUAL ";
                         break;
-                    case db07::TokenType::OPERATOR_LT:
+                    case db07::token_type::OPERATOR_LT:
                         std::cout << "LESS_THAN ";
                         break;
-                    case db07::TokenType::OPERATOR_LE:
+                    case db07::token_type::OPERATOR_LE:
                         std::cout << "LESS_OR_EQUAL ";
                         break;
-                    case db07::TokenType::OPERATOR_GE:
+                    case db07::token_type::OPERATOR_GE:
                         std::cout << "GREATER_OR_EQUAL ";
                         break;
-                    case db07::TokenType::OPERATOR_GT:
+                    case db07::token_type::OPERATOR_GT:
                         std::cout << "GREATER_THAN ";
                         break;
-                    case db07::TokenType::OPERATOR_AND:
+                    case db07::token_type::OPERATOR_AND:
                         std::cout << "AND ";
                         break;
-                    case db07::TokenType::OPERATOR_OR:
+                    case db07::token_type::OPERATOR_OR:
                         std::cout << "OR ";
                         break;
-                    case db07::TokenType::OPERATOR_NOT:
+                    case db07::token_type::OPERATOR_NOT:
                         std::cout << "NOT ";
                         break;
-                    case db07::TokenType::OPERATOR_IN:
+                    case db07::token_type::OPERATOR_IN:
                         std::cout << "IN ";
                         break;
-                    case db07::TokenType::KEYWORD_SELECT:
+                    case db07::token_type::KEYWORD_SELECT:
                         std::cout << "SELECT ";
                         break;
-                    case db07::TokenType::KEYWORD_DISTINCT:
+                    case db07::token_type::KEYWORD_DISTINCT:
                         std::cout << "DISTINCT ";
                         break;
-                    case db07::TokenType::KEYWORD_FROM:
+                    case db07::token_type::KEYWORD_FROM:
                         std::cout << "FROM ";
                         break;
-                    case db07::TokenType::KEYWORD_WHERE:
+                    case db07::token_type::KEYWORD_WHERE:
                         std::cout << "WHERE ";
                         break;
-                    case db07::TokenType::INTEGER:
+                    case db07::token_type::INTEGER:
                         std::cout << "INTEGER[" << token->int_value() << "] ";
                         break;
-                    case db07::TokenType::LITERAL:
+                    case db07::token_type::LITERAL:
                         std::cout << "LITERAL[" << token->string_value() << "] ";
                         break;
-                    case db07::TokenType::IDENTIFIER:
+                    case db07::token_type::IDENTIFIER:
                         std::cout << "IDENTIFIER[" << token->string_value() << "] ";
                         break;
                     default:

@@ -1,8 +1,8 @@
-#ifndef DB07_TOKEN_TYPE_H
-#define DB07_TOKEN_TYPE_H
+#ifndef TOKEN_TYPE_H
+#define TOKEN_TYPE_H
 
 namespace db07 {
-    enum class TokenType {
+    enum class token_type {
         OPERATOR_EQ,
         OPERATOR_NEQ,
         OPERATOR_LT,

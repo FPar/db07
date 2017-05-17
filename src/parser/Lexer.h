@@ -1,12 +1,12 @@
-#ifndef DB07_LEXER_H
-#define DB07_LEXER_H
+#ifndef LEXER_H
+#define LEXER_H
 
-#include<string>
-#include<regex>
-#include<cctype>
-#include<list>
+#include <string>
+#include <regex>
+#include <cctype>
+#include <list>
 #include <memory>
-#include "token_evaluator.h"
+#include "parser/Token_evaluator.h"
 
 namespace db07 {
     class Lexer {
