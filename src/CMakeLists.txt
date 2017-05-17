@@ -6,9 +6,6 @@ set(SOURCES
     control/Destination_receiver.cpp
     control/Destination_receiver.h
 
-    executor/Executor.h
-    executor/Executor.cpp
-
 	optimizer/Plan.h
 	optimizer/Plan_node.h
     optimizer/Select_plan.h
@@ -23,7 +20,12 @@ set(SOURCES
     parser/token_recognizer.h
 
     storage_engine/Attribute.h
+	storage_engine/Global_catalog.h
 	storage_engine/Catalog.h
+	storage_engine/Catalog_item.h
+	storage_engine/catalog_item_exists.h
+	storage_engine/catalog_item_not_found.h
+	storage_engine/Relation.h
     storage_engine/Type.h
 
     main.cpp
