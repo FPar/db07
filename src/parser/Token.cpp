@@ -1,4 +1,4 @@
-#include "token.h"
+#include "parser/Token.h"
 
 namespace db07 {
     Token::Token(const token_type type)

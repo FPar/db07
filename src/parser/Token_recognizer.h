@@ -22,7 +22,7 @@ namespace db07 {
 
             bool matches(std::string &token_string) const;
 
-            token_type token_type() const;
+            token_type type() const;
         };
 
         static const std::list<Rule> RULES;

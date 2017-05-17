@@ -29,7 +29,7 @@ namespace db07 {
         return predicate_(token_string);
     }
 
-    token_type Token_recognizer::Rule::token_type() const {
+    token_type Token_recognizer::Rule::type() const {
         return token_type_;
     }
 
@@ -38,7 +38,7 @@ namespace db07 {
              rule != Token_recognizer::RULES.end();
              rule++) {
             if (rule->matches(token_string)) {
-                return rule->token_type();
+                return rule->type();
             }
         }
         return token_type::UNRECOGNIZED;

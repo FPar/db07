@@ -1,5 +1,5 @@
 #include <iostream>
-#include "parser/lexer.h"
+#include "parser/Lexer.h"
 #include "storage_engine/Catalog.h"
 
 int main(int argc, char **argv) {
