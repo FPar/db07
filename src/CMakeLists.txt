@@ -8,6 +8,10 @@ set(SOURCES
 
 	optimizer/Plan.h
 	optimizer/Plan_node.h
+    optimizer/Query_condition.cpp
+    optimizer/Query_condition.h
+    optimizer/Query_data.cpp
+    optimizer/Query_data.h
     optimizer/Select_plan.h
 
     parser/lexer.cpp
