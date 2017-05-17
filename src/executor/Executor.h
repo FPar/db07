@@ -1,15 +1,15 @@
 #ifndef EXECUTOR_H
 #define EXECUTOR_H
 
-#include "optimizer/Query_plan.h"
+#include "optimizer/Plan.h"
 
 namespace db07 {
     class Executor {
     private:
-        const Query_plan *plan;
+        const Plan *plan;
 
     public:
-        Executor(Query_plan &plan) : plan(&plan) { }
+        Executor(Plan &plan) : plan(&plan) { }
 
         void run();
     };

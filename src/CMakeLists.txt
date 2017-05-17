@@ -8,10 +8,10 @@ set(SOURCES
 
     executor/Executor.h
     executor/Executor.cpp
-    
-    nodes/cmdType.h
 
-    optimizer/Query_plan.h
+	optimizer/Plan.h
+	optimizer/Plan_node.h
+    optimizer/Select_plan.h
 
     parser/lexer.cpp
     parser/lexer.h
