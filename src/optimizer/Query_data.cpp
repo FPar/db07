@@ -1,6 +1,6 @@
 #include <list>
-#include "Query_condition.h"
-#include "Query_data.h"
+#include "optimizer/Query_condition.h"
+#include "optimizer/Query_data.h"
 
 using namespace std;
 

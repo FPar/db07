@@ -1,5 +1,5 @@
-#include "lexer.h"
-#include "token_recognizer.h"
+#include "parser/Lexer.h"
+#include "parser/Token_recognizer.h"
 
 namespace db07 {
     std::list<Token> Lexer::tokenize(std::string &input) {
