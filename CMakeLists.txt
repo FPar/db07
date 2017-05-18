@@ -1,5 +1,8 @@
-project(db07)
 cmake_minimum_required(VERSION 3.2)
+
+project(db07)
+
 set(CMAKE_CXX_STANDARD 11)
+
 add_subdirectory(src)
 add_subdirectory(tests)

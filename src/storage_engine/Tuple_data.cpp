@@ -24,7 +24,7 @@ Tuple_data::~Tuple_data()
     delete[] m_data;
 }
 
-void Tuple_data::get_indexes(Tuple_description &description, int *indexes)
+void Tuple_data::get_indexes(const Tuple_description &description, int *indexes)
 {
     int arr_i = 0;
     int position = 0;

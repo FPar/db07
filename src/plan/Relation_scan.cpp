@@ -9,6 +9,8 @@ bool Relation_scan::has_next()
 
 Tuple Relation_scan::next()
 {
-    Tuple_description desc = m_relation->description();
-    return Tuple(&desc, new Tuple_data(std::vector<Tuple_value>()));
+    const Tuple_description *desc = m_relation->description();
+    std::vector<Tuple_value> values;
+    Tuple_data *data = new Tuple_data(values);
+    return Tuple(desc, data);
 }

@@ -11,7 +11,7 @@ namespace db07 {
         int *m_value_indexes;
 
     public:
-        Tuple(Tuple_description *description, Tuple_data *data);
+        Tuple(const Tuple_description *description, Tuple_data *data);
 
         const Tuple_description *description() const
         {
