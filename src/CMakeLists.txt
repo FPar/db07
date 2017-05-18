@@ -24,6 +24,8 @@ set(SOURCES
     parser/token_type.h
 
     storage_engine/Attribute.h
+	storage_engine/Btree.cpp
+	storage_engine/Btree.h
 	storage_engine/Global_catalog.h
 	storage_engine/Catalog.h
 	storage_engine/Catalog_item.h
