@@ -6,7 +6,7 @@
 namespace db07 {
     class Plan {
     public:
-        void execute(Destination_receiver &destination);
+        virtual void execute(Destination_receiver &destination) = 0;
     };
 }
 

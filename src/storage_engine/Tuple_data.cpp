@@ -1,0 +1,25 @@
+#include "storage_engine/Tuple_data.h"
+
+using namespace std;
+
+db07::Tuple_data::Tuple_data(vector<Tuple_value> &values) {
+    // Get size
+    int size = 0;
+    for (auto i = values.cbegin(); i != values.cend(); ++i) {
+        size += i->length();
+    }
+
+    // Write data
+    m_data = new unsigned char[size];
+    int index;
+    for (auto i = values.cbegin(); i != values.cend(); ++i) {
+        
+    }
+}
+
+db07::Tuple_data::~Tuple_data() {
+    delete[] m_data;
+}
+
+void db07::Tuple_data::set_value(int position, Tuple_value &value) {
+}

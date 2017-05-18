@@ -30,7 +30,12 @@ set(SOURCES
 	storage_engine/catalog_item_exists.h
 	storage_engine/catalog_item_not_found.h
 	storage_engine/Relation.h
+	storage_engine/Tuple.h
+	storage_engine/Tuple_data.cpp
+	storage_engine/Tuple_data.h
     storage_engine/Type.h
+
+	storage_engine/types/Tuple_value.h
 
     main.cpp
 )
