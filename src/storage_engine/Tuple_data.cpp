@@ -1,8 +1,10 @@
 #include "storage_engine/Tuple_data.h"
 
 using namespace std;
+using namespace db07;
 
-db07::Tuple_data::Tuple_data(vector<Tuple_value> &values) {
+Tuple_data::Tuple_data(vector<Tuple_value> &values)
+{
     // Get size
     int size = 0;
     for (auto i = values.cbegin(); i != values.cend(); ++i) {
@@ -17,9 +19,22 @@ db07::Tuple_data::Tuple_data(vector<Tuple_value> &values) {
     }
 }
 
-db07::Tuple_data::~Tuple_data() {
+Tuple_data::~Tuple_data()
+{
     delete[] m_data;
 }
 
-void db07::Tuple_data::set_value(int position, Tuple_value &value) {
+void Tuple_data::get_indexes(Tuple_description &description, int *indexes)
+{
+    int arr_i = 0;
+    int position = 0;
+    for (auto i = description.cbegin(); i != description.cend(); ++i) {
+        indexes[arr_i] = position;
+        Type *type = i->type();
+        position += type->length();
+    }
+}
+
+void Tuple_data::set_value(int position, Tuple_value &value)
+{
 }

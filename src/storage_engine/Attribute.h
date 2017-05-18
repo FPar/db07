@@ -1,5 +1,5 @@
 #ifndef ATTRIBUTE_H
-#define ATTRIBUTE
+#define ATTRIBUTE_H
 
 #include <string>
 #include <vector>

@@ -12,6 +12,7 @@ set(SOURCES
     optimizer/Query_condition.h
     optimizer/Query_data.cpp
     optimizer/Query_data.h
+	optimizer/Select_plan.cpp
     optimizer/Select_plan.h
 
     parser/Lexer.cpp
@@ -22,8 +23,14 @@ set(SOURCES
     parser/Token_recognizer.cpp
     parser/Token_recognizer.h
     parser/token_type.h
+	
+	plan/matching/Condition.h
+	plan/Relation_scan.cpp
+	plan/Relation_scan.h
 
     storage_engine/Attribute.h
+    storage_engine/Bitmap.cpp
+    storage_engine/Bitmap.h
 	storage_engine/Btree.cpp
 	storage_engine/Btree.h
 	storage_engine/Global_catalog.h
@@ -32,6 +39,7 @@ set(SOURCES
 	storage_engine/catalog_item_exists.h
 	storage_engine/catalog_item_not_found.h
 	storage_engine/Relation.h
+	storage_engine/Tuple.cpp
 	storage_engine/Tuple.h
 	storage_engine/Tuple_data.cpp
 	storage_engine/Tuple_data.h

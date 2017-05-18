@@ -2,12 +2,20 @@
 #define DESTINATION_RECEIVER_H
 
 #include "storage_engine/Attribute.h"
+#include "storage_engine/Tuple.h"
 
 namespace db07 {
     class Destination_receiver {
+    private:
+        Tuple_description *m_description;
+
+        void horizontal_line();
+
     public:
-        bool receive_slot();
-        void startup(Tuple_description &tuple_desc);
+        Destination_receiver(Tuple_description *description);
+        ~Destination_receiver();
+
+        void receive(Tuple &tuple);
     };
 }
 

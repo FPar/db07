@@ -21,7 +21,7 @@ namespace db07 {
             return m_name;
         }
 
-        Tuple_description description() const {
+        const Tuple_description &description() const {
             return m_description;
         }
     };

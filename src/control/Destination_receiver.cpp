@@ -6,8 +6,31 @@
 using namespace std;
 using namespace db07;
 
-void horizontal_line(Tuple_description &tuple_desc) {
-    for (auto i = tuple_desc.cbegin(); i != tuple_desc.cend(); ++i) {
+Destination_receiver::Destination_receiver(Tuple_description *description) :
+    m_description(description)
+{
+    horizontal_line();
+
+    for (auto i = m_description->cbegin(); i != m_description->cend(); ++i) {
+        cout << '|' << i->name();
+    }
+    cout << "|\n";
+
+    horizontal_line();
+}
+
+Destination_receiver::~Destination_receiver()
+{
+    horizontal_line();
+}
+
+void Destination_receiver::receive(Tuple &tuple)
+{
+    
+}
+
+void Destination_receiver::horizontal_line() {
+    for (auto i = m_description->cbegin(); i != m_description->cend(); ++i) {
         cout << '+';
         for (int k = 0; k < i->name().length(); ++k) {
             cout << '-';
@@ -15,19 +38,4 @@ void horizontal_line(Tuple_description &tuple_desc) {
 
     }
     cout << "+\n";
-}
-
-bool db07::Destination_receiver::receive_slot() {
-    return false;
-}
-
-void db07::Destination_receiver::startup(Tuple_description &tuple_desc) {
-    horizontal_line(tuple_desc);
-
-    for (auto i = tuple_desc.cbegin(); i != tuple_desc.cend(); ++i) {
-        cout << '|' << i->name();
-    }
-    cout << "|\n";
-
-    horizontal_line(tuple_desc);
 }
