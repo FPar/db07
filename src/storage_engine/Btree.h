@@ -8,25 +8,26 @@
 
 namespace db07 {
 
-    class dbTree {
+    class Btree {
 
     private:
         struct Node {
             int *keys;
             Node *childNodes;
+
+            Node(int amountOfKeys): keys(new int[amountOfKeys]), childNodes(new Node[amountOfKeys+1]) {};
         };
 
-        Node(int amountOfKeys){};
 
         struct LeafNode : Node {
-            std::map<int, Record> entries;
-            int size;
+
+            LeafNode(): {};
         };
 
         Node *root;
 
     public:
-        dbTree (Node *root): root(root) {}
+        Btree (Node *root): root(root) {}
     };
 
 }
