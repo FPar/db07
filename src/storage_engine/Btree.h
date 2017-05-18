@@ -4,6 +4,9 @@
 #include <list>
 #include <string>
 #include "Attribute.h"
+#include "Tuple.h"
+
+#define AMOUNTKEYS 4
 
 
 namespace db07 {
@@ -12,22 +15,27 @@ namespace db07 {
 
     private:
         struct Node {
-            int *keys;
-            Node *childNodes;
-
-            Node(int amountOfKeys): keys(new int[amountOfKeys]), childNodes(new Node[amountOfKeys+1]) {};
+            int keys[AMOUNTKEYS];
+            Node childNodes[AMOUNTKEYS+1];
         };
 
 
         struct LeafNode : Node {
 
-            LeafNode(): {};
         };
 
         Node *root;
 
     public:
-        Btree (Node *root): root(root) {}
+        void insert(int index, std::vector<Tuple> entries);
+
+        void remove(int index);
+
+        void indexSeek(int index);
+
+        void indexScan(Tuple *values);
+
+
     };
 
 }
