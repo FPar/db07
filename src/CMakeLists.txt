@@ -24,7 +24,12 @@ set(SOURCES
     parser/Token_recognizer.h
     parser/token_type.h
 	
+	plan/matching/And_condition.cpp
+	plan/matching/And_condition.h
 	plan/matching/Condition.h
+	plan/matching/Or_condition.cpp
+	plan/matching/Or_condition.h
+
 	plan/Relation_scan.cpp
 	plan/Relation_scan.h
 
