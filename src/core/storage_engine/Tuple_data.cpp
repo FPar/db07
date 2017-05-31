@@ -1,4 +1,4 @@
-#include "storage_engine/Tuple_data.h"
+#include "Tuple_data.h"
 
 using namespace std;
 using namespace db07;
@@ -24,7 +24,7 @@ Tuple_data::~Tuple_data()
     delete[] m_data;
 }
 
-void Tuple_data::get_indexes(const Tuple_description &description, int *indexes)
+void Tuple_data::get_indexes(const Table_definition &description, int *indexes)
 {
     int arr_i = 0;
     int position = 0;

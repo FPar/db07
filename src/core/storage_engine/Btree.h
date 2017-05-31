@@ -3,7 +3,7 @@
 
 #include <list>
 #include <string>
-#include "Attribute.h"
+#include "Column.h"
 #include "Tuple.h"
 
 #define AMOUNTKEYS 4
@@ -27,13 +27,13 @@ namespace db07 {
         Node *root;
 
     public:
-        void insert(int index, std::vector<Tuple> entries);
+        void insert(int index, std::vector<Row> entries);
 
         void remove(int index);
 
         void indexSeek(int index);
 
-        void indexScan(Tuple *values);
+        void indexScan(Row *values);
 
 
     };

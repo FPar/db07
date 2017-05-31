@@ -7,10 +7,10 @@ bool Relation_scan::has_next()
     return false;
 }
 
-Tuple Relation_scan::next()
+Row Relation_scan::next()
 {
-    const Tuple_description *desc = m_relation->description();
+    const Table_definition *desc = m_relation->description();
     std::vector<Tuple_value> values;
     Tuple_data *data = new Tuple_data(values);
-    return Tuple(desc, data);
+    return Row(desc, data);
 }

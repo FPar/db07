@@ -4,9 +4,6 @@
 #include <string>
 
 namespace db07 {
-    /*
-     * Definition of a data type.
-     */
     class Type {
     private:
 

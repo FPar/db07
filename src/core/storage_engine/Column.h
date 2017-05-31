@@ -1,23 +1,23 @@
-#ifndef ATTRIBUTE_H
-#define ATTRIBUTE_H
+#ifndef COLUMN_H
+#define COLUMN_H
 
 #include <string>
 #include <vector>
 
-#include "storage_engine/Type.h"
+#include "Type.h"
 
 namespace db07 {
     /*
      * Information about a table column.
      */
-    class Attribute {
+    class Column {
     private:
         std::string m_name;
         Type *m_type;
         bool m_not_null;
 
     public:
-        Attribute(std::string &name, Type *type, bool not_null)
+        Column(std::string &name, Type *type, bool not_null)
             : m_name(name), m_type(type), m_not_null(not_null)
         {
         }
@@ -38,7 +38,7 @@ namespace db07 {
         };
     };
 
-    typedef std::vector<Attribute> Tuple_description;
+    typedef std::vector<Column> Table_definition;
 }
 
-#endif // !ATTRIBUTE_H
+#endif // !COLUMN_H

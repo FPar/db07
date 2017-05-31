@@ -1,21 +1,21 @@
 #ifndef DESTINATION_RECEIVER_H
 #define DESTINATION_RECEIVER_H
 
-#include "storage_engine/Attribute.h"
-#include "storage_engine/Tuple.h"
+#include "storage_engine/Column.h"
+#include "storage_engine/Row.h"
 
 namespace db07 {
     class Destination_receiver {
     private:
-        Tuple_description *m_description;
+        Table_definition *m_description;
 
         void horizontal_line();
 
     public:
-        Destination_receiver(Tuple_description *description);
+        Destination_receiver(Table_definition *description);
         ~Destination_receiver();
 
-        void receive(Tuple &tuple);
+        void receive(Row &tuple);
     };
 }
 

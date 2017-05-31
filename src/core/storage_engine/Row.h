@@ -4,16 +4,16 @@
 #include "Tuple_data.h"
 
 namespace db07 {
-    class Tuple {
+    class Row {
     private:
-        const Tuple_description *m_description;
+        const Table_definition *m_description;
         Tuple_data *m_data;
         int *m_value_indexes;
 
     public:
-        Tuple(const Tuple_description *description, Tuple_data *data);
+        Row(const Table_definition *description, Tuple_data *data);
 
-        const Tuple_description *description() const
+        const Table_definition *description() const
         {
             return m_description;
         }

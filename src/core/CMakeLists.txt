@@ -35,19 +35,19 @@ set(SOURCES
 	plan/Relation_scan.cpp
 	plan/Relation_scan.h
 
-    storage_engine/Attribute.h
     storage_engine/Bitmap.cpp
     storage_engine/Bitmap.h
 	storage_engine/Btree.cpp
 	storage_engine/Btree.h
+    storage_engine/Column.h
 	storage_engine/Global_catalog.h
-	storage_engine/Catalog.h
-	storage_engine/Catalog_item.h
-	storage_engine/catalog_item_exists.h
-	storage_engine/catalog_item_not_found.h
-	storage_engine/Relation.h
-	storage_engine/Tuple.cpp
-	storage_engine/Tuple.h
+	storage_engine/Object_store.h
+	storage_engine/Object_store_item.h
+	storage_engine/object_store_item_exists.h
+	storage_engine/object_store_item_not_found.h
+	storage_engine/Row.cpp
+	storage_engine/Row.h
+	storage_engine/Table.h
 	storage_engine/Tuple_data.cpp
 	storage_engine/Tuple_data.h
     storage_engine/Type.h

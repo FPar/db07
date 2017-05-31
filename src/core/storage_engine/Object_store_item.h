@@ -4,7 +4,7 @@
 #include <string>
 
 namespace db07 {
-    class Catalog_item {
+    class Object_store_item {
     public:
         virtual std::string name() const = 0;
     };

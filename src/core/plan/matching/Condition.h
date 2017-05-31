@@ -1,13 +1,13 @@
 #ifndef CONDITION_H
-#define QUALIFICATION_H
+#define CONDITION_H
 
-#include "storage_engine/Tuple.h"
+#include "storage_engine/Row.h"
 
 namespace db07 {
     class Condition {
     public:
-        virtual bool fulfil(Tuple &tuple) const = 0;
+        virtual bool fulfil(Row &tuple) const = 0;
     };
 }
 
-#endif // !QUALIFICATION_H
+#endif // !CONDITION_H

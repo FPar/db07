@@ -3,12 +3,13 @@
 
 #include <string>
 #include <vector>
-#include "storage_engine/catalog_item_exists.h"
-#include "storage_engine/catalog_item_not_found.h"
-#include "storage_engine/Relation.h"
+
+#include "object_store_item_exists.h"
+#include "object_store_item_not_found.h"
+#include "Table.h"
 
 namespace db07 {
-    template <typename T> class Catalog : public Relation {
+    template <typename T> class Object_store : public Table {
     private:
         std::vector<T *> m_items;
 
@@ -22,7 +23,7 @@ namespace db07 {
         }
 
     public:
-        Catalog(std::string name) : T(name)
+        Object_store(std::string name) : T(name)
         {
         }
 

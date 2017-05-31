@@ -1,6 +1,6 @@
 #include <iostream>
 #include "parser/Lexer.h"
-#include "storage_engine/Catalog.h"
+#include "storage_engine/Global_object_store.h"
 
 int main(int argc, char **argv) {
     db07::Lexer lexer;
