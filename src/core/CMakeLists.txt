@@ -40,7 +40,7 @@ set(SOURCES
 	storage_engine/Btree.cpp
 	storage_engine/Btree.h
     storage_engine/Column.h
-	storage_engine/Global_catalog.h
+	storage_engine/Global_object_store.h
 	storage_engine/Object_store.h
 	storage_engine/Object_store_item.h
 	storage_engine/object_store_item_exists.h
