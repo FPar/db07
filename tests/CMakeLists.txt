@@ -1,6 +1,6 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/vendor/catch
-    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/core
 )
 
 set(TEST_SOURCES

@@ -1,7 +1,7 @@
 #ifndef TUPLE_H
 #define TUPLE_H
 
-#include "storage_engine/Tuple_data.h"
+#include "Tuple_data.h"
 
 namespace db07 {
     class Tuple {
@@ -17,6 +17,8 @@ namespace db07 {
         {
             return m_description;
         }
+
+        int compare_field(int field_index, unsigned char *to);
     };
 }
 
