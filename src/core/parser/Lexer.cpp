@@ -20,8 +20,9 @@ namespace db07 {
                 }
 
                 // recognized, no more prefixes
-                token_chr = previous_token_chr;
                 token_string.clear();
+                token_type = token_type::UNRECOGNIZED;
+                token_chr = previous_token_chr;
             }
 
             if (!token_string.empty()) {
@@ -34,6 +35,8 @@ namespace db07 {
             }
         }
 
+        Token token = Token_evaluator::for_type(token_type)(token_string);
+        tokens.push_back(token);
         return tokens;
     }
 }
