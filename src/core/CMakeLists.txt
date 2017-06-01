@@ -32,8 +32,8 @@ set(SOURCES
 	plan/matching/Or_condition.cpp
 	plan/matching/Or_condition.h
 
-	plan/Relation_scan.cpp
-	plan/Relation_scan.h
+	plan/Table_scan.cpp
+	plan/Table_scan.h
 
 	storage_engine/types/Type.h
     storage_engine/types/Types.cpp
