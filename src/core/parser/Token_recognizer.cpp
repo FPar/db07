@@ -41,9 +41,7 @@ namespace db07 {
     };
 
     token_type Token_recognizer::recognize(std::string &token_string) {
-        for (auto rule = Token_recognizer::RULES.begin();
-             rule != Token_recognizer::RULES.end();
-             rule++) {
+        for (auto rule = RULES.begin(); rule != RULES.end(); rule++) {
             if ((*rule)->matches(token_string)) {
                 return (*rule)->type();
             }
