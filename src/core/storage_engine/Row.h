@@ -1,24 +1,29 @@
 #ifndef TUPLE_H
 #define TUPLE_H
 
-#include "Tuple_data.h"
+#include <vector>
+#include <string>
+
+#include "Column.h"
+#include "values/Value.h"
 
 namespace db07 {
     class Row {
     private:
-        const Table_definition *m_description;
-        Tuple_data *m_data;
-        int *m_value_indexes;
+        const Table_definition* _description;
+        const std::vector<Value*> _values;
 
     public:
-        Row(const Table_definition *description, Tuple_data *data);
+        Row(const Table_definition *description, std::vector<Value*> &values) :
+            _description(description), _values(values) {};
 
         const Table_definition *description() const
         {
-            return m_description;
+            return _description;
         }
 
-        int compare_field(int field_index, unsigned char *to);
+        Value* const get(std::string &field) const;
+        int compare_field(std::string &field, Value &to) const;
     };
 }
 

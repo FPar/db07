@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "Type.h"
+#include "types/Type.h"
 
 namespace db07 {
     /*
@@ -29,9 +29,6 @@ namespace db07 {
         Type *type() const {
             return m_type;
         };
-
-        bool has_type_mod() const;
-        int type_mod() const;
 
         bool not_null() const {
             return m_not_null;

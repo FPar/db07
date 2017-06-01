@@ -35,6 +35,14 @@ set(SOURCES
 	plan/Relation_scan.cpp
 	plan/Relation_scan.h
 
+	storage_engine/types/Type.h
+    storage_engine/types/Types.cpp
+    storage_engine/types/Types.h
+
+	storage_engine/values/Value.h
+    storage_engine/values/Int_value.cpp
+    storage_engine/values/Int_value.h
+
     storage_engine/Bitmap.cpp
     storage_engine/Bitmap.h
 	storage_engine/Btree.cpp
@@ -48,11 +56,6 @@ set(SOURCES
 	storage_engine/Row.cpp
 	storage_engine/Row.h
 	storage_engine/Table.h
-	storage_engine/Tuple_data.cpp
-	storage_engine/Tuple_data.h
-    storage_engine/Type.h
-
-	storage_engine/types/Tuple_value.h
 )
 
 add_library(db07_core ${SOURCES})
