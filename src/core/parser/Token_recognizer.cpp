@@ -40,12 +40,21 @@ namespace db07 {
             })
     };
 
-    token_type Token_recognizer::recognize(std::string &token_string) {
+    token_type Token_recognizer::recognize(const std::string &token_string) {
         for (auto rule = RULES.begin(); rule != RULES.end(); rule++) {
             if ((*rule)->matches(token_string)) {
                 return (*rule)->type();
             }
         }
         return token_type::UNRECOGNIZED;
+    }
+
+    bool Token_recognizer::can_recognize(const std::string &token_string) {
+        for (auto rule = RULES.begin(); rule != RULES.end(); rule++) {
+            if ((*rule)->can_match(token_string)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

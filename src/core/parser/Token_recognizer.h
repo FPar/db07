@@ -11,7 +11,9 @@ namespace db07 {
         static const std::list<Recognition_rule *> RULES;
 
     public:
-        static token_type recognize(std::string &token_string);
+        static token_type recognize(const std::string &token_string);
+
+        static bool can_recognize(const std::string &token_string);
     };
 }
 

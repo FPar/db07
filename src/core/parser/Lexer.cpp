@@ -4,30 +4,36 @@
 namespace db07 {
     std::list<Token> Lexer::tokenize(std::string &input) {
         std::list<Token> tokens;
+
         std::string token_string;
-        for (std::string::iterator input_iterator = input.begin();
-             input_iterator != input.end();
-             input_iterator++) {
-            char chr = *input_iterator;
-            if (is_delimiter(chr)) {
-                token_type token_type = Token_recognizer::recognize(token_string);
+        token_type token_type = token_type::UNRECOGNIZED;
+        for (auto token_chr = input.begin(), previous_token_chr = token_chr;
+             token_chr != input.end();
+             token_chr++) {
+            token_string += *token_chr;
+
+            if (!Token_recognizer::can_recognize(token_string)) {
                 Token token = Token_evaluator::for_type(token_type)(token_string);
                 tokens.push_back(token);
                 if (token_type == token_type::UNRECOGNIZED) {
                     return tokens;
                 }
-                token_string = {};
-            } else {
-                token_string += chr;
+
+                // recognized, no more prefixes
+                token_chr = previous_token_chr;
+                token_string.clear();
+            }
+
+            if (!token_string.empty()) {
+                // only if not recognized fully in if-statement above
+                token_type = Token_recognizer::recognize(token_string);
+                if (token_type != token_type::UNRECOGNIZED) {
+                    // recognized with prefix
+                    previous_token_chr = token_chr;
+                }
             }
         }
-        token_type token_type = Token_recognizer::recognize(token_string);
-        Token token = Token_evaluator::for_type(token_type)(token_string);
-        tokens.push_back(token);
-        return tokens;
-    }
 
-    bool Lexer::is_delimiter(char chr) {
-        return chr == ' ';
+        return tokens;
     }
 }

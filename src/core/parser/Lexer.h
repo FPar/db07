@@ -12,9 +12,6 @@ namespace db07 {
     class Lexer {
     public:
         std::list<Token> tokenize(std::string &);
-
-    private:
-        bool is_delimiter(char chr);
     };
 }
 
