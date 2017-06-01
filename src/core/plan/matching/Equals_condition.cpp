@@ -2,7 +2,7 @@
 
 using namespace db07;
 
-bool db07::Equals_condition::fulfil(Row &tuple) const
+bool Equals_condition::interpret(int compare_result) const
 {
-    return false;
+    return compare_result == 0;
 }

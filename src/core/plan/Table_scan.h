@@ -6,14 +6,14 @@
 #include "storage_engine/Table.h"
 
 namespace db07 {
-    class Relation_scan : public Plan_node {
+    class Table_scan : public Plan_node {
     private:
-        const Table *m_relation;
-        const Condition *m_condition;
+        const Table* _table;
+        const Condition* m_condition;
 
     public:
-        Relation_scan(Table *relation, Condition *condition)
-            : m_relation(relation), m_condition(condition)
+        Table_scan(Table *table, Condition *condition)
+            : _table(table), m_condition(condition)
         {
         }
 

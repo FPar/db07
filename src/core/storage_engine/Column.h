@@ -12,18 +12,18 @@ namespace db07 {
      */
     class Column {
     private:
-        std::string m_name;
+        std::string _name;
         Type *m_type;
         bool m_not_null;
 
     public:
         Column(std::string &name, Type *type, bool not_null)
-            : m_name(name), m_type(type), m_not_null(not_null)
+            : _name(name), m_type(type), m_not_null(not_null)
         {
         }
 
         std::string name() const {
-            return m_name;
+            return _name;
         }
 
         Type *type() const {

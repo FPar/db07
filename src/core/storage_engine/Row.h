@@ -22,8 +22,8 @@ namespace db07 {
             return _description;
         }
 
-        Value* const get(std::string &field) const;
-        int compare_field(std::string &field, Value &to) const;
+        Value* const get(const std::string &field) const;
+        int compare_field(const std::string &field, const Value &to) const;
     };
 }
 

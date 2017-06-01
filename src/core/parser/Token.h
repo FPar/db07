@@ -7,9 +7,9 @@
 namespace db07 {
     class Token {
     private:
-        const token_type type_;
-        const std::string string_value_;
-        const int int_value_;
+        const token_type _type;
+        const std::string _string_value;
+        const int _int_value;
 
     public:
         Token(const token_type type_);

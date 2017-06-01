@@ -4,41 +4,56 @@
 #include <string>
 #include <list>
 #include "Query_condition.h"
+#include "Query_type.h"
+
 using namespace std;
 
 namespace db07 {
     class Query_data {
+
     private:
+        /**Query_type defines the type of the query.*/
+        const Query_type _queryType;
         /**String table on where the query will be executed.*/
-        const string tableName;
+        const string _tableName;
         /**String column which is needed for the select statement.*/
-        const string columnName;
+        const list <string> _columnName;
         /**List of primaryKey for the create statement.*/
-        list<string> primaryKey;
+        list <string> _primaryKey;
         /**List of condition in an query statement.*/
-        list<Query_condition> conditions;
+        list <Query_condition> _conditions;
         /**
          * List of pair of column name and value.
          * Pairing column name with data type,
          * or insert/update a value in a column.
          */
-        list<pair<string, string>> columns2value;
+        list <pair<string, string>> _columns2value;
 
     public:
+
+        const Query_type getQuery_type() const;
+
         string getTableName();
-        string getColumnName();
-        list<string> getPrimaryKeys();
-        list<Query_condition> getConditions();
-        list<pair<string, string>>getColumnValues();
 
-        Query_data(const string &tableName, const string &columnName, const list<string, allocator<string>> &primarykey,
-                   const list<Query_condition, allocator<Query_condition>> &conditions,
-                   const list<pair<string, string>, allocator<pair<string, string>>> &columns2value) : tableName(
-                tableName), columnName(columnName), primaryKey(primaryKey), conditions(conditions), columns2value(
-                columns2value) {}
+        list <string> getPrimaryKeys();
+
+        list <Query_condition> getConditions();
+
+        list <pair<string, string>> getColumnValues();
+
+        const list <string> &getColumnName() const;
+
+        Query_data(const Query_type queryType, const string &tableName, const list <string> &columnName,
+                   const list <string> &primaryKey, const list <Query_condition> &conditions,
+                   const list <pair<string, string>> &columns2value) : _queryType(queryType),
+                                                                       _tableName(tableName),
+                                                                       _columnName(columnName),
+                                                                       _primaryKey(primaryKey),
+                                                                       _conditions(conditions),
+                                                                       _columns2value(columns2value) {}
+
     };
-
 
 }
 
-#endif //DB07_QUERY_DATA_H
+#endif //DB07_QUERY_DATA_Hs

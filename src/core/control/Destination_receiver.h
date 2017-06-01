@@ -7,7 +7,7 @@
 namespace db07 {
     class Destination_receiver {
     private:
-        Table_definition *m_description;
+        Table_definition *_description;
 
         void horizontal_line();
 
@@ -19,4 +19,4 @@ namespace db07 {
     };
 }
 
-#endif // !EXECUTOR_DESTINATION_H
+#endif // !DESTINATION_RECEIVER_H
