@@ -3,8 +3,8 @@
 
 namespace db07 {
     void Parser::parse(std::list<Token> &tokens) {
-        lookahead = tokens.begin();
-        end = tokens.end();
+        _lookahead = tokens.begin();
+        _end = tokens.end();
         if (start()) {
             std::cout << "OK\n";
         }
@@ -51,18 +51,18 @@ namespace db07 {
             return false;
         }
         // TODO process terminal
-        lookahead++;
+        _lookahead++;
         return true;
     }
 
     bool Parser::lookahead_is(token_type type) {
-        return lookahead == end
+        return _lookahead == _end
                ? false
-               : lookahead->type() == type;
+               : _lookahead->type() == type;
     }
 
     bool Parser::end_of_tokens() {
-        if (lookahead != end) {
+        if (_lookahead != _end) {
             std::cerr << "Expected no more tokens\n";
             return false;
         }

@@ -12,11 +12,11 @@ namespace db07 {
     private:
         class Rule {
         private:
-            const std::function<bool(std::string &)> predicate_;
-            const token_type token_type_;
+            const std::function<bool(std::string &)> _predicate;
+            const token_type _token_type;
         public:
             Rule(const std::function<bool(std::string &)> &predicate_, const token_type token_type_)
-                : predicate_(predicate_), token_type_(token_type_)
+                : _predicate(predicate_), _token_type(token_type_)
             {
             }
 

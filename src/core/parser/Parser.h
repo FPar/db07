@@ -7,8 +7,8 @@
 namespace db07 {
     class Parser {
     private:
-        std::list<Token>::const_iterator lookahead;
-        std::list<Token>::const_iterator end;
+        std::list<Token>::const_iterator _lookahead;
+        std::list<Token>::const_iterator _end;
     public:
         void parse(std::list<Token> &tokens);
 

@@ -26,11 +26,11 @@ namespace db07 {
     };
 
     bool Token_recognizer::Rule::matches(std::string &token_string) const {
-        return predicate_(token_string);
+        return _predicate(token_string);
     }
 
     token_type Token_recognizer::Rule::type() const {
-        return token_type_;
+        return _token_type;
     }
 
     token_type Token_recognizer::recognize(std::string &token_string) {
