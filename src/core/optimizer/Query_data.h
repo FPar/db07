@@ -41,11 +41,16 @@ namespace db07 {
 
         list <pair<string, string>> getColumnValues();
 
-        const list <string> &getColumnName() const;
+        const list <string> getColumnName() const;
 
-        Query_data(const string &tableName, const list <string> &columnName, const list <string> &primaryKey,
-                   const list <Query_condition> &conditions, const list <pair<string, string>> &columns2value,
-                   const Query_type &queryType);
+        Query_data(const Query_type queryType, const string &tableName, const list <string> &columnName,
+                   const list <string> &primaryKey, const list <Query_condition> &conditions,
+                   const list <pair<string, string>> &columns2value) : _queryType(queryType),
+                                                                 _tableName(tableName),
+                                                                 _columnName(columnName),
+                                                                 _primaryKey(primaryKey),
+                                                                 _conditions(conditions),
+                                                                 _columns2value(columns2value) {}
 
     };
 
