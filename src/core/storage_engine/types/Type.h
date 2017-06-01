@@ -10,7 +10,7 @@ namespace db07 {
         /*
          * Name of the type.
          */
-        const std::string m_name;
+        const std::string _name;
 
         /*
          * Length of the type in bytes for fixed length types.
@@ -19,11 +19,11 @@ namespace db07 {
 
     public:
         Type(const std::string name, int length) :
-            m_name(name),
+            _name(name),
             m_length(length) { }
 
         std::string name() const {
-            return m_name;
+            return _name;
         };
 
         int length() const {

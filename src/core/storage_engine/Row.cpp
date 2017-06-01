@@ -1,5 +1,7 @@
 #include "Row.h"
 
+#include <cassert>
+
 using namespace std;
 using namespace db07;
 
@@ -11,6 +13,7 @@ Value* const Row::get(string &field) const
             return _values.at(index);
         }
     }
+    assert(0);
 }
 
 int Row::compare_field(string &field, Value &to) const

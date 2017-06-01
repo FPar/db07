@@ -9,21 +9,21 @@
 namespace db07 {
     class Table : public Object_store_item {
     private:
-        std::string m_name;
-        Table_definition m_description;
+        std::string _name;
+        Table_definition _description;
 
     public:
         Table(std::string &name, Table_definition &description)
-            : m_name(name), m_description(description)
+            : _name(name), _description(description)
         {
         }
 
         virtual std::string name() const {
-            return m_name;
+            return _name;
         }
 
         const Table_definition *description() const {
-            return &m_description;
+            return &_description;
         }
     };
 }
