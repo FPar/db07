@@ -30,11 +30,4 @@ namespace db07 {
     const list <string> &Query_data::getColumnName() const {
         return _columnName;
     }
-
-    Query_data::Query_data(const string &tableName, const list <string> &columnName, const list <string> &primaryKey,
-                           const list <Query_condition> &conditions, const list <pair<string, string>> &columns2value,
-                           const Query_type &queryType) {
-
-    }
-
 }
