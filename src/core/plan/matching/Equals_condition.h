@@ -1,22 +1,23 @@
 #ifndef EQUALS_CONDITION_H
 #define EQUALS_CONDITION_H
 
+#include <string>
 #include "Condition.h"
+#include "storage_engine/values/Value.h"
 
 namespace db07 {
     class Equals_condition : public Condition {
     private:
-        const int _field_index;
-        const unsigned char *_data;
-        const int _data_size;
+        const std::string _column;
+        const Value* _value;
 
     public:
-        Equals_condition(int field_index, unsigned char *data, int data_size) :
-            _field_index(field_index), _data(data), _data_size(data_size)
+        Equals_condition(std::string column, Value* value) :
+            _column(column), _value(value)
         {
         }
 
-        bool fulfil(Row &tuple) const;
+        bool fulfil(Row& row) const;
     };
 }
 

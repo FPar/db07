@@ -5,7 +5,7 @@
 using namespace std;
 using namespace db07;
 
-Value* const Row::get(string &field) const
+Value* const Row::get(const string &field) const
 {
     int index = 0;
     for (auto i = _description->cbegin(); i != _description->cend(); ++i) {
@@ -16,7 +16,8 @@ Value* const Row::get(string &field) const
     assert(0);
 }
 
-int Row::compare_field(string &field, Value &to) const
+int Row::compare_field(const string &field, const Value &to) const
 {
-    return 0;
+    Value* value = get(field);
+    return value->compare(to);
 }

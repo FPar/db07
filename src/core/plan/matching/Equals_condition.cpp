@@ -2,7 +2,7 @@
 
 using namespace db07;
 
-bool db07::Equals_condition::fulfil(Row &tuple) const
+bool db07::Equals_condition::fulfil(Row& row) const
 {
-    return false;
+    return row.compare_field(_column, *_value) == 0;
 }

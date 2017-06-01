@@ -11,7 +11,7 @@ namespace db07 {
     public:
         Int_value(int data) : _data(data) {};
         Type* type();
-        int compare(Value& to);
+        int compare(const Value & to);
     };
 }
 
