@@ -8,4 +8,8 @@ namespace db07 {
     bool String_token_rule::matches(std::string &token_string) const {
         return _string_representation.compare(token_string) == 0;
     }
+
+    bool String_token_rule::can_match(std::string &token_string) const {
+        return _string_representation.compare(0, token_string.length(), token_string) == 0;
+    }
 }

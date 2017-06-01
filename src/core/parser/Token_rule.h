@@ -8,12 +8,15 @@ namespace db07 {
     class Token_rule {
     private:
         const token_type _token_type;
+
     public:
         Token_rule(const token_type token_type);
 
         token_type type() const;
 
         virtual bool matches(std::string &token_string) const = 0;
+
+        virtual bool can_match(std::string &token_string) const = 0;
     };
 }
 

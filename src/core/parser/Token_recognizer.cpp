@@ -18,9 +18,26 @@ namespace db07 {
             new String_token_rule("DISTINCT", token_type::KEYWORD_DISTINCT),
             new String_token_rule("FROM", token_type::KEYWORD_FROM),
             new String_token_rule("WHERE", token_type::KEYWORD_WHERE),
-            new Regex_token_rule("[0-9]+", token_type::INTEGER),
-            new Regex_token_rule("\'.*\'", token_type::LITERAL),
-            new Regex_token_rule("[a-z][a-z0-9_]*", token_type::IDENTIFIER)
+            new Regex_token_rule("[0-9]+", token_type::INTEGER, [](std::string &token_string) {
+                for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
+                    if (isdigit(*token_chr)) {
+                        return false;
+                    }
+                }
+                return true;
+            }),
+            new Regex_token_rule("\'.*\'", token_type::LITERAL, [](std::string &token_string) {
+                return token_string.front() == '\'';
+            }),
+            new Regex_token_rule("[a-z][a-z0-9_]*", token_type::IDENTIFIER, [](std::string &token_string) {
+                for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
+                    if ((token_chr == token_string.begin() && !isalpha(*token_chr))
+                        || !isalnum(*token_chr)) {
+                        return false;
+                    }
+                }
+                return true;
+            })
     };
 
     token_type Token_recognizer::recognize(std::string &token_string) {
