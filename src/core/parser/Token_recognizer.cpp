@@ -4,6 +4,16 @@
 
 namespace db07 {
     const std::list<Recognition_rule *> Token_recognizer::RULES = {
+            new Regex_recognition_rule("\\s+", token_type::WHITESPACE, [](const std::string &token_string) {
+                for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
+                    if (!isspace(*token_chr)) {
+                        return false;
+                    }
+                }
+                return true;
+            }),
+            new String_recognition_rule("(", token_type::LEFT_BRACKET),
+            new String_recognition_rule(")", token_type::RIGHT_BRACKET),
             new String_recognition_rule("=", token_type::OPERATOR_EQ),
             new String_recognition_rule("!=", token_type::OPERATOR_NEQ),
             new String_recognition_rule("<", token_type::OPERATOR_LT),
@@ -20,7 +30,7 @@ namespace db07 {
             new String_recognition_rule("WHERE", token_type::KEYWORD_WHERE),
             new Regex_recognition_rule("[0-9]+", token_type::INTEGER, [](const std::string &token_string) {
                 for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
-                    if (isdigit(*token_chr)) {
+                    if (!isdigit(*token_chr)) {
                         return false;
                     }
                 }

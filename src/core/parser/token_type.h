@@ -3,6 +3,9 @@
 
 namespace db07 {
     enum class token_type {
+        WHITESPACE,
+        LEFT_BRACKET,
+        RIGHT_BRACKET,
         OPERATOR_EQ,
         OPERATOR_NEQ,
         OPERATOR_LT,

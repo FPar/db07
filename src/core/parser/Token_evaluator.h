@@ -9,6 +9,9 @@ namespace db07 {
     public:
         static std::function<Token(std::string &)> for_type(token_type token_type) {
             switch (token_type) {
+                case token_type::WHITESPACE:
+                case token_type::LEFT_BRACKET:
+                case token_type::RIGHT_BRACKET:
                 case token_type::OPERATOR_EQ:
                 case token_type::OPERATOR_NEQ:
                 case token_type::OPERATOR_LT:
