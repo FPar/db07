@@ -1,7 +1,7 @@
 #include "Regex_token_rule.h"
 
 namespace db07 {
-    Regex_token_rule::Regex_token_rule(const char *regex_str, const token_type token_type)
+    Regex_token_rule::Regex_token_rule(const std::string regex_str, const token_type token_type)
             : Token_rule(token_type),
               _regex(regex_str, std::regex_constants::icase) {}
 

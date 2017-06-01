@@ -10,7 +10,7 @@ namespace db07 {
         std::regex _regex;
 
     public:
-        Regex_token_rule(const char *regex_str, const token_type token_type);
+        Regex_token_rule(const std::string regex_str, const token_type token_type);
 
         bool matches(std::string &token_string) const override;
     };
