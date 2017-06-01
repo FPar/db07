@@ -23,7 +23,9 @@ set(SOURCES
     parser/Token_recognizer.cpp
     parser/Token_recognizer.h
     parser/token_type.h
-	
+	parser/Parser.cpp
+	parser/Parser.h
+
 	plan/matching/And_condition.cpp
 	plan/matching/And_condition.h
 	plan/matching/Condition.h
@@ -58,6 +60,6 @@ set(SOURCES
 	storage_engine/Row.cpp
 	storage_engine/Row.h
 	storage_engine/Table.h
-)
+		parser/Token_rule.h parser/Token_rule.h)
 
 add_library(db07_core ${SOURCES})

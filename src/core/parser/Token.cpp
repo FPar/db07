@@ -2,23 +2,23 @@
 
 namespace db07 {
     Token::Token(const token_type type)
-            : type_(type), string_value_(""), int_value_(0) {}
+            : _type(type), _string_value(""), _int_value(0) {}
 
     Token::Token(const token_type type, std::string &string_value)
-            : type_(type), string_value_(string_value), int_value_(0) {}
+            : _type(type), _string_value(string_value), _int_value(0) {}
 
     Token::Token(const token_type type, int int_value)
-            : type_(type), string_value_(""), int_value_(int_value) {}
+            : _type(type), _string_value(""), _int_value(int_value) {}
 
     token_type Token::type() const {
-        return type_;
+        return _type;
     }
 
     std::string Token::string_value() const {
-        return string_value_;
+        return _string_value;
     }
 
     int Token::int_value() const {
-        return int_value_;
+        return _int_value;
     }
 }
