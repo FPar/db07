@@ -26,8 +26,8 @@ set(SOURCES
 	parser/token_type.h
 	parser/Parser.cpp
 	parser/Parser.h
-    parser/Recognition_rule.h
-    parser/Recognition_rule.cpp
+	parser/Recognition_rule.h
+	parser/Recognition_rule.cpp
 	parser/String_recognition_rule.cpp
 	parser/String_recognition_rule.h
 	parser/Regex_recognition_rule.cpp
