@@ -14,6 +14,7 @@ set(SOURCES
     optimizer/Query_data.h
 	optimizer/Select_plan.cpp
     optimizer/Select_plan.h
+	optimizer/Query_type.h
 
     parser/Lexer.cpp
     parser/Lexer.h
@@ -40,6 +41,7 @@ set(SOURCES
 	storage_engine/types/Type.h
     storage_engine/types/Types.cpp
     storage_engine/types/Types.h
+
 
     storage_engine/values/Int_value.cpp
     storage_engine/values/Int_value.h

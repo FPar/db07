@@ -6,23 +6,35 @@ using namespace std;
 
 namespace db07 {
 
+    const Query_type Query_data::getQuery_type() const {
+        return _queryType;
+    }
+
     string Query_data::getTableName() {
-        return std::string();
+        return _tableName;
     }
 
-    string Query_data::getColumnName() {
-        return std::string();
+    list <string> Query_data::getPrimaryKeys() {
+        return _primaryKey;
     }
 
-    list<string> Query_data::getPrimaryKeys() {
-        return list<string, allocator<string>>();
+    list <Query_condition> Query_data::getConditions() {
+        return _conditions;
     }
 
-    list<Query_condition> Query_data::getConditions() {
-        return list<Query_condition, allocator<Query_condition>>();
+    list <pair<string, string>> Query_data::getColumnValues() {
+        return _columns2value;
+
     }
 
-    list<pair<string, string>> Query_data::getColumnValues() {
-        return list<pair<string, string>, allocator<pair<string, string>>>();
+    const list <string> &Query_data::getColumnName() const {
+        return _columnName;
     }
+
+    Query_data::Query_data(const string &tableName, const list <string> &columnName, const list <string> &primaryKey,
+                           const list <Query_condition> &conditions, const list <pair<string, string>> &columns2value,
+                           const Query_type &queryType) {
+
+    }
+
 }
