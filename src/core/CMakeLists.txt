@@ -29,9 +29,13 @@ set(SOURCES
 
 	plan/matching/And_condition.cpp
 	plan/matching/And_condition.h
+	plan/matching/Comparing_condition.cpp
+	plan/matching/Comparing_condition.h
 	plan/matching/Condition.h
 	plan/matching/Equals_condition.cpp
 	plan/matching/Equals_condition.h
+	plan/matching/Greater_condition.cpp
+	plan/matching/Greater_condition.h
 	plan/matching/Or_condition.cpp
 	plan/matching/Or_condition.h
 
@@ -41,7 +45,6 @@ set(SOURCES
 	storage_engine/types/Type.h
     storage_engine/types/Types.cpp
     storage_engine/types/Types.h
-
 
     storage_engine/values/Int_value.cpp
     storage_engine/values/Int_value.h

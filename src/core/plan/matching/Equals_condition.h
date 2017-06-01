@@ -2,22 +2,18 @@
 #define EQUALS_CONDITION_H
 
 #include <string>
-#include "Condition.h"
-#include "storage_engine/values/Value.h"
+#include "Comparing_condition.h"
 
 namespace db07 {
-    class Equals_condition : public Condition {
-    private:
-        const std::string _column;
-        const Value* _value;
+    class Equals_condition : public Comparing_condition {
+    protected:
+        bool interpret(int compare_result) const;
 
     public:
-        Equals_condition(std::string column, Value* value) :
-            _column(column), _value(value)
+        Equals_condition(std::string &column, Value* value) :
+            Comparing_condition(column, value)
         {
         }
-
-        bool fulfil(Row& row) const;
     };
 }
 
