@@ -26,12 +26,12 @@ set(SOURCES
 	parser/token_type.h
 	parser/Parser.cpp
 	parser/Parser.h
-	parser/Token_rule.h
-	parser/Token_rule.cpp
-	parser/String_token_rule.cpp
-	parser/String_token_rule.h
-	parser/Regex_token_rule.cpp
-	parser/Regex_token_rule.h
+    parser/Recognition_rule.h
+    parser/Recognition_rule.cpp
+	parser/String_recognition_rule.cpp
+	parser/String_recognition_rule.h
+	parser/Regex_recognition_rule.cpp
+	parser/Regex_recognition_rule.h
 
 	plan/matching/And_condition.cpp
 	plan/matching/And_condition.h

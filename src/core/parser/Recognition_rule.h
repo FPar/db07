@@ -5,12 +5,12 @@
 #include "token_type.h"
 
 namespace db07 {
-    class Token_rule {
+    class Recognition_rule {
     private:
         const token_type _token_type;
 
     public:
-        Token_rule(const token_type token_type);
+        Recognition_rule(const token_type token_type);
 
         token_type type() const;
 
