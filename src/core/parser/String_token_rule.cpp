@@ -5,11 +5,11 @@ namespace db07 {
             : Token_rule(token_type),
               _string_representation(string_representation) {}
 
-    bool String_token_rule::matches(std::string &token_string) const {
+    bool String_token_rule::matches(const std::string &token_string) const {
         return _string_representation.compare(token_string) == 0;
     }
 
-    bool String_token_rule::can_match(std::string &token_string) const {
+    bool String_token_rule::can_match(const std::string &token_string) const {
         return _string_representation.compare(0, token_string.length(), token_string) == 0;
     }
 }

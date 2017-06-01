@@ -11,9 +11,9 @@ namespace db07 {
     public:
         String_token_rule(const std::string string_representation, const token_type token_type);
 
-        bool matches(std::string &token_string) const override;
+        bool matches(const std::string &token_string) const override;
 
-        bool can_match(std::string &token_string) const override;
+        bool can_match(const std::string &token_string) const override;
     };
 }
 

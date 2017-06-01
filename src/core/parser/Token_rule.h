@@ -14,9 +14,9 @@ namespace db07 {
 
         token_type type() const;
 
-        virtual bool matches(std::string &token_string) const = 0;
+        virtual bool matches(const std::string &token_string) const = 0;
 
-        virtual bool can_match(std::string &token_string) const = 0;
+        virtual bool can_match(const std::string &token_string) const = 0;
     };
 }
 
