@@ -1,4 +1,5 @@
 #include "Row.h"
+#include <stdexcept>
 
 using namespace std;
 using namespace db07;
