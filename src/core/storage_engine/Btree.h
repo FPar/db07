@@ -46,7 +46,7 @@ namespace db07 {
 
     public:
 
-        Btree():{};
+		Btree();
 
         void insert(int index, Row *entries);
 
