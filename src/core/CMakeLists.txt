@@ -63,6 +63,7 @@ set(SOURCES
 	storage_engine/Btree.cpp
 	storage_engine/Btree.h
 	storage_engine/Column.h
+	storage_engine/Global_object_store.cpp
 	storage_engine/Global_object_store.h
 	storage_engine/Object_store.h
 	storage_engine/Object_store_item.h

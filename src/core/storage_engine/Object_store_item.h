@@ -6,6 +6,10 @@
 namespace db07 {
     class Object_store_item {
     public:
+		virtual ~Object_store_item()
+		{
+		}
+
         virtual std::string name() const = 0;
     };
 }

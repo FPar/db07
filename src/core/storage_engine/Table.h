@@ -6,26 +6,34 @@
 #include "Column.h"
 #include "Object_store_item.h"
 
-namespace db07 {
-    class Table : public Object_store_item {
-    private:
-        std::string _name;
-        Table_definition _description;
+namespace db07
+{
+	class Table : public Object_store_item
+	{
+	public:
+		Table(std::string& name, Table_definition& definition)
+			: _name(name), _definition(definition)
+		{
+		}
 
-    public:
-        Table(std::string &name, Table_definition &description)
-            : _name(name), _description(description)
-        {
-        }
+		virtual ~Table()
+		{
+		}
 
-        virtual std::string name() const {
-            return _name;
-        }
+		std::string name() const override
+		{
+			return _name;
+		}
 
-        const Table_definition *description() const {
-            return &_description;
-        }
-    };
+		const Table_definition* description() const
+		{
+			return &_definition;
+		}
+
+	private:
+		std::string _name;
+		Table_definition _definition;
+	};
 }
 
 #endif // !TABLE_H
