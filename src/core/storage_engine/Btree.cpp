@@ -1,6 +1,10 @@
 
 #include "Btree.h"
 
+db07::Btree::Btree() {
+    root = new LeafNode();
+}
+
 void db07::Btree::insert(int index, Row *entries) {
     insertNode(index, entries, root);
 }
@@ -18,7 +22,7 @@ void db07::Btree::insertNode(int index, Row *entries, Node *node) {
         insertNode(index, entries, node);
     }else {
         //Check if new entry can be inserted in current Node
-        if(node->setKeys == AMOUNTKEYS){
+        if(node->keys.size() == AMOUNTKEYS){
             insertFullNode(index, entries, node);
         }else {
             insertSpaceNode(index, entries, node);
@@ -62,9 +66,8 @@ void db07::Btree::insertSpaceNode(int index, Row *entries, Node *node) {
         }
         if((*i) == -1){
             node->keys[counter] = index;
-            node->setKeys++;
             LeafNode *leaf = new LeafNode();
-            leaf->prevNode = node;
+            leaf->parentNode = node;
             insertLeafNode(index, entries, leaf);
             node->childNodes[counter + 1] =  leaf;
             return;
@@ -89,12 +92,20 @@ void db07::Btree::insertLeafNode(int index,  Row *entries, LeafNode *leafNode) {
         if((*i) == -1){
             leafNode->keys[counter] = index;
             leafNode->entries[counter] = entries;
-            leafNode->setKeys++;
             return;
         }
         counter++;
     }
 }
+
+int db07::Btree::findMiddleIndex(Node *node) {
+    return 0;
+}
+
+void db07::Btree::splitNode(Node *node) {
+    int middleIndex = findMiddleIndex(node);
+}
+
 
 
 

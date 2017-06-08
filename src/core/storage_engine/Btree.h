@@ -17,18 +17,20 @@ namespace db07 {
     private:
 
         struct Node {
-            std::array<int, AMOUNTKEYS> keys = {-1};
-            std::array<Node*, AMOUNTKEYS+1> childNodes = {nullptr};
-            Node *prevNode = nullptr;
-            int setKeys = 0;
+            std::vector<int> keys;
+            std::vector<Node*> childNodes;
+            Node *parentNode = nullptr;
+            int level = 0;
         };
 
 
         struct LeafNode : Node {
-            std::array<Row*, AMOUNTKEYS> entries = {nullptr};
+            std::vector<Row*> entries;
         };
 
         Node *root;
+
+
 
         void insertFullNode(int index, Row *entries, Node *node);
 
@@ -38,7 +40,13 @@ namespace db07 {
 
         void insertNode(int index, Row *entries, Node *node);
 
+        void splitNode(Node *node);
+
+        int findMiddleIndex(Node *node);
+
     public:
+
+        Btree():{};
 
         void insert(int index, Row *entries);
 
