@@ -4,6 +4,10 @@
 namespace db07 {
     class Plan {
     public:
+		virtual ~Plan()
+		{
+		}
+
         virtual void execute() = 0;
     };
 }

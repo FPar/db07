@@ -2,21 +2,25 @@
 #define QUERY_PLAN_H
 
 #include "control/Destination_receiver.h"
-#include "optimizer/Plan.h"
-#include "optimizer/Plan_node.h"
+#include "Plan.h"
+#include "Plan_node.h"
 
-namespace db07 {
-    class Select_plan : public Plan {
-    private:
-        Destination_receiver *m_receiver;
-        Plan_node *m_root;
+namespace db07
+{
+	class Select_plan : public Plan
+	{
+	public:
+		Select_plan(Destination_receiver* receiver, Plan_node* root) :
+			_receiver(receiver), _root(root)
+		{
+		}
 
-    public:
-        Select_plan(Destination_receiver *receiver, Plan_node *root) :
-            m_receiver(receiver), m_root(root) { }
+		void execute() override;
 
-        void execute();
-    };
+	private:
+		Destination_receiver* _receiver;
+		Plan_node* _root;
+	};
 }
 
 #endif // !QUERY_PLAN_H

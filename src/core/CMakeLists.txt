@@ -6,6 +6,8 @@ set(SOURCES
 	control/Destination_receiver.cpp
 	control/Destination_receiver.h
 
+	optimizer/Insert_plan.cpp
+	optimizer/Insert_plan.h
 	optimizer/Plan.h
 	optimizer/Plan_node.h
 	optimizer/Query_condition.cpp
