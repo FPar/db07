@@ -1,10 +1,10 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include <string>
-
 #include "Column.h"
 #include "Object_store_item.h"
+#include "Row.h"
+#include "Btree.h"
 
 namespace db07
 {
@@ -30,10 +30,13 @@ namespace db07
 			return &_definition;
 		}
 
+		void insert(Row* row);
+
 	private:
 		std::string _name;
 		Table_definition _definition;
+		Btree _data;
 	};
 }
 
-#endif // !TABLE_H
+#endif

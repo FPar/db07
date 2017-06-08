@@ -9,7 +9,6 @@ set(SOURCES
 	optimizer/Insert_plan.cpp
 	optimizer/Insert_plan.h
 	optimizer/Plan.h
-	optimizer/Plan_node.h
 	optimizer/Query_condition.cpp
 	optimizer/Query_condition.h
 	optimizer/Query_data.cpp
@@ -55,7 +54,8 @@ set(SOURCES
 	plan/matching/Or_condition.h
 	plan/matching/Unequals_condition.cpp
 	plan/matching/Unequals_condition.h
-
+	
+	plan/Plan_node.h
 	plan/Table_scan.cpp
 	plan/Table_scan.h
 
@@ -82,6 +82,7 @@ set(SOURCES
 	storage_engine/object_store_item_not_found.h
 	storage_engine/Row.cpp
 	storage_engine/Row.h
+	storage_engine/Table.cpp
 	storage_engine/Table.h
 )
 

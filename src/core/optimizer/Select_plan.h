@@ -3,7 +3,7 @@
 
 #include "control/Destination_receiver.h"
 #include "Plan.h"
-#include "Plan_node.h"
+#include "plan/Plan_node.h"
 
 namespace db07
 {
