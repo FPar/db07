@@ -1,7 +1,6 @@
 #ifndef COMPARING_CONDITION_H
 #define COMPARING_CONDITION_H
 
-#include <string>
 #include "Condition.h"
 #include "storage_engine/values/Value.h"
 
@@ -19,7 +18,7 @@ namespace db07 {
         {
         }
 
-        bool fulfil(Row& row) const;
+        bool fulfil(Row& row) const override;
     };
 }
 

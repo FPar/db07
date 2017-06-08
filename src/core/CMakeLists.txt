@@ -40,12 +40,21 @@ set(SOURCES
 	plan/matching/Comparing_condition.cpp
 	plan/matching/Comparing_condition.h
 	plan/matching/Condition.h
+	plan/matching/conditions.h
 	plan/matching/Equals_condition.cpp
 	plan/matching/Equals_condition.h
 	plan/matching/Greater_condition.cpp
 	plan/matching/Greater_condition.h
+	plan/matching/Greater_equals_condition.cpp
+	plan/matching/Greater_equals_condition.h
+	plan/matching/Less_condition.cpp
+	plan/matching/Less_condition.h
+	plan/matching/Less_equals_condition.cpp
+	plan/matching/Less_equals_condition.h
 	plan/matching/Or_condition.cpp
 	plan/matching/Or_condition.h
+	plan/matching/Unequals_condition.cpp
+	plan/matching/Unequals_condition.h
 
 	plan/Table_scan.cpp
 	plan/Table_scan.h
