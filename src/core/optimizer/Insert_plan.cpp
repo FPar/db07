@@ -8,5 +8,6 @@ void Insert_plan::execute()
 	{
 		Row* current = _source->next();
 		_target->insert(current);
+		++_rows_inserted;
 	}
 }

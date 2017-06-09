@@ -16,9 +16,15 @@ namespace db07
 
 		void execute() override;
 
+		int rows_inserted() const
+		{
+			return _rows_inserted;
+		}
+
 	private:
 		Plan_node* _source;
 		Table* _target;
+		int _rows_inserted = 0;
 	};
 }
 
