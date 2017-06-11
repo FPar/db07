@@ -7,7 +7,8 @@
 #include "Column.h"
 #include "Row.h"
 
-#define AMOUNTKEYS 4
+#define MAX_AMOUNTKEYS 4
+#define MIDDLE_VALUE 2
 
 
 namespace db07 {
@@ -36,13 +37,13 @@ namespace db07 {
 
         void insertSpaceNode(int index, Row *entries, Node *node);
 
-        void insertLeafNode(int index, Row *entries, LeafNode *leafNode);
+        LeafNode* insertLeafNode(int index, Row *entries, Node *leafNode);
 
         void insertNode(int index, Row *entries, Node *node);
 
         void splitNode(Node *node);
 
-        int findMiddleIndex(Node *node);
+        LeafNode* splitLeafNode(LeafNode *leafNode);
 
     public:
 

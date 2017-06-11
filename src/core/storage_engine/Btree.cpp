@@ -17,15 +17,18 @@ void db07::Btree::insert(int index, Row *entries) {
  */
 void db07::Btree::insertNode(int index, Row *entries, Node *node) {
     //Check if node has been initialized
-    if(node == nullptr){
-        node = new Node();
-        insertNode(index, entries, node);
-    }else {
-        //Check if new entry can be inserted in current Node
-        if(node->keys.size() == AMOUNTKEYS){
-            insertFullNode(index, entries, node);
-        }else {
-            insertSpaceNode(index, entries, node);
+    int levelOfNode = node->level;
+    int amountOfKeys = node->keys.size();
+    if(levelOfNode == 0){ // Leafnode
+
+        LeafNode* splittingAvailable = insertLeafNode(index, entries, node);
+        //return splittingAvailable;
+
+    }else{ // Just a Node
+        if(amountOfKeys == MAX_AMOUNTKEYS){ // Node full
+
+        }else{ // Node is space
+
         }
     }
 }
@@ -86,24 +89,55 @@ void db07::Btree::insertSpaceNode(int index, Row *entries, Node *node) {
  * @param entries Entry values of the entry
  * @param leafNode LeafNode for insertion
  */
-void db07::Btree::insertLeafNode(int index,  Row *entries, LeafNode *leafNode) {
+LeafNode* db07::Btree::insertLeafNode(int index,  Row *entries, Node *node) {
+    LeafNode *newLeafNode = nullptr;
+    LeafNode *leafNode = (LeafNode*) node;
+    bool foundInsertPosition = false;
     int counter = 0;
-    for(auto i = leafNode->keys.cbegin(); i < leafNode->keys.cend(); i++){
-        if((*i) == -1){
-            leafNode->keys[counter] = index;
-            leafNode->entries[counter] = entries;
-            return;
+    auto i = leafNode->keys.cbegin();
+    for(; i < leafNode->keys.cend() && !foundInsertPosition; ++i){
+        if((*i)> index){
+            foundInsertPosition = true;
+            leafNode->keys.insert(i,index);
         }
-        counter++;
+        ++counter;
     }
+    if(!foundInsertPosition){ // empty list for keys or after last element
+        leafNode->keys.insert(i,index);
+    } else{
+        --counter;
+    }
+    auto j = leafNode->entries.cbegin();
+    while(counter > 0) {
+        ++j;
+        --counter;
+    }
+    leafNode->entries.insert(j, entries);
+
+    if(leafNode->keys.size() > MAX_AMOUNTKEYS){
+        newLeafNode = splitLeafNode(leafNode);
+    }
+    return newLeafNode;
 }
 
-int db07::Btree::findMiddleIndex(Node *node) {
-    return 0;
-}
 
 void db07::Btree::splitNode(Node *node) {
-    int middleIndex = findMiddleIndex(node);
+   // int middleIndex = findMiddleIndex(node);
+}
+
+db07::Btree::LeafNode *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNode) {
+    int counter = 0;
+    LeafNode *newLeaf = new LeafNode();
+    auto i = leafNode->keys.cbegin()+MIDDLE_VALUE;
+    auto j = leafNode->entries.cbegin() + MIDDLE_VALUE;
+    for(; i < leafNode->keys.end() && j < leafNode->entries.cend(); i++, j++){
+        newLeaf->keys[counter] = (*i);
+        newLeaf->entries[counter] = (*j);
+        counter++;
+    }
+    leafNode->keys.erase(leafNode->keys.cbegin()+ MIDDLE_VALUE, leafNode->keys.cend());
+    leafNode->entries.erase(leafNode->entries.cbegin()+ MIDDLE_VALUE, leafNode->entries.cend());
+    return newLeaf;
 }
 
 
