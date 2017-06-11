@@ -24,14 +24,19 @@ namespace db07 {
             int level = 0;
         };
 
+        struct LeafNode : Node {
+            std::vector<Row*> entries;
+        };
+
+
         struct SplitInfo {
             int insertIndex = -1;
             Node * newNode = nullptr;
         };
 
-
-        struct LeafNode : Node {
-            std::vector<Row*> entries;
+        struct SearchInfo {
+            bool found = false;
+            Row * entry = nullptr;
         };
 
         Node *root;
@@ -45,6 +50,10 @@ namespace db07 {
 
         SplitInfo* splitLeafNode(LeafNode *leafNode);
 
+        SearchInfo* search(int index, Node* node);
+
+
+
     public:
 
 		Btree();
@@ -53,9 +62,9 @@ namespace db07 {
 
         void remove(int index);
 
-        LeafNode *indexSeek(int index);
+        Row *indexSeek(int index);
 
-        LeafNode *indexScan(Row *values);
+        Row *indexScan(Row *values);
 
 
     };
