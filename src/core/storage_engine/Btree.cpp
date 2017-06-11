@@ -21,7 +21,7 @@ void db07::Btree::insertNode(int index, Row *entries, Node *node) {
     int amountOfKeys = node->keys.size();
     if(levelOfNode == 0){ // Leafnode
 
-        LeafNode* splittingAvailable = insertLeafNode(index, entries, node);
+        SplitInfo* splittingAvailable = insertLeafNode(index, entries, node);
         //return splittingAvailable;
 
     }else{ // Just a Node
@@ -89,8 +89,8 @@ void db07::Btree::insertSpaceNode(int index, Row *entries, Node *node) {
  * @param entries Entry values of the entry
  * @param leafNode LeafNode for insertion
  */
-LeafNode* db07::Btree::insertLeafNode(int index,  Row *entries, Node *node) {
-    LeafNode *newLeafNode = nullptr;
+db07::Btree::SplitInfo *db07::Btree::insertLeafNode(int index, Row *entries, Node *node) {
+    SplitInfo *newSplitInfo = new SplitInfo();
     LeafNode *leafNode = (LeafNode*) node;
     bool foundInsertPosition = false;
     int counter = 0;
@@ -115,13 +115,13 @@ LeafNode* db07::Btree::insertLeafNode(int index,  Row *entries, Node *node) {
     leafNode->entries.insert(j, entries);
 
     if(leafNode->keys.size() > MAX_AMOUNTKEYS){
-        newLeafNode = splitLeafNode(leafNode);
+        newSplitInfo = splitLeafNode(leafNode);
     }
-    return newLeafNode;
+    return newSplitInfo;
 }
 
 
-SplitInfo * db07::Btree::splitNode(Node *node) {
+db07::Btree::SplitInfo *db07::Btree::splitNode(Node *node) {
     int counter = 0;
     int index = node->keys[MIDDLE_VALUE];
     Node *newNode = new Node();
@@ -145,9 +145,12 @@ SplitInfo * db07::Btree::splitNode(Node *node) {
     return newSplitInfo;
 }
 
-db07::Btree::LeafNode *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNode) {
+db07::Btree::SplitInfo *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNode) {
     int counter = 0;
     LeafNode *newLeaf = new LeafNode();
+    SplitInfo *newSplitInfo = new SplitInfo();
+    newSplitInfo->insertIndex = leafNode->keys[MIDDLE_VALUE];
+    newSplitInfo->newNode = newLeaf;
     auto i = leafNode->keys.cbegin()+MIDDLE_VALUE;
     auto j = leafNode->entries.cbegin() + MIDDLE_VALUE;
     for(; i < leafNode->keys.end() && j < leafNode->entries.cend(); i++, j++){
@@ -157,7 +160,7 @@ db07::Btree::LeafNode *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNod
     }
     leafNode->keys.erase(leafNode->keys.cbegin()+ MIDDLE_VALUE, leafNode->keys.cend());
     leafNode->entries.erase(leafNode->entries.cbegin()+ MIDDLE_VALUE, leafNode->entries.cend());
-    return newLeaf;
+    return newSplitInfo;
 }
 
 

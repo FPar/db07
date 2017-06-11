@@ -25,8 +25,8 @@ namespace db07 {
         };
 
         struct SplitInfo {
-            int insertIndex;
-            Node * newNode;
+            int insertIndex = -1;
+            Node * newNode = nullptr;
         };
 
 
@@ -42,13 +42,13 @@ namespace db07 {
 
         void insertSpaceNode(int index, Row *entries, Node *node);
 
-        LeafNode* insertLeafNode(int index, Row *entries, Node *leafNode);
+        SplitInfo * insertLeafNode(int index, Row *entries, Node *leafNode);
 
         void insertNode(int index, Row *entries, Node *node);
 
-        SplitInfo * splitNode(Node *node);
+        SplitInfo* splitNode(Node *node);
 
-        LeafNode* splitLeafNode(LeafNode *leafNode);
+        SplitInfo* splitLeafNode(LeafNode *leafNode);
 
     public:
 
