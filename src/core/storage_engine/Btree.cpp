@@ -121,8 +121,28 @@ LeafNode* db07::Btree::insertLeafNode(int index,  Row *entries, Node *node) {
 }
 
 
-void db07::Btree::splitNode(Node *node) {
-   // int middleIndex = findMiddleIndex(node);
+SplitInfo * db07::Btree::splitNode(Node *node) {
+    int counter = 0;
+    int index = node->keys[MIDDLE_VALUE];
+    Node *newNode = new Node();
+    newNode->level = node->level;
+    SplitInfo *newSplitInfo = new SplitInfo();
+    newSplitInfo->insertIndex = index;
+    newSplitInfo->newNode = newNode;
+    auto i = node->keys.cbegin()+MIDDLE_VALUE + 1;
+    auto j = node->childNodes.cbegin() + MIDDLE_VALUE + 1;
+    for(; i < node->keys.end(); i++){
+        newNode->keys[counter] = (*i);
+        counter++;
+    }
+    counter = 0;
+    for(;j < node->childNodes.cend(); j++){
+        newNode->childNodes[counter] = (*j);
+        counter++;
+    }
+    node->keys.erase(node->keys.cbegin()+ MIDDLE_VALUE, node->keys.cend());
+    node->childNodes.erase(node->childNodes.cbegin()+ MIDDLE_VALUE + 1, node->childNodes.cend());
+    return newSplitInfo;
 }
 
 db07::Btree::LeafNode *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNode) {

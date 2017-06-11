@@ -24,6 +24,11 @@ namespace db07 {
             int level = 0;
         };
 
+        struct SplitInfo {
+            int insertIndex;
+            Node * newNode;
+        };
+
 
         struct LeafNode : Node {
             std::vector<Row*> entries;
@@ -41,7 +46,7 @@ namespace db07 {
 
         void insertNode(int index, Row *entries, Node *node);
 
-        void splitNode(Node *node);
+        SplitInfo * splitNode(Node *node);
 
         LeafNode* splitLeafNode(LeafNode *leafNode);
 
