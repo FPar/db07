@@ -37,14 +37,9 @@ namespace db07 {
         Node *root;
 
 
-
-        void insertFullNode(int index, Row *entries, Node *node);
-
-        void insertSpaceNode(int index, Row *entries, Node *node);
-
         SplitInfo * insertLeafNode(int index, Row *entries, Node *leafNode);
 
-        void insertNode(int index, Row *entries, Node *node);
+        SplitInfo* insertNode(int index, Row *entries, Node *node);
 
         SplitInfo* splitNode(Node *node);
 

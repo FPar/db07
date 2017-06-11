@@ -6,7 +6,16 @@ db07::Btree::Btree() {
 }
 
 void db07::Btree::insert(int index, Row *entries) {
-    insertNode(index, entries, root);
+    // TODO vorher search
+    SplitInfo *newSplitInfo = insertNode(index, entries, root);
+    if(newSplitInfo->insertIndex != -1){
+        Node *newRootNode = new Node();
+        newRootNode->level = root->level+1;
+        newRootNode->keys[0] = newSplitInfo->insertIndex;
+        newRootNode->childNodes[0] = root;
+        newRootNode->childNodes[1] = newSplitInfo->newNode;
+        root = newRootNode;
+    }
 }
 
 /**
@@ -15,71 +24,51 @@ void db07::Btree::insert(int index, Row *entries) {
  * @param Entries values of the entry
  * @param node Start node for insertion
  */
-void db07::Btree::insertNode(int index, Row *entries, Node *node) {
+db07::Btree::SplitInfo* db07::Btree::insertNode(int index, Row *entries, Node *node) {
     //Check if node has been initialized
     int levelOfNode = node->level;
     int amountOfKeys = node->keys.size();
     if(levelOfNode == 0){ // Leafnode
 
         SplitInfo* splittingAvailable = insertLeafNode(index, entries, node);
-        //return splittingAvailable;
+        return splittingAvailable;
 
     }else{ // Just a Node
-        if(amountOfKeys == MAX_AMOUNTKEYS){ // Node full
+        bool isNodeFound = false;
+        int counter = 0;
+        SplitInfo *newSplitInfo = new SplitInfo();
+        SplitInfo *result = new SplitInfo();
+        auto j = node->childNodes.cbegin();
+        auto i = node->keys.cbegin();
+        for(; i < node->keys.cend() && !isNodeFound ; ++i,++j){
+            if(index < (*i)){
+                isNodeFound = true;
+                newSplitInfo = insertNode(index,entries,node->childNodes[counter]);
+                if(newSplitInfo->insertIndex != -1){
+                    node->keys.insert(i,newSplitInfo->insertIndex);
+                    node->childNodes.insert(j+1,newSplitInfo->newNode);
+                    if(node->keys.size() > MAX_AMOUNTKEYS){
+                        result = splitNode(node);
+                    }
+                }
+            }
+            counter++;
+        }
 
-        }else{ // Node is space
+        if(!isNodeFound){ // Insert at the end
+            newSplitInfo = insertNode(index,entries,node->childNodes[counter]);
+            if(newSplitInfo->insertIndex != -1){
+                node->keys.insert(i,newSplitInfo->insertIndex);
+                node->childNodes.insert(j+1,newSplitInfo->newNode);
+                if(node->keys.size() > MAX_AMOUNTKEYS){
+                    result = splitNode(node);
+                }
+            }
+        }
 
-        }
-    }
-}
+        return result;
 
-/**
- * Insert an entry in a node that is full
- * @param index Index of the entry
- * @param entries Entries values of the entry
- * @param node Node for insertion
- */
-void db07::Btree::insertFullNode(int index, Row *entries, Node *node) {
-    int counter = 0;
-    for(auto i = node->keys.cbegin(); i < node->keys.cend(); i++){
-        if(index < (*i)){
-            insertNode(index, entries, node->childNodes[counter]);
-            return;
-        }
-        if(i == node->keys.end()){
-                insertNode(index, entries, node->childNodes[counter + 1]);
-                return;
-        }
-        counter++;
-    }
-}
 
-/**
- * Insert an entry into a node
- * @param index Index of the entry
- * @param entries Entry values of the entry
- * @param node Node for insertion
- */
-void db07::Btree::insertSpaceNode(int index, Row *entries, Node *node) {
-    int counter = 0;
-    for(auto i = node->keys.cbegin(); i < node->keys.cend(); i++){
-        if(index < (*i)){
-            insertNode(index, entries, node->childNodes[counter]);
-            return;
-        }
-        if((*i) == -1){
-            node->keys[counter] = index;
-            LeafNode *leaf = new LeafNode();
-            leaf->parentNode = node;
-            insertLeafNode(index, entries, leaf);
-            node->childNodes[counter + 1] =  leaf;
-            return;
-        }
-        if(i == node->keys.end()) {
-            insertNode(index, entries, node->childNodes[counter + 1]);
-            return;
-        }
-        counter++;
     }
 }
 
