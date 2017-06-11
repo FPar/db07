@@ -6,7 +6,8 @@
 namespace db07 {
     class Condition {
     public:
-        virtual bool fulfil(Row &tuple) const = 0;
+	    virtual ~Condition() = default;
+	    virtual bool fulfil(Row &tuple) const = 0;
     };
 }
 

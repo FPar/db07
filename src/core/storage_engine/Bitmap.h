@@ -1,19 +1,21 @@
 #ifndef BITMAP_H
 #define BITMAP_H
 
-namespace db07 {
-    class Bitmap {
-    private:
-        unsigned char *m_data;
+namespace db07
+{
+	class Bitmap
+	{
+	public:
+		Bitmap(unsigned char* map) : _data(map)
+		{
+		}
 
-    public:
-        Bitmap(unsigned char *map) : m_data(map)
-        {
-        }
+		bool get(int index) const;
+		void set(int index, bool value) const;
 
-        bool get(int index) const;
-        void set(int index, bool value);
-    };
+	private:
+		unsigned char* _data;
+	};
 }
 
 #endif // !BITMAP_H
