@@ -56,6 +56,8 @@ set(SOURCES
 	plan/matching/Unequals_condition.h
 	
 	plan/Plan_node.h
+	plan/Projection.cpp
+	plan/Projection.h
 	plan/Table_scan.cpp
 	plan/Table_scan.h
 
@@ -84,6 +86,8 @@ set(SOURCES
 	storage_engine/Row.h
 	storage_engine/Table.cpp
 	storage_engine/Table.h
+	storage_engine/Table_definition.cpp
+	storage_engine/Table_definition.h
 )
 
 add_library(db07_core ${SOURCES})

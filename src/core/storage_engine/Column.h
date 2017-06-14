@@ -38,8 +38,6 @@ namespace db07
 		Type* _type;
 		bool _not_null;
 	};
-
-	typedef std::vector<Column> Table_definition;
 }
 
 #endif // !COLUMN_H

@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include "Column.h"
 #include "values/Value.h"
+#include "Table_definition.h"
 
 namespace db07
 {

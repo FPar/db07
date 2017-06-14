@@ -15,7 +15,7 @@ Row::~Row()
 Value* Row::get(const string& field) const
 {
 	int index = 0;
-	for (auto i = _description->cbegin(); i != _description->cend(); ++i)
+	for (auto i = _description->columns().cbegin(); i != _description->columns().cend(); ++i)
 	{
 		if ((*i).name() == field)
 		{

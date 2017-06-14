@@ -11,7 +11,7 @@ Destination_receiver::Destination_receiver(Table_definition *description) :
 {
     horizontal_line();
 
-    for (auto i = _description->cbegin(); i != _description->cend(); ++i) {
+    for (auto i = _description->columns().cbegin(); i != _description->columns().cend(); ++i) {
         cout << '|' << i->name();
     }
     cout << "|\n";
@@ -30,7 +30,7 @@ void Destination_receiver::receive(Row &tuple)
 }
 
 void Destination_receiver::horizontal_line() {
-    for (auto i = _description->cbegin(); i != _description->cend(); ++i) {
+    for (auto i = _description->columns().cbegin(); i != _description->columns().cend(); ++i) {
         cout << '+';
         for (size_t k = 0; k < i->name().length(); ++k) {
             cout << '-';
