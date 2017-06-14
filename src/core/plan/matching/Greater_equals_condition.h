@@ -8,7 +8,7 @@ namespace db07
 	class Greater_equals_condition : public Comparing_condition
 	{
 	public:
-		Greater_equals_condition(std::string& column, Value* value)
+		Greater_equals_condition(unsigned int column, Value* value)
 			: Comparing_condition(column, value)
 		{
 		}

@@ -6,30 +6,24 @@
 #include "values/Value.h"
 #include "Table_definition.h"
 
-namespace db07
-{
-	class Row
-	{
-	public:
-		Row(const Table_definition* description, std::vector<Value*>& values) :
-			_description(description), _values(values)
-		{
-		}
+namespace db07 {
+    class Row {
+    public:
+        Row(std::vector<Value *> &values) : _values(values) {
+        }
 
-		~Row();
+        ~Row();
 
-		const Table_definition* description() const
-		{
-			return _description;
-		}
+        const Table_definition *description() const {
+            return _description;
+        }
 
-		Value* get(const std::string& field) const;
-		int compare_field(const std::string& field, const Value& to) const;
+        Value *get(unsigned int field) const;
 
-	private:
-		const Table_definition* _description;
-		const std::vector<Value*> _values;
-	};
+    private:
+        const Table_definition *_description;
+        const std::vector<Value *> _values;
+    };
 }
 
 #endif

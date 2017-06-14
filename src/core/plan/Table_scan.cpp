@@ -10,5 +10,5 @@ bool Table_scan::has_next()
 Row* Table_scan::next()
 {
     std::vector<Value*> values;
-    return new Row(nullptr, values);
+    return new Row(values);
 }

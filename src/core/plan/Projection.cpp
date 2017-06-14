@@ -3,7 +3,7 @@
 using namespace std;
 using namespace db07;
 
-Projection::Projection(Table_definition& input, vector<string>& columns): _columns(columns), _definition(new Table_definition())
+Projection::Projection(Table_definition& input, vector<string>& columns): _columns(columns)
 {
 	for (auto column_name : columns)
 	{

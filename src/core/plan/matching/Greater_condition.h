@@ -11,7 +11,7 @@ namespace db07
 		bool interpret(int compare_result) const override;
 
 	public:
-		Greater_condition(std::string& column, Value* value) :
+		Greater_condition(unsigned int column, Value* value) :
 			Comparing_condition(column, value)
 		{
 		}

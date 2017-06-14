@@ -13,8 +13,8 @@ namespace db07
 	class Column
 	{
 	public:
-		Column(std::string& name, Type* type, bool not_null)
-			: _name(name), _type(type), _not_null(not_null)
+		Column(std::string& name, Type& type, bool not_null)
+			: _name(name), _type(&type), _not_null(not_null)
 		{
 		}
 
