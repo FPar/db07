@@ -4,7 +4,7 @@ using namespace std;
 using namespace db07;
 
 Insert_data_node::Insert_data_node(const shared_ptr<Table_definition> &table_definition,
-                                   unique_ptr<vector<unique_ptr<Row>>> rows) :
+                                   unique_ptr<vector<shared_ptr<Row>>> rows) :
         _table_definition(table_definition), _rows(move(rows)) {
     _position = _rows->begin();
 }

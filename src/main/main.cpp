@@ -5,6 +5,7 @@
 #include "optimizer/Plan.h"
 #include "example/Create_products_table.h"
 #include "example/Insert_product_data.h"
+#include "example/Select_product_by_id.h"
 
 using namespace std;
 using namespace db07;
@@ -16,13 +17,19 @@ bool terminates_command(string &line);
 int main(int argc, char **argv) {
     Global_object_store object_store;
 
-    Create_products_table create_table_example;
-    unique_ptr<Create_table_command> c = create_table_example.command();
-    c->execute(object_store);
+    {
+        Create_products_table create_table_example;
+        unique_ptr<Create_table_command> c = create_table_example.command();
+        c->execute(object_store);
 
-    Insert_product_data insert_products_data;
-    unique_ptr<Insert_plan> p = insert_products_data.plan(object_store);
-    p->execute();
+        Insert_product_data insert_products_data;
+        unique_ptr<Insert_plan> i = insert_products_data.plan(object_store);
+        i->execute();
+
+        Select_product_by_id select_product_by_id;
+        unique_ptr<Select_plan> s = select_product_by_id.plan(object_store, 1);
+        s->execute();
+    }
 
     string command;
     while ((command = read_command()) != "exit;") {

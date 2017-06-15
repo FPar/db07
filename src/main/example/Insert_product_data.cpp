@@ -11,13 +11,13 @@ unique_ptr<Insert_plan> Insert_product_data::plan(Global_object_store &global_ob
     shared_ptr<Table> products_table = global_object_store.tables().find("products");
     shared_ptr<Table_definition> table_definition(products_table->definition());
 
-    unique_ptr<vector<unique_ptr<Row>>> rows(new vector<unique_ptr<Row>>());
+    unique_ptr<vector<shared_ptr<Row>>> rows(new vector<shared_ptr<Row>>());
 
-    vector<Value *> values;
-    values.push_back(new Int_value(1));
-    values.push_back(new Varchar_value("Screw"));
-    values.push_back(new Varchar_value("Holds things together."));
-    values.push_back(new Int_value(10));
+    shared_ptr<vector<unique_ptr<Value>>> values(new vector<unique_ptr<Value>>());
+    values->push_back(unique_ptr<Value>(new Int_value(1)));
+    values->push_back(unique_ptr<Value>(new Varchar_value("Screw")));
+    values->push_back(unique_ptr<Value>(new Varchar_value("Holds things together.")));
+    values->push_back(unique_ptr<Value>(new Int_value(10)));
 
     rows->push_back(unique_ptr<Row>(new Row(values)));
 

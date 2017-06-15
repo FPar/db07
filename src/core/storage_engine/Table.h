@@ -2,6 +2,7 @@
 #define TABLE_H
 
 #include <memory>
+#include "Table_definition.h"
 #include "Column.h"
 #include "Object_store_item.h"
 #include "Row.h"
@@ -25,7 +26,11 @@ namespace db07 {
             return _definition;
         }
 
-        void insert(Row *row);
+        Btree &data() {
+            return _data;
+        }
+
+        void insert(Row &row);
 
     private:
         std::string _name;

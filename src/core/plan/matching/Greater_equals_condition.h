@@ -3,19 +3,16 @@
 
 #include "Comparing_condition.h"
 
-namespace db07
-{
-	class Greater_equals_condition : public Comparing_condition
-	{
-	public:
-		Greater_equals_condition(unsigned int column, Value* value)
-			: Comparing_condition(column, value)
-		{
-		}
+namespace db07 {
+    class Greater_equals_condition : public Comparing_condition {
+    public:
+        Greater_equals_condition(unsigned int column, std::unique_ptr<Value> value)
+                : Comparing_condition(column, move(value)) {
+        }
 
-	protected:
-		bool interpret(int compare_result) const override;
-	};
+    protected:
+        bool interpret(int compare_result) const override;
+    };
 }
 
 #endif

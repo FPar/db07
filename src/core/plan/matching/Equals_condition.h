@@ -9,8 +9,8 @@ namespace db07 {
         bool interpret(int compare_result) const override;
 
     public:
-        Equals_condition(unsigned int column, Value *value) :
-                Comparing_condition(column, value) {
+        Equals_condition(unsigned int column, std::unique_ptr<Value> value) :
+                Comparing_condition(column, move(value)) {
         }
     };
 }

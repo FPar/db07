@@ -16,6 +16,8 @@ namespace db07 {
         Type *type();
 
         int compare(const Value &to);
+
+        std::string to_string() override;
     };
 }
 

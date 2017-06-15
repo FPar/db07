@@ -2,7 +2,8 @@
 
 using namespace db07;
 
-void Select_plan::execute()
-{
-
+void Select_plan::execute() {
+    while(_root->has_next()) {
+        _receiver->receive(*_root->next());
+    }
 }

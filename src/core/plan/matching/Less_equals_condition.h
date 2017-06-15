@@ -6,8 +6,8 @@
 namespace db07 {
     class Less_equals_condition : public Comparing_condition {
     public:
-        Less_equals_condition(unsigned int column, Value *value)
-                : Comparing_condition(column, value) {
+        Less_equals_condition(unsigned int column, std::unique_ptr<Value> value)
+                : Comparing_condition(column, move(value)) {
         }
 
     protected:

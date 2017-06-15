@@ -5,22 +5,19 @@
 #include "Plan.h"
 #include "plan/Plan_node.h"
 
-namespace db07
-{
-	class Select_plan : public Plan
-	{
-	public:
-		Select_plan(Destination_receiver* receiver, Plan_node* root) :
-			_receiver(receiver), _root(root)
-		{
-		}
+namespace db07 {
+    class Select_plan : public Plan {
+    public:
+        Select_plan(std::unique_ptr<Destination_receiver> receiver, std::unique_ptr<Plan_node> root) :
+                _receiver(move(receiver)), _root(move(root)) {
+        }
 
-		void execute() override;
+        void execute() override;
 
-	private:
-		Destination_receiver* _receiver;
-		Plan_node* _root;
-	};
+    private:
+        std::unique_ptr<Destination_receiver> _receiver;
+        std::unique_ptr<Plan_node> _root;
+    };
 }
 
-#endif // !QUERY_PLAN_H
+#endif
