@@ -11,7 +11,7 @@ namespace db07 {
 
         virtual bool has_next() = 0;
 
-        virtual Row *next() = 0;
+        virtual std::shared_ptr<Row> next() = 0;
     };
 }
 

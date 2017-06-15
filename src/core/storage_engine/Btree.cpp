@@ -1,27 +1,27 @@
-
 #include "Btree.h"
 
-db07::Btree::Btree() {
-    root = new LeafNode();
-}
+using namespace std;
+using namespace db07;
 
-void db07::Btree::insert(int index, Row *entries) {
-    SearchInfo *newSearchInfo = search(index, root);
+Btree::Btree() : root(new LeafNode()) {}
+
+void Btree::insert(int index, std::shared_ptr<Row> entries) {
+    auto newSearchInfo = search(index, *root);
     if (!(newSearchInfo->found)) {
-        SplitInfo *newSplitInfo = insertNode(index, entries, root);
+        unique_ptr<SplitInfo> newSplitInfo = insertNode(index, entries, *root);
         if (newSplitInfo->insertIndex != -1) {
-            Node *newRootNode = new Node();
+            unique_ptr<Node> newRootNode(new Node());
             newRootNode->level = root->level + 1;
             newRootNode->keys[0] = newSplitInfo->insertIndex;
-            newRootNode->childNodes[0] = root;
-            newRootNode->childNodes[1] = newSplitInfo->newNode;
-            root = newRootNode;
+            newRootNode->childNodes[0] = move(root);
+            newRootNode->childNodes[1] = move(newSplitInfo->newNode);
+            root = move(newRootNode);
         }
     }
 }
 
-db07::Row *db07::Btree::indexSeek(int index) {
-    SearchInfo *newSearchInfo = search(index, root);
+std::shared_ptr<Row> Btree::indexSeek(int index) {
+    unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
     return newSearchInfo->entry;
 }
 
@@ -31,30 +31,29 @@ db07::Row *db07::Btree::indexSeek(int index) {
  * @param Entries values of the entry
  * @param node Start node for insertion
  */
-db07::Btree::SplitInfo *db07::Btree::insertNode(int index, Row *entries, Node *node) {
+unique_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> entries, Node &node) {
     //Check if node has been initialized
-    int levelOfNode = node->level;
-    int amountOfKeys = node->keys.size();
+    int levelOfNode = node.level;
     if (levelOfNode == 0) { // Leafnode
 
-        SplitInfo *splittingAvailable = insertLeafNode(index, entries, node);
+        unique_ptr<SplitInfo> splittingAvailable = insertLeafNode(index, entries, node);
         return splittingAvailable;
 
     } else { // Just a Node
         bool isNodeFound = false;
         int counter = 0;
-        SplitInfo *newSplitInfo = new SplitInfo();
-        SplitInfo *result = new SplitInfo();
-        auto j = node->childNodes.cbegin();
-        auto i = node->keys.cbegin();
-        for (; i < node->keys.cend() && !isNodeFound; ++i, ++j) {
+        unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+        unique_ptr<SplitInfo> result(new SplitInfo());
+        auto j = node.childNodes.cbegin();
+        auto i = node.keys.cbegin();
+        for (; i < node.keys.cend() && !isNodeFound; ++i, ++j) {
             if (index < (*i)) {
                 isNodeFound = true;
-                newSplitInfo = insertNode(index, entries, node->childNodes[counter]);
+                newSplitInfo = insertNode(index, entries, *node.childNodes[counter]);
                 if (newSplitInfo->insertIndex != -1) {
-                    node->keys.insert(i, newSplitInfo->insertIndex);
-                    node->childNodes.insert(j + 1, newSplitInfo->newNode);
-                    if (node->keys.size() > MAX_AMOUNTKEYS) {
+                    node.keys.insert(i, newSplitInfo->insertIndex);
+                    node.childNodes.insert(j + 1, move(newSplitInfo->newNode));
+                    if (node.keys.size() > MAX_AMOUNTKEYS) {
                         result = splitNode(node);
                     }
                 }
@@ -63,11 +62,11 @@ db07::Btree::SplitInfo *db07::Btree::insertNode(int index, Row *entries, Node *n
         }
 
         if (!isNodeFound) { // Insert at the end
-            newSplitInfo = insertNode(index, entries, node->childNodes[counter]);
+            newSplitInfo = insertNode(index, entries, *node.childNodes[counter]);
             if (newSplitInfo->insertIndex != -1) {
-                node->keys.insert(i, newSplitInfo->insertIndex);
-                node->childNodes.insert(j + 1, newSplitInfo->newNode);
-                if (node->keys.size() > MAX_AMOUNTKEYS) {
+                node.keys.insert(i, newSplitInfo->insertIndex);
+                node.childNodes.insert(j + 1, move(newSplitInfo->newNode));
+                if (node.keys.size() > MAX_AMOUNTKEYS) {
                     result = splitNode(node);
                 }
             }
@@ -86,90 +85,89 @@ db07::Btree::SplitInfo *db07::Btree::insertNode(int index, Row *entries, Node *n
  * @param entries Entry values of the entry
  * @param leafNode LeafNode for insertion
  */
-db07::Btree::SplitInfo *db07::Btree::insertLeafNode(int index, Row *entries, Node *node) {
-    SplitInfo *newSplitInfo = new SplitInfo();
-    LeafNode *leafNode = (LeafNode *) node;
+unique_ptr<Btree::SplitInfo> Btree::insertLeafNode(int index, std::shared_ptr<Row> entries, Node &node) {
+    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+    LeafNode &leafNode = (LeafNode &) node;
     bool foundInsertPosition = false;
     int counter = 0;
-    auto i = leafNode->keys.cbegin();
-    for (; i < leafNode->keys.cend() && !foundInsertPosition; ++i) {
+    auto i = leafNode.keys.cbegin();
+    for (; i < leafNode.keys.cend() && !foundInsertPosition; ++i) {
         if ((*i) > index) {
             foundInsertPosition = true;
-            leafNode->keys.insert(i, index);
+            leafNode.keys.insert(i, index);
         }
         ++counter;
     }
     if (!foundInsertPosition) { // empty list for keys or after last element
-        leafNode->keys.insert(i, index);
+        leafNode.keys.insert(i, index);
     } else {
         --counter;
     }
-    auto j = leafNode->entries.cbegin();
+    auto j = leafNode.entries.cbegin();
     while (counter > 0) {
         ++j;
         --counter;
     }
-    leafNode->entries.insert(j, entries);
+    leafNode.entries.insert(j, entries);
 
-    if (leafNode->keys.size() > MAX_AMOUNTKEYS) {
+    if (leafNode.keys.size() > MAX_AMOUNTKEYS) {
         newSplitInfo = splitLeafNode(leafNode);
     }
     return newSplitInfo;
 }
 
-db07::Btree::SplitInfo *db07::Btree::splitNode(Node *node) {
+unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
     int counter = 0;
-    int index = node->keys[MIDDLE_VALUE];
-    Node *newNode = new Node();
-    newNode->level = node->level;
-    SplitInfo *newSplitInfo = new SplitInfo();
+    int index = node.keys[MIDDLE_VALUE];
+    unique_ptr<Node> newNode(new Node());
+    newNode->level = node.level;
+    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     newSplitInfo->insertIndex = index;
-    newSplitInfo->newNode = newNode;
-    auto i = node->keys.cbegin() + MIDDLE_VALUE + 1;
-    auto j = node->childNodes.cbegin() + MIDDLE_VALUE + 1;
-    for (; i < node->keys.end(); i++) {
+    newSplitInfo->newNode = move(newNode);
+    auto i = node.keys.cbegin() + MIDDLE_VALUE + 1;
+    auto j = node.childNodes.begin() + MIDDLE_VALUE + 1;
+    for (; i < node.keys.end(); i++) {
         newNode->keys[counter] = (*i);
         counter++;
     }
     counter = 0;
-    for (; j < node->childNodes.cend(); j++) {
-        newNode->childNodes[counter] = (*j);
+    for (; j < node.childNodes.end(); j++) {
+        newNode->childNodes[counter] = move(*j);
         counter++;
     }
-    node->keys.erase(node->keys.cbegin() + MIDDLE_VALUE, node->keys.cend());
-    node->childNodes.erase(node->childNodes.cbegin() + MIDDLE_VALUE + 1, node->childNodes.cend());
+    node.keys.erase(node.keys.cbegin() + MIDDLE_VALUE, node.keys.cend());
+    node.childNodes.erase(node.childNodes.cbegin() + MIDDLE_VALUE + 1, node.childNodes.cend());
     return newSplitInfo;
 }
 
-db07::Btree::SplitInfo *db07::Btree::splitLeafNode(db07::Btree::LeafNode *leafNode) {
+unique_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
     int counter = 0;
-    LeafNode *newLeaf = new LeafNode();
-    SplitInfo *newSplitInfo = new SplitInfo();
-    newSplitInfo->insertIndex = leafNode->keys[MIDDLE_VALUE];
-    newSplitInfo->newNode = newLeaf;
-    auto i = leafNode->keys.cbegin() + MIDDLE_VALUE;
-    auto j = leafNode->entries.cbegin() + MIDDLE_VALUE;
-    for (; i < leafNode->keys.end() && j < leafNode->entries.cend(); i++, j++) {
+    unique_ptr<LeafNode> newLeaf(new LeafNode());
+    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+    newSplitInfo->insertIndex = leafNode.keys[MIDDLE_VALUE];
+    newSplitInfo->newNode = move(newLeaf);
+    auto i = leafNode.keys.cbegin() + MIDDLE_VALUE;
+    auto j = leafNode.entries.cbegin() + MIDDLE_VALUE;
+    for (; i < leafNode.keys.end() && j < leafNode.entries.cend(); i++, j++) {
         newLeaf->keys[counter] = (*i);
         newLeaf->entries[counter] = (*j);
         counter++;
     }
-    leafNode->keys.erase(leafNode->keys.cbegin() + MIDDLE_VALUE, leafNode->keys.cend());
-    leafNode->entries.erase(leafNode->entries.cbegin() + MIDDLE_VALUE, leafNode->entries.cend());
+    leafNode.keys.erase(leafNode.keys.cbegin() + MIDDLE_VALUE, leafNode.keys.cend());
+    leafNode.entries.erase(leafNode.entries.cbegin() + MIDDLE_VALUE, leafNode.entries.cend());
     return newSplitInfo;
 }
 
-db07::Btree::SearchInfo *db07::Btree::search(int index, db07::Btree::Node *node) {
-
-    if (node->level == 0) {
-        SearchInfo *newSearchInfo = new SearchInfo();
+unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
+    if (node.level == 0) {
+        unique_ptr<SearchInfo> newSearchInfo(new SearchInfo());
         bool isIndexFound = false;
         int counter = 0;
-        for (auto i = node->keys.cbegin(); i < node->keys.cend() && !isIndexFound; ++i) {
+        for (auto i = node.keys.cbegin(); i < node.keys.cend() && !isIndexFound; ++i) {
             if (index == (*i)) {
-                LeafNode *leaf = (LeafNode *) node;
+                LeafNode &leaf = (LeafNode &) node;
                 isIndexFound = true;
-                newSearchInfo->entry = leaf->entries[counter];
+                newSearchInfo->entry = leaf.entries[counter];
             }
             counter++;
         }
@@ -177,19 +175,13 @@ db07::Btree::SearchInfo *db07::Btree::search(int index, db07::Btree::Node *node)
         return newSearchInfo;
     } else {
         int counter = 0;
-        for (auto i = node->keys.cbegin(); i < node->keys.cend(); ++i) {
+        for (auto i = node.keys.cbegin(); i < node.keys.cend(); ++i) {
             if (index < (*i)) {
-                return search(index, node->childNodes[counter]);
+                return search(index, *node.childNodes[counter]);
             }
             counter++;
         }
 
-        return search(index, node->childNodes[counter]);
+        return search(index, *node.childNodes[counter]);
     }
-    return nullptr;
 }
-
-
-
-
-

@@ -14,7 +14,7 @@ namespace db07 {
 
         bool has_next() override;
 
-        Row *next() override;
+        std::shared_ptr<Row> next() override;
 
     private:
         const std::shared_ptr<Table> _table;

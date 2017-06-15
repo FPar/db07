@@ -13,9 +13,7 @@ bool Insert_data_node::has_next() {
     return _position != _rows->end();
 }
 
-Row *Insert_data_node::next() {
-    Row *row = &(**_position);
-    ++_position;
-    return row;
+std::shared_ptr<Row> Insert_data_node::next() {
+    return *_position++;
 }
 

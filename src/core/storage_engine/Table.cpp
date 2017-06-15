@@ -4,7 +4,7 @@
 using namespace std;
 using namespace db07;
 
-void Table::insert(Row &row) {
-    auto &id = reinterpret_cast<Int_value &>(*row.get(0));
-    _data.insert(id.data(), &row);
+void Table::insert(std::shared_ptr<Row> &row) {
+    auto &id = reinterpret_cast<Int_value &>(*row->get(0));
+    _data.insert(id.data(), row);
 }

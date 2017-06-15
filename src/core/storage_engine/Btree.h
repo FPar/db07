@@ -19,50 +19,48 @@ namespace db07 {
 
         struct Node {
             std::vector<int> keys;
-            std::vector<Node*> childNodes;
-            Node *parentNode = nullptr;
+            std::vector<std::unique_ptr<Node>> childNodes;
+            std::unique_ptr<Node> parentNode = nullptr;
             int level = 0;
         };
 
         struct LeafNode : Node {
-            std::vector<Row*> entries;
+            std::vector<std::shared_ptr<Row>> entries;
         };
 
 
         struct SplitInfo {
             int insertIndex = -1;
-            Node * newNode = nullptr;
+            std::unique_ptr<Node> newNode = nullptr;
         };
 
         struct SearchInfo {
             bool found = false;
-            Row * entry = nullptr;
+            std::shared_ptr<Row> entry = nullptr;
         };
 
-        Node *root;
+        std::unique_ptr<Node> root;
 
+        std::unique_ptr<SplitInfo> insertLeafNode(int index, std::shared_ptr<Row> entries, Node &leafNode);
 
-        SplitInfo * insertLeafNode(int index, Row *entries, Node *leafNode);
+        std::unique_ptr<SplitInfo> insertNode(int index, std::shared_ptr<Row> entries, Node &node);
 
-        SplitInfo* insertNode(int index, Row *entries, Node *node);
+        std::unique_ptr<SplitInfo> splitNode(Node &node);
 
-        SplitInfo* splitNode(Node *node);
+        std::unique_ptr<SplitInfo> splitLeafNode(LeafNode &leafNode);
 
-        SplitInfo* splitLeafNode(LeafNode *leafNode);
-
-        SearchInfo* search(int index, Node* node);
-
+        std::unique_ptr<SearchInfo> search(int index, Node &node);
 
 
     public:
 
-		Btree();
+        Btree();
 
-        void insert(int index, Row *entries);
+        void insert(int index, std::shared_ptr<Row> entries);
 
         void remove(int index);
 
-        Row *indexSeek(int index);
+        std::shared_ptr<Row> indexSeek(int index);
 
         Row *indexScan(Row *values);
 

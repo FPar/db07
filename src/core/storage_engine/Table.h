@@ -30,7 +30,7 @@ namespace db07 {
             return _data;
         }
 
-        void insert(Row &row);
+        void insert(std::shared_ptr<Row> &row);
 
     private:
         std::string _name;
