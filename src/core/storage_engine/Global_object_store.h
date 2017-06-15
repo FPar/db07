@@ -1,5 +1,5 @@
-#ifndef CATALOG_H
-#define CATALOG_H
+#ifndef GLOBAL_OBJECT_STORE_H
+#define GLOBAL_OBJECT_STORE_H
 
 #include <memory>
 #include "Object_store.h"
@@ -19,4 +19,4 @@ namespace db07 {
     };
 }
 
-#endif // !CATALOG_H
+#endif
