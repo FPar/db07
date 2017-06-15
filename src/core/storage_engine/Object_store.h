@@ -10,35 +10,32 @@ namespace db07 {
     template<typename T>
     class Object_store {
     public:
-        Object_store(std::string &name) : _name(name) {
+        Object_store(std::string name) : _name(name) {
         }
 
-        void add(T *item) {
-            if (try_find(item->name()))
+        void add(std::shared_ptr<T> &item) {
+            if (contains(item->name()))
                 throw object_store_item_exists(_name, item->name());
 
             _items.push_back(item);
         }
 
-        T *find(std::string &item_name) const {
-            T *item = try_find(item_name);
-            if (!item)
-                throw object_store_item_not_found(_name, item_name);
+        std::shared_ptr<T> find(const std::string &item_name) const {
+            for (auto i = _items.cbegin(); i != _items.cend(); ++i) {
+                if ((**i).name() == _name) {
+                    return *i;
+                }
+            }
 
-            return item;
+            throw object_store_item_not_found(_name, item_name);
         }
 
     private:
         std::string _name;
-        std::vector<T *> _items;
+        std::vector<std::shared_ptr<T>> _items;
 
-        T *try_find(std::string &name) const {
-            for (auto i = _items.cbegin(); i != _items.cend(); ++i) {
-                if ((**i).name() == name) {
-                    return *i;
-                }
-            }
-            return nullptr;
+        bool contains(const std::string &name) {
+            return false;
         }
     };
 }

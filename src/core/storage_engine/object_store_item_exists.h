@@ -11,7 +11,7 @@ namespace db07 {
         const std::string _item_name;
 
     public:
-        object_store_item_exists(std::string &catalog_name, std::string &item_name) :
+        object_store_item_exists(const std::string &catalog_name, const std::string &item_name) :
                 runtime_error("Cannot create two items within the object store with the same name."),
                 _catalog_name(catalog_name),
                 _item_name(item_name) {

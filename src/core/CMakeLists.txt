@@ -3,6 +3,9 @@ include_directories(
 )
 
 set(SOURCES
+    commands/Create_table_command.cpp
+    commands/Create_table_command.h
+
     control/Destination_receiver.cpp
     control/Destination_receiver.h
 
