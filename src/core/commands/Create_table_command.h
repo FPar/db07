@@ -8,7 +8,7 @@
 namespace db07 {
     class Create_table_command {
     public:
-        Create_table_command(std::string &name, std::shared_ptr<Table_definition> &table_definition) :
+        Create_table_command(const std::string &name, std::shared_ptr<Table_definition> &table_definition) :
                 _name(name), _table_definition(std::move(table_definition)) {}
 
         void execute(Global_object_store &global_object_store);

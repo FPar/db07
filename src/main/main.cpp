@@ -3,6 +3,8 @@
 #include "storage_engine/Global_object_store.h"
 #include "optimizer/Query_data.h"
 #include "optimizer/Plan.h"
+#include "example/Create_products_table.h"
+#include "example/Insert_product_data.h"
 
 using namespace std;
 using namespace db07;
@@ -13,6 +15,14 @@ bool terminates_command(string &line);
 
 int main(int argc, char **argv) {
     Global_object_store object_store;
+
+    Create_products_table create_table_example;
+    unique_ptr<Create_table_command> c = create_table_example.command();
+    c->execute(object_store);
+
+    Insert_product_data insert_products_data;
+    unique_ptr<Insert_plan> p = insert_products_data.plan(object_store);
+    p->execute();
 
     string command;
     while ((command = read_command()) != "exit;") {

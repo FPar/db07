@@ -11,9 +11,11 @@ namespace db07 {
         std::string _data;
 
     public:
-        Varchar_value(std::string &data) : _data(data) {};
-        Type* type();
-        int compare(const Value & to);
+        Varchar_value(const std::string &data) : _data(data) {};
+
+        Type *type();
+
+        int compare(const Value &to);
     };
 }
 

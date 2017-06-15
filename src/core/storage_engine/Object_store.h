@@ -22,7 +22,7 @@ namespace db07 {
 
         std::shared_ptr<T> find(const std::string &item_name) const {
             for (auto i = _items.cbegin(); i != _items.cend(); ++i) {
-                if ((**i).name() == _name) {
+                if ((**i).name() == item_name) {
                     return *i;
                 }
             }

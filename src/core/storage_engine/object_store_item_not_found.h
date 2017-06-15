@@ -11,7 +11,7 @@ namespace db07 {
         const std::string _item_name;
 
     public:
-        object_store_item_not_found(std::string &catalog_name, std::string &item_name) :
+        object_store_item_not_found(const std::string &catalog_name, const std::string &item_name) :
             runtime_error("Cannot find item with that name in the catalog."),
             _catalog_name(catalog_name),
             _item_name(item_name)

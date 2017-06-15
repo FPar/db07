@@ -3,7 +3,7 @@
 using namespace std;
 using namespace db07;
 
-void Table_definition_builder::add_column(string &name, Type &type) {
+void Table_definition_builder::add_column(const string &name, const Type &type) {
     Column col(name, type, false);
     _columns.push_back(move(col));
 }

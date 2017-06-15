@@ -5,27 +5,23 @@
 #include "plan/Plan_node.h"
 #include "storage_engine/Table.h"
 
-namespace db07
-{
-	class Insert_plan : public Plan
-	{
-	public:
-		Insert_plan(Plan_node* source, Table* target) : _source(source), _target(target)
-		{
-		}
+namespace db07 {
+    class Insert_plan : public Plan {
+    public:
+        Insert_plan(std::unique_ptr<Plan_node> source, std::shared_ptr<Table> target) :
+                _source(std::move(source)), _target(target) {}
 
-		void execute() override;
+        void execute() override;
 
-		int rows_inserted() const
-		{
-			return _rows_inserted;
-		}
+        int rows_inserted() const {
+            return _rows_inserted;
+        }
 
-	private:
-		Plan_node* _source;
-		Table* _target;
-		int _rows_inserted = 0;
-	};
+    private:
+        std::unique_ptr<Plan_node> _source;
+        std::shared_ptr<Table> _target;
+        int _rows_inserted = 0;
+    };
 }
 
 #endif

@@ -8,7 +8,8 @@
 namespace db07 {
     class Insert_data_node : public Plan_node {
     public:
-        explicit Insert_data_node(std::shared_ptr<const Table_definition> &table_definition, std::vector<Row *> &rows);
+        explicit Insert_data_node(const std::shared_ptr<Table_definition> &table_definition,
+                                  std::unique_ptr<std::vector<std::unique_ptr<Row>>> rows);
 
         bool has_next() override;
 
@@ -16,8 +17,8 @@ namespace db07 {
 
     private:
         const std::shared_ptr<const Table_definition> _table_definition;
-        const std::vector<Row *> _rows;
-        std::vector<Row *>::const_iterator _position;
+        const std::unique_ptr<std::vector<std::unique_ptr<Row>>> _rows;
+        std::vector<std::unique_ptr<Row>>::const_iterator _position;
     };
 }
 

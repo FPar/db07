@@ -1,15 +1,21 @@
 #include "Insert_data_node.h"
 
-bool db07::Insert_data_node::has_next() {
-    return _position != _rows.end();
+using namespace std;
+using namespace db07;
+
+Insert_data_node::Insert_data_node(const shared_ptr<Table_definition> &table_definition,
+                                   unique_ptr<vector<unique_ptr<Row>>> rows) :
+        _table_definition(table_definition), _rows(move(rows)) {
+    _position = _rows->begin();
 }
 
-db07::Row *db07::Insert_data_node::next() {
-    return *_position++;
+bool Insert_data_node::has_next() {
+    return _position != _rows->end();
 }
 
-db07::Insert_data_node::Insert_data_node(std::shared_ptr<const db07::Table_definition> &table_definition,
-                                         std::vector<Row *> &rows) :
-        _table_definition(table_definition), _rows(rows) {
-    _position = _rows.begin();
+Row *Insert_data_node::next() {
+    Row *row = &(**_position);
+    ++_position;
+    return row;
 }
+

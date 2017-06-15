@@ -5,39 +5,33 @@
 
 #include "types/Type.h"
 
-namespace db07
-{
-	/*
-	 * Information about a table column.
-	 */
-	class Column
-	{
-	public:
-		Column(std::string& name, Type& type, bool not_null)
-			: _name(name), _type(&type), _not_null(not_null)
-		{
-		}
+namespace db07 {
+    /*
+     * Information about a table column.
+     */
+    class Column {
+    public:
+        Column(const std::string &name, const Type &type, bool not_null)
+                : _name(name), _type(&type), _not_null(not_null) {
+        }
 
-		std::string name() const
-		{
-			return _name;
-		}
+        std::string name() const {
+            return _name;
+        }
 
-		Type* type() const
-		{
-			return _type;
-		}
+        const Type *type() const {
+            return _type;
+        }
 
-		bool not_null() const
-		{
-			return _not_null;
-		}
+        bool not_null() const {
+            return _not_null;
+        }
 
-	private:
-		std::string _name;
-		Type* _type;
-		bool _not_null;
-	};
+    private:
+        std::string _name;
+        const Type *_type;
+        bool _not_null;
+    };
 }
 
-#endif // !COLUMN_H
+#endif
