@@ -36,8 +36,13 @@ namespace db07 {
                 }
                 return true;
             }),
-            new Regex_recognition_rule("\'.*\'", token_type::STRING_LITERAL, [](const std::string &token_string) {
-                return token_string.front() == '\'';
+            new Regex_recognition_rule("\'[^\']*\'", token_type::STRING_LITERAL, [](const std::string &token_string) {
+                bool starts_with_apostrophe = token_string.front() == '\'';
+                unsigned long pos_second_apostrophe = token_string.find_first_of('\'', 1);
+                bool has_second_apostrophe = pos_second_apostrophe != std::string::npos;
+                bool ends_with_apostrophe = pos_second_apostrophe == token_string.length() - 1;
+
+                return starts_with_apostrophe && (!has_second_apostrophe || ends_with_apostrophe);
             }),
             new Regex_recognition_rule("[a-z][a-z0-9_]*", token_type::IDENTIFIER, [](const std::string &token_string) {
                 for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
