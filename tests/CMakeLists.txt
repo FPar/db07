@@ -5,7 +5,11 @@ include_directories(
 
 set(TEST_SOURCES
     main.cpp
-        parser/Token_test.cpp parser/Token_evaluator_test.cpp parser/Parser_test.cpp)
+    parser/Token_test.cpp
+    parser/Token_evaluator_test.cpp
+    parser/Parser_test.cpp
+    parser/Regex_recognition_rule.cpp
+    parser/String_recognition_test.cpp)
 
 add_executable(db07_test ${TEST_SOURCES})
 
