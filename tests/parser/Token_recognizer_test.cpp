@@ -10,11 +10,6 @@ namespace db07 {
             CHECK(Token_recognizer::recognize("\n") == token_type::WHITESPACE);
             CHECK(Token_recognizer::recognize("\n\r") == token_type::WHITESPACE);
             CHECK(Token_recognizer::recognize(" \n ") == token_type::WHITESPACE);
-
-            CHECK(Token_recognizer::recognize("") == token_type::UNRECOGNIZED);
-            CHECK(Token_recognizer::recognize("a") == token_type::UNRECOGNIZED);
-            CHECK(Token_recognizer::recognize("a") == token_type::UNRECOGNIZED);
-            CHECK(Token_recognizer::recognize("a") == token_type::UNRECOGNIZED);
         }
     }
 }
