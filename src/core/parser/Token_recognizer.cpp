@@ -5,8 +5,8 @@
 namespace db07 {
     const std::list<Recognition_rule *> Token_recognizer::RULES = {
             new Regex_recognition_rule("\\s+", token_type::WHITESPACE, [](const std::string &token_string) {
-                for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
-                    if (!isspace(*token_chr)) {
+                for (const auto &token_chr : token_string) {
+                    if (!isspace(token_chr)) {
                         return false;
                     }
                 }
@@ -29,8 +29,8 @@ namespace db07 {
             new String_recognition_rule("FROM", token_type::KEYWORD_FROM),
             new String_recognition_rule("WHERE", token_type::KEYWORD_WHERE),
             new Regex_recognition_rule("[0-9]+", token_type::INTEGER_LITERAL, [](const std::string &token_string) {
-                for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
-                    if (!isdigit(*token_chr)) {
+                for (const auto &token_chr : token_string) {
+                    if (!isdigit(token_chr)) {
                         return false;
                     }
                 }
@@ -56,17 +56,17 @@ namespace db07 {
     };
 
     token_type Token_recognizer::recognize(const std::string &token_string) {
-        for (auto rule = RULES.begin(); rule != RULES.end(); rule++) {
-            if ((*rule)->matches(token_string)) {
-                return (*rule)->type();
+        for (const auto &rule : RULES) {
+            if (rule->matches(token_string)) {
+                return rule->type();
             }
         }
         return token_type::UNRECOGNIZED;
     }
 
     bool Token_recognizer::can_recognize(const std::string &token_string) {
-        for (auto rule = RULES.begin(); rule != RULES.end(); rule++) {
-            if ((*rule)->can_match(token_string)) {
+        for (const auto &rule : RULES) {
+            if (rule->can_match(token_string)) {
                 return true;
             }
         }

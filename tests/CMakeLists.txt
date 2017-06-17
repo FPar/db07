@@ -11,6 +11,7 @@ set(TEST_SOURCES
     parser/Regex_recognition_rule.cpp
     parser/String_recognition_test.cpp
     parser/Token_recognizer_test.cpp
+    parser/Lexer_test.cpp
 )
 
 add_executable(db07_test ${TEST_SOURCES})
