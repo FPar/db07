@@ -54,7 +54,7 @@ namespace db07 {
         }
     }
 
-    TEST_CASE("token_evaluator_no_value", "[TokenEvaluator]") {
+    TEST_CASE("token_evaluator_no_value") {
         no_value(token_type::OPERATOR_EQ, "OPERATOR_EQ");
         no_value(token_type::OPERATOR_NEQ, "OPERATOR_NEQ");
         no_value(token_type::OPERATOR_LT, "OPERATOR_LT");
@@ -71,15 +71,15 @@ namespace db07 {
         no_value(token_type::KEYWORD_WHERE, "KEYWORD_WHERE");
     }
 
-    TEST_CASE("token_evaluator_int_literal", "[TokenEvaluator]") {
+    TEST_CASE("token_evaluator_int_literal") {
         int_literal(token_type::INTEGER, "INTEGER");
     }
 
-    TEST_CASE("token_evaluator_string_literal", "[TokenEvaluator]") {
+    TEST_CASE("token_evaluator_string_literal") {
         string_literal(token_type::LITERAL, "LITERAL");
     }
 
-    TEST_CASE("token_evaluator_string_value", "[TokenEvaluator]") {
+    TEST_CASE("token_evaluator_string_value") {
         string_value(token_type::IDENTIFIER, "IDENTIFIER");
         string_value(token_type::UNRECOGNIZED, "UNRECOGNIZED");
     }

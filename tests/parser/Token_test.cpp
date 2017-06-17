@@ -3,7 +3,7 @@
 #include "parser/Token.h"
 
 namespace db07 {
-    TEST_CASE("token_ctor_no_value", "[Token]") {
+    TEST_CASE("token_ctor_no_value") {
         Token token = Token(token_type::IDENTIFIER);
 
         CHECK(token.type() == token_type::IDENTIFIER);
@@ -11,7 +11,7 @@ namespace db07 {
         CHECK(token.string_value() == "");
     }
 
-    TEST_CASE("token_ctor_string_value", "[Token]") {
+    TEST_CASE("token_ctor_string_value") {
         std::string token_string = "identifier";
         Token token = Token(token_type::IDENTIFIER, token_string);
 
@@ -20,7 +20,7 @@ namespace db07 {
         CHECK(token.string_value() == token_string);
     }
 
-    TEST_CASE("token_ctor_int_value", "[Token]") {
+    TEST_CASE("token_ctor_int_value") {
         Token token = Token(token_type::INTEGER, 42);
 
         CHECK(token.type() == token_type::INTEGER);
@@ -28,7 +28,7 @@ namespace db07 {
         CHECK(token.string_value() == "");
     }
 
-    TEST_CASE("token_ctor_no_token_type_check", "[Token]") {
+    TEST_CASE("token_ctor_no_token_type_check") {
         std::string token_string = "invalid_integer";
         Token token = Token(token_type::INTEGER, token_string);
 

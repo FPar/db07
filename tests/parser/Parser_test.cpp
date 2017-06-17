@@ -2,7 +2,7 @@
 #include "parser/Parser.h"
 
 namespace db07 {
-    TEST_CASE("parser_select_from", "[Parser]") {
+    TEST_CASE("parser_select_from") {
         std::list<Token> tokens;
         tokens.push_back(Token(token_type::KEYWORD_SELECT));
         tokens.push_back(Token(token_type::KEYWORD_FROM));
