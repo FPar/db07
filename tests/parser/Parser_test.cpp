@@ -11,5 +11,5 @@ namespace db07 {
         tokens.push_back(Token(token_type::IDENTIFIER));
         Parser parser;
         parser.parse(tokens);
-    };
+    }
 }

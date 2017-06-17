@@ -9,7 +9,9 @@ set(TEST_SOURCES
     parser/Token_evaluator_test.cpp
     parser/Parser_test.cpp
     parser/Regex_recognition_rule.cpp
-    parser/String_recognition_test.cpp)
+    parser/String_recognition_test.cpp
+    parser/Token_recognizer_test.cpp
+)
 
 add_executable(db07_test ${TEST_SOURCES})
 

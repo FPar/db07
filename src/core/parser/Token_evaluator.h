@@ -27,17 +27,18 @@ namespace db07 {
                 case token_type::KEYWORD_FROM:
                 case token_type::KEYWORD_WHERE:
                     return [token_type](std::string &) { return Token(token_type); };
-                case token_type::INTEGER:
+                case token_type::INTEGER_LITERAL:
                     return [token_type](std::string &token_string) {
                         int int_value = std::stoi(token_string);
                         return Token(token_type, int_value);
                     };
-                case token_type::LITERAL:
+                case token_type::STRING_LITERAL:
                     return [token_type](std::string &token_string) {
                         std::string string_value = token_string.substr(1, token_string.length() - 2);
                         return Token(token_type, string_value);
                     };
                 case token_type::IDENTIFIER:
+                default:
                 case token_type::UNRECOGNIZED:
                     return [token_type](std::string &token_string) { return Token(token_type, token_string); };
             }

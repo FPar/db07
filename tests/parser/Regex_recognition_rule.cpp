@@ -3,13 +3,13 @@
 
 namespace db07 {
     TEST_CASE("Token type") {
-        Regex_recognition_rule rule(".*", token_type::INTEGER, [](const std::string &token_string) { return false; });
+        Regex_recognition_rule rule(".*", token_type::INTEGER_LITERAL, [](const std::string &token_string) { return false; });
 
-        CHECK(rule.type() == token_type::INTEGER);
+        CHECK(rule.type() == token_type::INTEGER_LITERAL);
     }
 
     TEST_CASE("Regex used for match recognition") {
-        Regex_recognition_rule rule("[0-9][0-9]+", token_type::INTEGER,
+        Regex_recognition_rule rule("[0-9][0-9]+", token_type::INTEGER_LITERAL,
                                     [](const std::string &token_string) { return false; });
 
         CHECK_FALSE(rule.matches("4"));
@@ -31,7 +31,7 @@ namespace db07 {
     }
 
     TEST_CASE("Predicate used for possible match recognition") {
-        Regex_recognition_rule rule(".*", token_type::LITERAL, [](const std::string &token_string) {
+        Regex_recognition_rule rule(".*", token_type::STRING_LITERAL, [](const std::string &token_string) {
             return !token_string.empty() && token_string.front() == 'a';
         });
 

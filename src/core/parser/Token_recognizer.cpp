@@ -28,7 +28,7 @@ namespace db07 {
             new String_recognition_rule("DISTINCT", token_type::KEYWORD_DISTINCT),
             new String_recognition_rule("FROM", token_type::KEYWORD_FROM),
             new String_recognition_rule("WHERE", token_type::KEYWORD_WHERE),
-            new Regex_recognition_rule("[0-9]+", token_type::INTEGER, [](const std::string &token_string) {
+            new Regex_recognition_rule("[0-9]+", token_type::INTEGER_LITERAL, [](const std::string &token_string) {
                 for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
                     if (!isdigit(*token_chr)) {
                         return false;
@@ -36,7 +36,7 @@ namespace db07 {
                 }
                 return true;
             }),
-            new Regex_recognition_rule("\'.*\'", token_type::LITERAL, [](const std::string &token_string) {
+            new Regex_recognition_rule("\'.*\'", token_type::STRING_LITERAL, [](const std::string &token_string) {
                 return token_string.front() == '\'';
             }),
             new Regex_recognition_rule("[a-z][a-z0-9_]*", token_type::IDENTIFIER, [](const std::string &token_string) {

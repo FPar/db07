@@ -72,11 +72,11 @@ namespace db07 {
     }
 
     TEST_CASE("token_evaluator_int_literal") {
-        int_literal(token_type::INTEGER, "INTEGER");
+        int_literal(token_type::INTEGER_LITERAL, "INTEGER_LITERAL");
     }
 
     TEST_CASE("token_evaluator_string_literal") {
-        string_literal(token_type::LITERAL, "LITERAL");
+        string_literal(token_type::STRING_LITERAL, "STRING_LITERAL");
     }
 
     TEST_CASE("token_evaluator_string_value") {

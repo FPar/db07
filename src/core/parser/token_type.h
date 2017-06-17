@@ -20,8 +20,8 @@ namespace db07 {
         KEYWORD_DISTINCT,
         KEYWORD_FROM,
         KEYWORD_WHERE,
-        INTEGER,
-        LITERAL,
+        INTEGER_LITERAL,
+        STRING_LITERAL,
         IDENTIFIER,
         UNRECOGNIZED
     };
