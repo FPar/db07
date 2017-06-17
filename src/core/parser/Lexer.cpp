@@ -7,12 +7,11 @@ namespace db07 {
 
         std::string token_string;
         token_type token_type = token_type::UNRECOGNIZED;
-        for (auto token_chr = input.begin(), previous_token_chr = token_chr;
-             token_chr != input.end();
-             token_chr++) {
+        for (auto token_chr = input.begin(), previous_token_chr = token_chr; token_chr != input.end(); token_chr++) {
             token_string += *token_chr;
 
             if (!Token_recognizer::can_recognize(token_string)) {
+                token_string.pop_back();
                 Token token = Token_evaluator::for_type(token_type)(token_string);
                 tokens.push_back(token);
                 if (token_type == token_type::UNRECOGNIZED) {
