@@ -20,14 +20,17 @@ namespace db07 {
             new String_recognition_rule("<=", token_type::OPERATOR_LE),
             new String_recognition_rule(">=", token_type::OPERATOR_GE),
             new String_recognition_rule(">", token_type::OPERATOR_GT),
+            new String_recognition_rule("*", token_type::STAR),
             new String_recognition_rule("AND", token_type::OPERATOR_AND),
             new String_recognition_rule("OR", token_type::OPERATOR_OR),
             new String_recognition_rule("NOT", token_type::OPERATOR_NOT),
             new String_recognition_rule("IN", token_type::OPERATOR_IN),
-            new String_recognition_rule("SELECT", token_type::KEYWORD_SELECT),
-            new String_recognition_rule("DISTINCT", token_type::KEYWORD_DISTINCT),
-            new String_recognition_rule("FROM", token_type::KEYWORD_FROM),
-            new String_recognition_rule("WHERE", token_type::KEYWORD_WHERE),
+            new String_recognition_rule("SELECT", token_type::SELECT),
+            new String_recognition_rule("DISTINCT", token_type::DISTINCT),
+            new String_recognition_rule(",", token_type::COMMA),
+            new String_recognition_rule("AS", token_type::AS),
+            new String_recognition_rule("FROM", token_type::FROM),
+            new String_recognition_rule("WHERE", token_type::WHERE),
             new Regex_recognition_rule("[0-9]+", token_type::INTEGER_LITERAL, [](const std::string &token_string) {
                 for (const auto &token_chr : token_string) {
                     if (!isdigit(token_chr)) {

@@ -65,10 +65,10 @@ namespace db07 {
         no_value(token_type::OPERATOR_OR, "OPERATOR_OR");
         no_value(token_type::OPERATOR_NOT, "OPERATOR_NOT");
         no_value(token_type::OPERATOR_IN, "OPERATOR_IN");
-        no_value(token_type::KEYWORD_SELECT, "KEYWORD_SELECT");
-        no_value(token_type::KEYWORD_DISTINCT, "KEYWORD_DISTINCT");
-        no_value(token_type::KEYWORD_FROM, "KEYWORD_FROM");
-        no_value(token_type::KEYWORD_WHERE, "KEYWORD_WHERE");
+        no_value(token_type::SELECT, "SELECT");
+        no_value(token_type::DISTINCT, "KEYWORD_DISTINCT");
+        no_value(token_type::FROM, "FROM");
+        no_value(token_type::WHERE, "WHERE");
     }
 
     TEST_CASE("token_evaluator_int_literal") {

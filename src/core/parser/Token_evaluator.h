@@ -12,6 +12,7 @@ namespace db07 {
                 case token_type::WHITESPACE:
                 case token_type::LEFT_BRACKET:
                 case token_type::RIGHT_BRACKET:
+                case token_type::STAR:
                 case token_type::OPERATOR_EQ:
                 case token_type::OPERATOR_NEQ:
                 case token_type::OPERATOR_LT:
@@ -22,10 +23,12 @@ namespace db07 {
                 case token_type::OPERATOR_OR:
                 case token_type::OPERATOR_NOT:
                 case token_type::OPERATOR_IN:
-                case token_type::KEYWORD_SELECT:
-                case token_type::KEYWORD_DISTINCT:
-                case token_type::KEYWORD_FROM:
-                case token_type::KEYWORD_WHERE:
+                case token_type::SELECT:
+                case token_type::DISTINCT:
+                case token_type::COMMA:
+                case token_type::AS:
+                case token_type::FROM:
+                case token_type::WHERE:
                     return [token_type](std::string &) { return Token(token_type); };
                 case token_type::INTEGER_LITERAL:
                     return [token_type](std::string &token_string) {
