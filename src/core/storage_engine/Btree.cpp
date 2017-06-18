@@ -188,7 +188,7 @@ unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
 
 void Btree::remove(int index) {
 
-    std:unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
+    unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
     if(newSearchInfo->found){
         bool result = removeNode(index,*root);
         if(root->level != 0 && result){
