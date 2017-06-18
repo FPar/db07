@@ -9,6 +9,7 @@
 
 #define MAX_AMOUNTKEYS 4
 #define MIDDLE_VALUE 2
+#define MIN_CHILDS MAX_AMOUNTKEYS/MIDDLE_VALUE
 
 
 namespace db07 {
@@ -39,6 +40,10 @@ namespace db07 {
             std::shared_ptr<Row> entry = nullptr;
         };
 
+        struct MergeInfo {
+
+        };
+
         std::unique_ptr<Node> root;
 
         std::unique_ptr<SplitInfo> insertLeafNode(int index, std::shared_ptr<Row> entries, Node &leafNode);
@@ -50,6 +55,9 @@ namespace db07 {
         std::unique_ptr<SplitInfo> splitLeafNode(LeafNode &leafNode);
 
         std::unique_ptr<SearchInfo> search(int index, Node &node);
+
+        bool removeNode(int index, Node &node);
+
 
 
     public:

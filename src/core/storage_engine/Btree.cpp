@@ -185,3 +185,78 @@ unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
         return search(index, *node.childNodes[counter]);
     }
 }
+
+void Btree::remove(int index) {
+
+    std:unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
+    if(newSearchInfo->found){
+        bool result = removeNode(index,*root);
+        if(root->level != 0 && result){
+
+        }
+    }
+
+}
+
+bool Btree::removeNode(int index, Btree::Node &node) {
+    if(node.level == 0){
+        LeafNode &leaf = (LeafNode &) node;
+        int counter = 0;
+        for(auto i = leaf.keys.cbegin(); i < leaf.keys.cend(); ++i){
+            if(index == (*i)){
+                leaf.keys.erase(i);
+                leaf.entries.erase(leaf.entries.cbegin()+counter);
+                break;
+            }
+            counter++;
+        }
+        return leaf.keys.size() < MIN_CHILDS;
+
+    }else{
+        int counter = 0;
+        for(auto i = node.keys.cbegin(); i < node.keys.cend(); ++i){
+            if(index < (*i)){
+                bool result = removeNode(index,*node.childNodes[counter]);
+                if(result){
+                    Node &sibling = i+1 == node.keys.cend()? *node.childNodes[counter-1]: *node.childNodes[counter+1];
+                    if(sibling.keys.size() > MIN_CHILDS){
+
+                    }
+                }
+            }
+            counter++;
+        }
+    }
+    return false;
+}
+
+
+/**
+ * Nachbar rechts vorhanden
+ * -> size == 2
+ *  --> gehe zurück und überprüfe ob linker Nachbar vorhanden ist
+ *  ---> linker Nachbar ja
+ *  ----> size == 2
+ *  ------> merge mit linker oder rechter Nachbar
+ *  ----> size < 2
+ *  ------> picke letztes key und childnode und füge es beim anderem Childnode an erste stelle bei den keys und chilnodes ein
+ *  ---> linker Nachbar nein
+ *  ----> merge mit rechter Nachbar
+ *
+ * -> size < 2
+ *  ---> picke erstes key und childnode und füge es beim anderem Childnode an letzter stelle bei den keys und chilnodes ein
+ *
+ *
+ * at the end
+ * key anpassung im node wo ich gerade bin
+ */
+
+
+
+
+
+
+
+
+
+
