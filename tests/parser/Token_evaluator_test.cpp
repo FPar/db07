@@ -56,7 +56,6 @@ namespace db07 {
 
     TEST_CASE("token_evaluator_no_value") {
         no_value(token_type::OPERATOR_EQ, "OPERATOR_EQ");
-        no_value(token_type::OPERATOR_NEQ, "OPERATOR_NEQ");
         no_value(token_type::OPERATOR_LT, "OPERATOR_LT");
         no_value(token_type::OPERATOR_LE, "OPERATOR_LE");
         no_value(token_type::OPERATOR_GE, "OPERATOR_GE");
@@ -64,7 +63,6 @@ namespace db07 {
         no_value(token_type::OPERATOR_AND, "OPERATOR_AND");
         no_value(token_type::OPERATOR_OR, "OPERATOR_OR");
         no_value(token_type::OPERATOR_NOT, "OPERATOR_NOT");
-        no_value(token_type::OPERATOR_IN, "OPERATOR_IN");
         no_value(token_type::SELECT, "SELECT");
         no_value(token_type::DISTINCT, "KEYWORD_DISTINCT");
         no_value(token_type::FROM, "FROM");
