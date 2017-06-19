@@ -119,20 +119,20 @@ unique_ptr<Btree::SplitInfo> Btree::insertLeafNode(int index, std::shared_ptr<Ro
 unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
     int counter = 0;
     int index = node.keys[MIDDLE_VALUE];
-    unique_ptr<Node> newNode(new Node());
+    Node* newNode(new Node());
     newNode->level = node.level;
     unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     newSplitInfo->insertIndex = index;
-    newSplitInfo->newNode = move(newNode);
+    newSplitInfo->newNode = unique_ptr<Node>(newNode);
     auto i = node.keys.cbegin() + MIDDLE_VALUE + 1;
     auto j = node.childNodes.begin() + MIDDLE_VALUE + 1;
     for (; i < node.keys.end(); i++) {
-        newNode->keys[counter] = (*i);
+        newNode->keys.push_back(*i);
         counter++;
     }
     counter = 0;
     for (; j < node.childNodes.end(); j++) {
-        newNode->childNodes[counter] = move(*j);
+        newNode->childNodes.push_back(move(*j));
         counter++;
     }
     node.keys.erase(node.keys.cbegin() + MIDDLE_VALUE, node.keys.cend());
