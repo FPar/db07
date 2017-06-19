@@ -17,6 +17,6 @@ bool Table_scan::has_next() {
 
 shared_ptr<Row> Table_scan::next() {
     // TODO: WE NEED AN ITERATOR FOR ALL NODES
-    std::shared_ptr<Row> row = _table->data().indexSeek(1);
-    return row;
+    auto row = _table->data().indexSeek(1);
+    return *row;
 }

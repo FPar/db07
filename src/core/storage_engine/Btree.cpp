@@ -1,28 +1,32 @@
 #include "Btree.h"
 
+#define MAX_AMOUNTKEYS 4
+#define MIDDLE_VALUE 2
+#define MIN_CHILDS MAX_AMOUNTKEYS/MIDDLE_VALUE
+
 using namespace std;
 using namespace db07;
 
 Btree::Btree() : root(new LeafNode()) {}
 
 void Btree::insert(int index, std::shared_ptr<Row> entries) {
-    auto newSearchInfo = search(index, *root);
+    auto newSearchInfo = search(index, root);
     if (!(newSearchInfo->found)) {
-        unique_ptr<SplitInfo> newSplitInfo = insertNode(index, entries, *root);
+        shared_ptr<SplitInfo> newSplitInfo = insertNode(index, entries, *root);
         if (newSplitInfo->insertIndex != -1) {
-            unique_ptr<Node> newRootNode(new Node());
+            shared_ptr<Node> newRootNode(new Node());
             newRootNode->level = root->level + 1;
             newRootNode->keys.push_back(newSplitInfo->insertIndex);
-            newRootNode->childNodes.push_back(move(root));
-            newRootNode->childNodes.push_back(move(newSplitInfo->newNode));
-            root = move(newRootNode);
+            newRootNode->childNodes.push_back(root);
+            newRootNode->childNodes.push_back(newSplitInfo->newNode);
+            root = newRootNode;
         }
     }
 }
 
-std::shared_ptr<Row> Btree::indexSeek(int index) {
-    unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
-    return newSearchInfo->entry;
+Btree::iterator Btree::indexSeek(int index) {
+    shared_ptr<SearchInfo> newSearchInfo = search(index, root);
+    return Btree::iterator(newSearchInfo->entry, newSearchInfo->index);
 }
 
 /**
@@ -31,19 +35,19 @@ std::shared_ptr<Row> Btree::indexSeek(int index) {
  * @param Entries values of the entry
  * @param node Start node for insertion
  */
-unique_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> entries, Node &node) {
+shared_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> &entries, Node &node) {
     //Check if node has been initialized
     int levelOfNode = node.level;
     if (levelOfNode == 0) { // Leafnode
 
-        unique_ptr<SplitInfo> splittingAvailable = insertLeafNode(index, entries, node);
+        shared_ptr<SplitInfo> splittingAvailable = insertLeafNode(index, entries, node);
         return splittingAvailable;
 
     } else { // Just a Node
         bool isNodeFound = false;
         int counter = 0;
-        unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
-        unique_ptr<SplitInfo> result(new SplitInfo());
+        shared_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+        shared_ptr<SplitInfo> result(new SplitInfo());
         auto j = node.childNodes.cbegin();
         auto i = node.keys.cbegin();
         for (; i < node.keys.cend() && !isNodeFound; ++i, ++j) {
@@ -52,7 +56,7 @@ unique_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> e
                 newSplitInfo = insertNode(index, entries, *node.childNodes[counter]);
                 if (newSplitInfo->insertIndex != -1) {
                     node.keys.insert(i, newSplitInfo->insertIndex);
-                    node.childNodes.insert(j + 1, move(newSplitInfo->newNode));
+                    node.childNodes.insert(j + 1, newSplitInfo->newNode);
                     if (node.keys.size() > MAX_AMOUNTKEYS) {
                         result = splitNode(node);
                     }
@@ -65,7 +69,7 @@ unique_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> e
             newSplitInfo = insertNode(index, entries, *node.childNodes[counter]);
             if (newSplitInfo->insertIndex != -1) {
                 node.keys.insert(i, newSplitInfo->insertIndex);
-                node.childNodes.insert(j + 1, move(newSplitInfo->newNode));
+                node.childNodes.insert(j + 1, newSplitInfo->newNode);
                 if (node.keys.size() > MAX_AMOUNTKEYS) {
                     result = splitNode(node);
                 }
@@ -85,8 +89,8 @@ unique_ptr<Btree::SplitInfo> Btree::insertNode(int index, std::shared_ptr<Row> e
  * @param entries Entry values of the entry
  * @param leafNode LeafNode for insertion
  */
-unique_ptr<Btree::SplitInfo> Btree::insertLeafNode(int index, std::shared_ptr<Row> entries, Node &node) {
-    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+shared_ptr<Btree::SplitInfo> Btree::insertLeafNode(int index, std::shared_ptr<Row> &entries, Node &node) {
+    shared_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     LeafNode &leafNode = (LeafNode &) node;
     bool foundInsertPosition = false;
     int counter = 0;
@@ -116,14 +120,14 @@ unique_ptr<Btree::SplitInfo> Btree::insertLeafNode(int index, std::shared_ptr<Ro
     return newSplitInfo;
 }
 
-unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
+shared_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
     int counter = 0;
     int index = node.keys[MIDDLE_VALUE];
-    Node* newNode(new Node());
+    Node *newNode(new Node());
     newNode->level = node.level;
-    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+    shared_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     newSplitInfo->insertIndex = index;
-    newSplitInfo->newNode = unique_ptr<Node>(newNode);
+    newSplitInfo->newNode = shared_ptr<Node>(newNode);
     auto i = node.keys.cbegin() + MIDDLE_VALUE + 1;
     auto j = node.childNodes.begin() + MIDDLE_VALUE + 1;
     for (; i < node.keys.end(); i++) {
@@ -132,7 +136,7 @@ unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
     }
     counter = 0;
     for (; j < node.childNodes.end(); j++) {
-        newNode->childNodes.push_back(move(*j));
+        newNode->childNodes.push_back(*j);
         counter++;
     }
     node.keys.erase(node.keys.cbegin() + MIDDLE_VALUE, node.keys.cend());
@@ -140,12 +144,12 @@ unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
     return newSplitInfo;
 }
 
-unique_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
+shared_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
     int counter = 0;
-    LeafNode* newLeaf = new LeafNode();
-    unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
+    LeafNode *newLeaf = new LeafNode();
+    shared_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     newSplitInfo->insertIndex = leafNode.keys[MIDDLE_VALUE];
-    newSplitInfo->newNode = unique_ptr<LeafNode>(newLeaf);
+    newSplitInfo->newNode = shared_ptr<LeafNode>(newLeaf);
     auto i = leafNode.keys.cbegin() + MIDDLE_VALUE;
     auto j = leafNode.entries.cbegin() + MIDDLE_VALUE;
     for (; i < leafNode.keys.end() && j < leafNode.entries.cend(); i++, j++) {
@@ -158,16 +162,17 @@ unique_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
     return newSplitInfo;
 }
 
-unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
-    if (node.level == 0) {
-        unique_ptr<SearchInfo> newSearchInfo(new SearchInfo());
+shared_ptr<Btree::SearchInfo> Btree::search(int index, shared_ptr<Node> &node) {
+    if (node->level == 0) {
+        shared_ptr<SearchInfo> newSearchInfo(new SearchInfo());
         bool isIndexFound = false;
         int counter = 0;
-        for (auto i = node.keys.cbegin(); i < node.keys.cend() && !isIndexFound; ++i) {
+        for (auto i = node->keys.cbegin(); i < node->keys.cend() && !isIndexFound; ++i) {
             if (index == (*i)) {
-                LeafNode &leaf = static_cast<LeafNode &>(node);
+                auto leaf = static_pointer_cast<LeafNode>(node);
                 isIndexFound = true;
-                newSearchInfo->entry = leaf.entries[counter];
+                newSearchInfo->entry = leaf;
+                newSearchInfo->index = counter;
             }
             counter++;
         }
@@ -175,20 +180,20 @@ unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
         return newSearchInfo;
     } else {
         int counter = 0;
-        for (auto i = node.keys.cbegin(); i < node.keys.cend(); ++i) {
+        for (auto i = node->keys.cbegin(); i < node->keys.cend(); ++i) {
             if (index < (*i)) {
-                return search(index, *node.childNodes[counter]);
+                return search(index, node->childNodes[counter]);
             }
             counter++;
         }
 
-        return search(index, *node.childNodes[counter]);
+        return search(index, node->childNodes[counter]);
     }
 }
 
 void Btree::remove(int index) {
 
-    unique_ptr<SearchInfo> newSearchInfo = search(index, *root);
+    shared_ptr<SearchInfo> newSearchInfo = search(index, root);
     if (newSearchInfo->found) {
         bool result = removeNode(index, *root);
         if (root->level != 0 && result) {
@@ -271,7 +276,7 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                             if (rightSibling.keys.size() > MIN_CHILDS) {
                                 //Borrow LeafNode entry from rightSibling
                                 rmNode.keys.push_back(rightSibling.keys[0]);
-                                rmNode.childNodes.push_back(move(rightSibling.childNodes[0]));
+                                rmNode.childNodes.push_back(rightSibling.childNodes[0]);
 
                                 //Remove borrowed entry from rightSibling
                                 rightSibling.keys.erase(rightSibling.keys.cbegin());
@@ -291,8 +296,8 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                                 rmNode.keys.insert(rmNode.keys.cbegin(),
                                                    leftSibling.keys[leftSibling.keys.size() - 1]);
                                 rmNode.childNodes.insert(rmNode.childNodes.cbegin(),
-                                                         move(leftSibling.childNodes[leftSibling.childNodes.size() -
-                                                                                     1]));
+                                                         leftSibling.childNodes[leftSibling.childNodes.size() -
+                                                                                1]);
 
                                 //Remove borrowed entry from leftSibling
                                 leftSibling.keys.erase(leftSibling.keys.cend() - 1);
@@ -336,12 +341,26 @@ bool Btree::removeNode(int index, Btree::Node &node) {
  * key anpassung im node wo ich gerade bin
  */
 
+Btree::iterator &Btree::iterator::operator++() {
+    return *this;
+}
 
+Btree::iterator &Btree::iterator::operator--() {
+    return *this;
+}
 
+shared_ptr<Row> Btree::iterator::operator->() {
+    return current->entries[index];
+}
 
+shared_ptr<Row> Btree::iterator::operator*() {
+    return current->entries[index];
+}
 
+bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+    return false;
+}
 
-
-
-
-
+bool operator!=(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+    return false;
+}
