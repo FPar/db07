@@ -16,9 +16,12 @@ bool Parser::sql() {
     return select();
 }
 
+bool Parser::lookahead_is_eof() {
+    return _lookahead == _end;
+}
+
 bool Parser::lookahead_is(token_type type) {
-    return _lookahead == _end ? false
-                              : _lookahead->type() == type;
+    return !lookahead_is_eof() && _lookahead->type() == type;
 }
 
 string Parser::token_to_string(token_type type) {
@@ -75,7 +78,7 @@ string Parser::token_to_string(token_type type) {
     throw runtime_error("Unknown token.");
 }
 
-bool Parser::parse_error(vector<token_type> expected) {
+bool Parser::parse_error(vector<token_type> expected, bool or_eof = false) {
     cout << "Syntax error: Expected ";
     if (expected.size() > 1) {
         cout << "one of ";
@@ -85,8 +88,11 @@ bool Parser::parse_error(vector<token_type> expected) {
     } else {
         cout << token_to_string(expected.front()) << " ";
     }
+    if (or_eof) {
+        cout << "or EOF ";
+    }
     cout << "but ";
-    if (_lookahead == _end) {
+    if (!or_eof && _lookahead == _end) {
         cout << "reached end of input";
     } else {
         cout << "found " << token_to_string(_lookahead->type());
@@ -191,7 +197,36 @@ bool Parser::from() {
 }
 
 bool Parser::from_id() {
-    return true;
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && from_id_space();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && from_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA}, true);
+}
+
+bool Parser::from_id_space() {
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && from_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::COMMA}, true);
+}
+
+bool Parser::from_id_comma() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && from_id();
+    }
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && from_id();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
 bool Parser::where() {

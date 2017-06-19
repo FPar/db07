@@ -16,11 +16,13 @@ namespace db07 {
     private:
         bool sql();
 
+        bool lookahead_is_eof();
+
         bool lookahead_is(token_type type);
 
         std::string token_to_string(token_type type);
 
-        bool parse_error(std::vector<token_type> expected);
+        bool parse_error(std::vector<token_type> expected, bool or_eof);
 
         bool terminal(token_type type);
 
@@ -43,6 +45,10 @@ namespace db07 {
         bool from();
 
         bool from_id();
+
+        bool from_id_space();
+
+        bool from_id_comma();
 
         bool where();
 

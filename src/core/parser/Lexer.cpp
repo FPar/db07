@@ -15,7 +15,7 @@ namespace db07 {
                 Token token = Token_evaluator::for_type(token_type)(token_string);
                 tokens.push_back(token);
                 if (token_type == token_type::UNRECOGNIZED) {
-                    return tokens;
+                    return tokens; // TODO throw exception instead
                 }
 
                 // recognized, no more prefixes
