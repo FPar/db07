@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
-#include "storage_engine/Global_object_store.h"
-#include "optimizer/Query_data.h"
-#include "optimizer/Plan.h"
+#include <storage_engine/Global_object_store.h>
+#include <optimizer/Query_data.h>
+#include <optimizer/Plan.h>
 #include "example/Create_products_table.h"
 #include "example/Insert_product_data.h"
 #include "example/Select_product_by_id.h"

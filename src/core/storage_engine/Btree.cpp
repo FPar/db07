@@ -12,9 +12,9 @@ void Btree::insert(int index, std::shared_ptr<Row> entries) {
         if (newSplitInfo->insertIndex != -1) {
             unique_ptr<Node> newRootNode(new Node());
             newRootNode->level = root->level + 1;
-            newRootNode->keys[0] = newSplitInfo->insertIndex;
-            newRootNode->childNodes[0] = move(root);
-            newRootNode->childNodes[1] = move(newSplitInfo->newNode);
+            newRootNode->keys.push_back(newSplitInfo->insertIndex);
+            newRootNode->childNodes.push_back(move(root));
+            newRootNode->childNodes.push_back(move(newSplitInfo->newNode));
             root = move(newRootNode);
         }
     }
@@ -142,15 +142,15 @@ unique_ptr<Btree::SplitInfo> Btree::splitNode(Node &node) {
 
 unique_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
     int counter = 0;
-    unique_ptr<LeafNode> newLeaf(new LeafNode());
+    LeafNode* newLeaf = new LeafNode();
     unique_ptr<SplitInfo> newSplitInfo(new SplitInfo());
     newSplitInfo->insertIndex = leafNode.keys[MIDDLE_VALUE];
-    newSplitInfo->newNode = move(newLeaf);
+    newSplitInfo->newNode = unique_ptr<LeafNode>(newLeaf);
     auto i = leafNode.keys.cbegin() + MIDDLE_VALUE;
     auto j = leafNode.entries.cbegin() + MIDDLE_VALUE;
     for (; i < leafNode.keys.end() && j < leafNode.entries.cend(); i++, j++) {
-        newLeaf->keys[counter] = (*i);
-        newLeaf->entries[counter] = (*j);
+        newLeaf->keys.push_back(*i);
+        newLeaf->entries.push_back(*j);
         counter++;
     }
     leafNode.keys.erase(leafNode.keys.cbegin() + MIDDLE_VALUE, leafNode.keys.cend());
@@ -165,7 +165,7 @@ unique_ptr<Btree::SearchInfo> Btree::search(int index, Node &node) {
         int counter = 0;
         for (auto i = node.keys.cbegin(); i < node.keys.cend() && !isIndexFound; ++i) {
             if (index == (*i)) {
-                LeafNode &leaf = (LeafNode &) node;
+                LeafNode &leaf = static_cast<LeafNode &>(node);
                 isIndexFound = true;
                 newSearchInfo->entry = leaf.entries[counter];
             }
@@ -291,7 +291,8 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                                 rmNode.keys.insert(rmNode.keys.cbegin(),
                                                    leftSibling.keys[leftSibling.keys.size() - 1]);
                                 rmNode.childNodes.insert(rmNode.childNodes.cbegin(),
-                                                         move(leftSibling.childNodes[leftSibling.childNodes.size() - 1]));
+                                                         move(leftSibling.childNodes[leftSibling.childNodes.size() -
+                                                                                     1]));
 
                                 //Remove borrowed entry from leftSibling
                                 leftSibling.keys.erase(leftSibling.keys.cend() - 1);

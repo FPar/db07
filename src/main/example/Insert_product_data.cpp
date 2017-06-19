@@ -13,13 +13,15 @@ unique_ptr<Insert_plan> Insert_product_data::plan(Global_object_store &global_ob
 
     unique_ptr<vector<shared_ptr<Row>>> rows(new vector<shared_ptr<Row>>());
 
-    shared_ptr<vector<unique_ptr<Value>>> values(new vector<unique_ptr<Value>>());
-    values->push_back(unique_ptr<Value>(new Int_value(1)));
-    values->push_back(unique_ptr<Value>(new Varchar_value("Screw")));
-    values->push_back(unique_ptr<Value>(new Varchar_value("Holds things together.")));
-    values->push_back(unique_ptr<Value>(new Int_value(10)));
+    for (int i = 1; i <= 100; ++i) {
+        shared_ptr<vector<unique_ptr<Value>>> values(new vector<unique_ptr<Value>>());
+        values->push_back(unique_ptr<Value>(new Int_value(i)));
+        values->push_back(unique_ptr<Value>(new Varchar_value("Screw")));
+        values->push_back(unique_ptr<Value>(new Varchar_value("Holds things together.")));
+        values->push_back(unique_ptr<Value>(new Int_value(10)));
 
-    rows->push_back(unique_ptr<Row>(new Row(values)));
+        rows->push_back(unique_ptr<Row>(new Row(values)));
+    }
 
     unique_ptr<Plan_node> source(new Insert_data_node(table_definition, move(rows)));
 
