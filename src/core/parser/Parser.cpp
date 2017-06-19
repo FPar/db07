@@ -242,7 +242,7 @@ bool Parser::from_id_comma() {
 
 bool Parser::after_from() {
     if (lookahead_is(token_type::WHERE)) {
-        return terminal(token_type::WHERE) && terminal(token_type::WHITESPACE) && where();
+        return where();
     }
     if (lookahead_is(token_type::GROUP)) {
         return group_by();
@@ -257,16 +257,127 @@ bool Parser::after_from() {
 }
 
 bool Parser::where() {
-    if (lookahead_is(token_type::IDENTIFIER)) {
-        return true;
+    if (lookahead_is(token_type::WHERE)) {
+        return terminal(token_type::WHERE) && terminal(token_type::WHITESPACE) && where_expr();
     }
+    return parse_error({token_type::WHERE});
+}
+
+bool Parser::where_expr() {
     if (lookahead_is(token_type::OPERATOR_NOT)) {
-        return true;
+        return terminal(token_type::OPERATOR_NOT) && terminal(token_type::WHITESPACE) && where_expr_pos();
     }
+    if (lookahead_is(token_type::LEFT_BRACKET) || lookahead_is(token_type::IDENTIFIER)) {
+        return where_expr_pos();
+    }
+    return parse_error({token_type::OPERATOR_NOT, token_type::LEFT_BRACKET, token_type::IDENTIFIER});
+}
+
+bool Parser::where_expr_pos() {
     if (lookahead_is(token_type::LEFT_BRACKET)) {
+        return terminal(token_type::LEFT_BRACKET) && where_expr_open();
+    }
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && where_id() && where_id_comp() && where_id_comp_rval();
+    }
+    return parse_error({token_type::LEFT_BRACKET, token_type::IDENTIFIER});
+}
+
+bool Parser::where_expr_open() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && where_expr() && terminal(token_type::RIGHT_BRACKET);
+    }
+    if (lookahead_is(token_type::OPERATOR_NOT) || lookahead_is(token_type::LEFT_BRACKET) ||
+        lookahead_is(token_type::IDENTIFIER)) {
+        return where_expr() && terminal(token_type::RIGHT_BRACKET);
+    }
+    return parse_error(
+            {token_type::WHITESPACE, token_type::OPERATOR_NOT, token_type::LEFT_BRACKET, token_type::IDENTIFIER});
+}
+
+bool Parser::where_id() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && where_comp();
+    }
+    if (lookahead_is(token_type::OPERATOR_EQ) || lookahead_is(token_type::OPERATOR_LE) ||
+        lookahead_is(token_type::OPERATOR_LT) || lookahead_is(token_type::OPERATOR_GT) ||
+        lookahead_is(token_type::OPERATOR_GE)) {
+        return where_comp();
+    }
+    return parse_error(
+            {token_type::WHITESPACE, token_type::OPERATOR_EQ, token_type::OPERATOR_LE, token_type::OPERATOR_LT,
+             token_type::OPERATOR_GT, token_type::OPERATOR_GE});
+}
+
+bool Parser::where_comp() {
+    if (lookahead_is(token_type::OPERATOR_EQ)) {
+        return terminal(token_type::OPERATOR_EQ);
+    }
+    if (lookahead_is(token_type::OPERATOR_LE)) {
+        return terminal(token_type::OPERATOR_LE);
+    }
+    if (lookahead_is(token_type::OPERATOR_LT)) {
+        return terminal(token_type::OPERATOR_LT);
+    }
+    if (lookahead_is(token_type::OPERATOR_GT)) {
+        return terminal(token_type::OPERATOR_GT);
+    }
+    if (lookahead_is(token_type::OPERATOR_GE)) {
+        return terminal(token_type::OPERATOR_GE);
+    }
+    return parse_error(
+            {token_type::OPERATOR_EQ, token_type::OPERATOR_LE, token_type::OPERATOR_LT, token_type::OPERATOR_GT,
+             token_type::OPERATOR_GE});
+}
+
+bool Parser::where_id_comp() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && where_rval();
+    }
+    if (lookahead_is(token_type::IDENTIFIER) || lookahead_is(token_type::STRING_LITERAL) ||
+        lookahead_is(token_type::INTEGER_LITERAL)) {
+        return where_rval();
+    }
+    return parse_error(
+            {token_type::WHITESPACE, token_type::IDENTIFIER, token_type::STRING_LITERAL, token_type::INTEGER_LITERAL});
+}
+
+bool Parser::where_rval() {
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER);
+    }
+    if (lookahead_is(token_type::STRING_LITERAL)) {
+        return terminal(token_type::STRING_LITERAL);
+    }
+    if (lookahead_is(token_type::INTEGER_LITERAL)) {
+        return terminal(token_type::INTEGER_LITERAL);
+    }
+    return parse_error({token_type::IDENTIFIER, token_type::STRING_LITERAL, token_type::INTEGER_LITERAL});
+}
+
+bool Parser::where_id_comp_rval() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && where_comp_space();
+    }
+    if (lookahead_is(token_type::RIGHT_BRACKET) || lookahead_is_eof()) {
         return true;
     }
-    return parse_error({token_type::IDENTIFIER, token_type::OPERATOR_NOT, token_type::LEFT_BRACKET});
+    return parse_error({token_type::WHITESPACE, token_type::RIGHT_BRACKET}, true);
+}
+
+bool Parser::where_comp_space() {
+    if (lookahead_is(token_type::OPERATOR_AND)) {
+        return terminal(token_type::OPERATOR_AND) && terminal(token_type::WHITESPACE) && where_expr();
+    }
+    if (lookahead_is(token_type::OPERATOR_OR)) {
+        return terminal(token_type::OPERATOR_OR) && terminal(token_type::WHITESPACE) && where_expr();
+    }
+    if (lookahead_is(token_type::RIGHT_BRACKET) || lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error(
+            {token_type::OPERATOR_AND, token_type::OPERATOR_OR, token_type::WHITESPACE, token_type::RIGHT_BRACKET},
+            true);
 }
 
 bool Parser::group_by() {

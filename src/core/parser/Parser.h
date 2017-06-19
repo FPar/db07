@@ -54,6 +54,24 @@ namespace db07 {
 
         bool where();
 
+        bool where_expr();
+
+        bool where_expr_pos();
+
+        bool where_expr_open();
+
+        bool where_id();
+
+        bool where_comp();
+
+        bool where_id_comp();
+
+        bool where_rval();
+
+        bool where_id_comp_rval();
+
+        bool where_comp_space();
+
         bool group_by();
 
         bool group_by_id();
