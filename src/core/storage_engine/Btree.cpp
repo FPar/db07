@@ -216,14 +216,14 @@ bool Btree::removeNode(int index, Btree::Node &node) {
         int counter = 0;
         for (auto i = node.keys.cbegin(); i < node.keys.cend(); ++i) {
             if (index < (*i)) {
-                Node rmNode = *node.childNodes[counter];
+                Node &rmNode = *node.childNodes[counter];
                 bool result = removeNode(index, rmNode);
                 if (result) {
                     //Borrow Mechanism
                     //Check if underlying Node is a LeafNode
-                    if(rmNode.level == 0) {
+                    if (rmNode.level == 0) {
                         LeafNode &rmLeafNode = (LeafNode &) node.childNodes[counter];
-                        if(i+1 != node.keys.cend()) {
+                        if (i + 1 != node.keys.cend()) {
                             //Check for right rightSibling
                             LeafNode &rightSibling = (LeafNode &) node.childNodes[counter + 1];
                             if (rightSibling.keys.size() > MIN_CHILDS) {
@@ -243,7 +243,7 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                         }
 
                         //Check for left Sibling
-                        if(i != node.keys.cbegin()) {
+                        if (i != node.keys.cbegin()) {
                             LeafNode &leftSibling = (LeafNode &) node.childNodes[counter - 1];
                             if (leftSibling.keys.size() > MIN_CHILDS) {
                                 //Borrow LeafNode entry from leftSibling
@@ -266,12 +266,12 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                         //Merge Mechanism
                     } else { //If underlying node is an internal Node
                         //Borrow Mechanism
-                        if(i+1 != node.keys.cbegin()) {
+                        if (i + 1 != node.keys.cbegin()) {
                             Node &rightSibling = *node.childNodes[counter + 1];
                             if (rightSibling.keys.size() > MIN_CHILDS) {
                                 //Borrow LeafNode entry from rightSibling
                                 rmNode.keys.push_back(rightSibling.keys[0]);
-                                rmNode.childNodes.push_back(rightSibling.childNodes[0]);
+                                rmNode.childNodes.push_back(move(rightSibling.childNodes[0]));
 
                                 //Remove borrowed entry from rightSibling
                                 rightSibling.keys.erase(rightSibling.keys.cbegin());
@@ -284,14 +284,14 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                             }
                         }
 
-                        if(i != node.keys.cbegin()){
+                        if (i != node.keys.cbegin()) {
                             Node &leftSibling = *node.childNodes[counter + 1];
                             if (leftSibling.keys.size() > MIN_CHILDS) {
                                 //Borrow LeafNode entry from leftSibling
                                 rmNode.keys.insert(rmNode.keys.cbegin(),
-                                                       leftSibling.keys[leftSibling.keys.size() - 1]);
+                                                   leftSibling.keys[leftSibling.keys.size() - 1]);
                                 rmNode.childNodes.insert(rmNode.childNodes.cbegin(),
-                                                          leftSibling.childNodes[leftSibling.childNodes.size() - 1]);
+                                                         move(leftSibling.childNodes[leftSibling.childNodes.size() - 1]));
 
                                 //Remove borrowed entry from leftSibling
                                 leftSibling.keys.erase(leftSibling.keys.cend() - 1);
