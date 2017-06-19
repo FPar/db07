@@ -245,12 +245,10 @@ bool Parser::after_from() {
         return terminal(token_type::WHERE) && terminal(token_type::WHITESPACE) && where();
     }
     if (lookahead_is(token_type::GROUP)) {
-        return terminal(token_type::GROUP) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
-               terminal(token_type::WHITESPACE) && group_by();
+        return group_by();
     }
     if (lookahead_is(token_type::ORDER)) {
-        return terminal(token_type::ORDER) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
-               terminal(token_type::WHITESPACE) && order_by();
+        return order_by();
     }
     if (lookahead_is_eof()) {
         return true;
@@ -272,10 +270,11 @@ bool Parser::where() {
 }
 
 bool Parser::group_by() {
-    if (lookahead_is(token_type::IDENTIFIER)) {
-        return terminal(token_type::IDENTIFIER) && group_by_id();
+    if (lookahead_is(token_type::GROUP)) {
+        return terminal(token_type::GROUP) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
+               terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && group_by_id();
     }
-    return parse_error({token_type::IDENTIFIER});
+    return parse_error({token_type::GROUP});
 }
 
 bool Parser::group_by_id() {
@@ -292,10 +291,13 @@ bool Parser::group_by_id_space() {
     if (lookahead_is(token_type::COMMA)) {
         return terminal(token_type::COMMA) && group_by_id_comma();
     }
+    if (lookahead_is(token_type::ORDER)) {
+        return order_by();
+    }
     if (lookahead_is_eof()) {
         return true;
     }
-    return parse_error({token_type::COMMA}, true);
+    return parse_error({token_type::COMMA, token_type::ORDER}, true);
 }
 
 bool Parser::group_by_id_comma() {
@@ -309,10 +311,11 @@ bool Parser::group_by_id_comma() {
 }
 
 bool Parser::order_by() {
-    if (lookahead_is(token_type::IDENTIFIER)) {
-        return terminal(token_type::IDENTIFIER) && order_by_id();
+    if (lookahead_is(token_type::ORDER)) {
+        return terminal(token_type::ORDER) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
+               terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && order_by_id();
     }
-    return parse_error({token_type::IDENTIFIER});
+    return parse_error({token_type::ORDER});
 }
 
 bool Parser::order_by_id() {
