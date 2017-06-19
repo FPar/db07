@@ -2,8 +2,8 @@
 #include "parser/Token_recognizer.h"
 
 namespace db07 {
-    std::list<Token> Lexer::tokenize(std::string &input) {
-        std::list<Token> tokens;
+    std::vector<Token> Lexer::tokenize(std::string &input) {
+        std::vector<Token> tokens;
 
         std::string token_string;
         token_type token_type = token_type::UNRECOGNIZED;

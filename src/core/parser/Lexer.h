@@ -2,16 +2,13 @@
 #define LEXER_H
 
 #include <string>
-#include <regex>
-#include <cctype>
-#include <list>
-#include <memory>
+#include <vector>
 #include "parser/Token_evaluator.h"
 
 namespace db07 {
     class Lexer {
     public:
-        std::list<Token> tokenize(std::string &);
+        std::vector<Token> tokenize(std::string &input);
     };
 }
 

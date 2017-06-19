@@ -3,7 +3,7 @@
 #include "Regex_recognition_rule.h"
 
 namespace db07 {
-    const std::list<Recognition_rule *> Token_recognizer::RULES = {
+    const std::vector<Recognition_rule *> Token_recognizer::RULES = {
             new Regex_recognition_rule("\\s+", token_type::WHITESPACE, [](const std::string &token_string) {
                 for (const auto &token_chr : token_string) {
                     if (!isspace(token_chr)) {

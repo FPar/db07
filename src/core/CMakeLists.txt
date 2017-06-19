@@ -24,6 +24,7 @@ set(SOURCES
     parser/Lexer.h
     parser/Token.cpp
     parser/Token.h
+    parser/Token_evaluator.cpp
     parser/Token_evaluator.h
     parser/Token_recognizer.cpp
     parser/Token_recognizer.h
