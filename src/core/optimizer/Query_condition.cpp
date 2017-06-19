@@ -1,24 +1,29 @@
+#include <memory>
 #include "optimizer/Query_condition.h"
 
 namespace db07 {
-    const std::string &Query_condition::getColumn() const {
-        return column;
+     std::string &Query_condition::getColumn()  {
+        return _column;
     }
 
-    const std::string &Query_condition::getOperation() const {
-        return operation;
+     std::string &Query_condition::getOperation()  {
+        return _operation;
     }
 
-    const std::string &Query_condition::getValue() const {
-        return value;
+    Value* Query_condition::getValue()  {
+        return _value;
     }
 
-    const Query_condition *Query_condition::getNextCondition() const {
-        return nextCondition;
+     Query_condition *Query_condition::getNextCondition()  {
+        return _nextCondition;
     }
 
-    const std::string &Query_condition::getBooleanOperator() const {
-        return booleanOperator;
+     std::string &Query_condition::getBooleanOperator()  {
+        return _booleanOperator;
     }
+
+
+
+
 }
 

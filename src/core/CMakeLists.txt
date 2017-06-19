@@ -19,6 +19,8 @@ set(SOURCES
     optimizer/Select_plan.cpp
     optimizer/Select_plan.h
     optimizer/Query_type.h
+    optimizer/Build_Plan.cpp
+    optimizer/Build_Plan.h
 
     parser/Lexer.cpp
     parser/Lexer.h
@@ -43,7 +45,6 @@ set(SOURCES
     plan/matching/Comparing_condition.cpp
     plan/matching/Comparing_condition.h
     plan/matching/Condition.h
-    plan/matching/conditions.h
     plan/matching/Equals_condition.cpp
     plan/matching/Equals_condition.h
     plan/matching/Greater_condition.cpp

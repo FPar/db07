@@ -2,7 +2,6 @@
 #include "optimizer/Query_condition.h"
 #include "optimizer/Query_data.h"
 
-using namespace std;
 
 namespace db07 {
 
@@ -10,24 +9,24 @@ namespace db07 {
         return _queryType;
     }
 
-    string Query_data::getTableName() {
+    std::string Query_data::getTableName() {
         return _tableName;
     }
 
-    list <string> Query_data::getPrimaryKeys() {
+    std::vector<std::string> Query_data::getPrimaryKeys() {
         return _primaryKey;
     }
 
-    list <Query_condition> Query_data::getConditions() {
+    std::vector<Query_condition> Query_data::getConditions()const {
         return _conditions;
     }
 
-    list <pair<string, string>> Query_data::getColumnValues() {
+    std::vector<std::pair<std::string, std::string>> Query_data::getColumnValues() {
         return _columns2value;
 
     }
 
-    const list <string> &Query_data::getColumnName() const {
+    const std::vector<std::string> &Query_data::getColumnName() const {
         return _columnName;
     }
 }

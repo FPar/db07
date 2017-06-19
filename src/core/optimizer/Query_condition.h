@@ -2,40 +2,47 @@
 #define DB07_QUERY_CONDITION_H
 
 #include <string>
+#include <storage_engine/values/Value.h>
+#include <storage_engine/values/Int_value.h>
+#include <memory>
 
 namespace db07 {
     class Query_condition {
     private:
         /**String column on which the condition es executed.*/
-        const std::string column;
+        std::string _column;
         /**String operation, for example equals or greater than.*/
-        const std::string operation;
-        /**String value on which the operation is compared.*/
-        const std::string value;
+        std::string _operation;
+        /**Value value on which the operation is compared.*/
+        Value* _value;
+
+
+    private:
         /**Condition pointer to the next condition, if it exist.*/
-        const Query_condition *nextCondition;
+        Query_condition *_nextCondition;
         /**String boolean operator between the next condition.*/
-        const std::string booleanOperator;
+        std::string _booleanOperator;
 
     public:
 
-        const std::string &getColumn() const;
+        std::string &getColumn();
 
-        const std::string &getOperation() const;
+        std::string &getOperation();
 
-        const std::string &getValue() const;
+        Value* getValue();
 
-        const Query_condition *getNextCondition() const;
+        Query_condition *getNextCondition();
 
-        const std::string &getBooleanOperator() const;
+        std::string &getBooleanOperator();
 
-        Query_condition(const std::string &column, const std::string &operation, const std::string &value,
-                        const Query_condition *nextCondition, const std::string &booleanOperator) :
-                column(column),
-                operation(operation),
-                value(value),
-                nextCondition(nextCondition),
-                booleanOperator(booleanOperator) {}
+        Query_condition(const std::string &_column, const std::string &_operation,
+                        Value* _value, Query_condition *_nextCondition,
+                        const std::string &_booleanOperator) :
+                _column(_column),
+                _operation(_operation),
+                _value(_value),
+                _nextCondition(_nextCondition),
+                _booleanOperator(_booleanOperator) {}
 
     };
 
