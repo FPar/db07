@@ -26,7 +26,7 @@ void Btree::insert(int index, std::shared_ptr<Row> entries) {
 
 Btree::iterator Btree::indexSeek(int index) {
     shared_ptr<SearchInfo> newSearchInfo = search(index, root);
-    return Btree::iterator(newSearchInfo->entry, newSearchInfo->index);
+    return Btree::iterator(newSearchInfo->entry);
 }
 
 /**
@@ -341,6 +341,21 @@ bool Btree::removeNode(int index, Btree::Node &node) {
  * key anpassung im node wo ich gerade bin
  */
 
+Btree::iterator::iterator(shared_ptr<Btree::LeafNode> &current) : current(current) {
+    shared_ptr<Btree::Node> this_level = current;
+    shared_ptr<Btree::Node> upper_level;
+    do {
+        upper_level = this_level->parentNode;
+        for (int i = 0; i < upper_level->childNodes.size(); ++i) {
+            if (upper_level->childNodes[i] == this_level) {
+                index.insert(index.begin(), i);
+                break;
+            }
+        }
+        this_level = upper_level;
+    } while (this_level->level != 0);
+}
+
 Btree::iterator &Btree::iterator::operator++() {
     return *this;
 }
@@ -350,11 +365,11 @@ Btree::iterator &Btree::iterator::operator--() {
 }
 
 shared_ptr<Row> Btree::iterator::operator->() {
-    return current->entries[index];
+    return current->entries[index.back()];
 }
 
 shared_ptr<Row> Btree::iterator::operator*() {
-    return current->entries[index];
+    return current->entries[index.back()];
 }
 
 bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {

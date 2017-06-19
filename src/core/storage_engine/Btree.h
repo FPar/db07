@@ -57,7 +57,7 @@ namespace db07 {
 
         class iterator {
         public:
-            explicit iterator(std::shared_ptr<LeafNode> &current, int index) : current(current), index(index) {}
+            explicit iterator(std::shared_ptr<LeafNode> &current);
 
             iterator &operator++();
 
@@ -73,7 +73,7 @@ namespace db07 {
 
         private:
             std::shared_ptr<LeafNode> current;
-            int index = 0;
+            std::vector<int> index;
         };
 
         Btree();
