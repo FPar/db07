@@ -34,8 +34,6 @@ string Parser::token_to_string(token_type type) {
             return "RIGHT_BRACKET";
         case token_type::OPERATOR_EQ:
             return "OPERATOR_EQ";
-        case token_type::OPERATOR_NEQ:
-            return "OPERATOR_NEQ";
         case token_type::OPERATOR_LT:
             return "OPERATOR_LT";
         case token_type::OPERATOR_LE:
@@ -50,8 +48,6 @@ string Parser::token_to_string(token_type type) {
             return "OPERATOR_OR";
         case token_type::OPERATOR_NOT:
             return "OPERATOR_NOT";
-        case token_type::OPERATOR_IN:
-            return "OPERATOR_IN";
         case token_type::SELECT:
             return "SELECT";
         case token_type::DISTINCT:
@@ -60,6 +56,16 @@ string Parser::token_to_string(token_type type) {
             return "FROM";
         case token_type::WHERE:
             return "WHERE";
+        case token_type::GROUP:
+            return "GROUP";
+        case token_type::ORDER:
+            return "ORDER";
+        case token_type::BY:
+            return "BY";
+        case token_type::ASC:
+            return "ASC";
+        case token_type::DESC:
+            return "DESC";
         case token_type::INTEGER_LITERAL:
             return "INTEGER_LITERAL";
         case token_type::STRING_LITERAL:
@@ -78,7 +84,7 @@ string Parser::token_to_string(token_type type) {
     throw runtime_error("Unknown token.");
 }
 
-bool Parser::parse_error(vector<token_type> expected, bool or_eof = false) {
+bool Parser::parse_error(vector<token_type> expected, bool eof_allowed = false) {
     cout << "Syntax error: Expected ";
     if (expected.size() > 1) {
         cout << "one of ";
@@ -88,11 +94,11 @@ bool Parser::parse_error(vector<token_type> expected, bool or_eof = false) {
     } else {
         cout << token_to_string(expected.front()) << " ";
     }
-    if (or_eof) {
+    if (eof_allowed) {
         cout << "or EOF ";
     }
     cout << "but ";
-    if (!or_eof && _lookahead == _end) {
+    if (!eof_allowed && _lookahead == _end) {
         cout << "reached end of input";
     } else {
         cout << "found " << token_to_string(_lookahead->type());
@@ -154,7 +160,8 @@ bool Parser::id_space_projection() {
         return terminal(token_type::COMMA) && id_comma_projection();
     }
     if (lookahead_is(token_type::AS)) {
-        return terminal(token_type::AS) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && id_as_projection();
+        return terminal(token_type::AS) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) &&
+               id_as_projection();
     }
     return parse_error({token_type::FROM, token_type::COMMA, token_type::AS});
 }
@@ -191,7 +198,8 @@ bool Parser::id_as_space_projection() {
 
 bool Parser::from() {
     if (lookahead_is(token_type::FROM)) {
-        return terminal(token_type::FROM) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && from_id();
+        return terminal(token_type::FROM) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) &&
+               from_id();
     }
     return parse_error({token_type::FROM});
 }
@@ -203,20 +211,23 @@ bool Parser::from_id() {
     if (lookahead_is(token_type::COMMA)) {
         return terminal(token_type::COMMA) && from_id_comma();
     }
-    if (lookahead_is_eof()) {
-        return true;
+    if (lookahead_is(token_type::WHERE) || lookahead_is(token_type::ORDER) || lookahead_is(token_type::GROUP) ||
+        lookahead_is_eof()) {
+        return after_from();
     }
-    return parse_error({token_type::WHITESPACE, token_type::COMMA}, true);
+    return parse_error(
+            {token_type::WHITESPACE, token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP}, true);
 }
 
 bool Parser::from_id_space() {
     if (lookahead_is(token_type::COMMA)) {
         return terminal(token_type::COMMA) && from_id_comma();
     }
-    if (lookahead_is_eof()) {
-        return true;
+    if (lookahead_is(token_type::WHERE) || lookahead_is(token_type::ORDER) || lookahead_is(token_type::GROUP) ||
+        lookahead_is_eof()) {
+        return after_from();
     }
-    return parse_error({token_type::COMMA}, true);
+    return parse_error({token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP}, true);
 }
 
 bool Parser::from_id_comma() {
@@ -229,30 +240,139 @@ bool Parser::from_id_comma() {
     return parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
+bool Parser::after_from() {
+    if (lookahead_is(token_type::WHERE)) {
+        return terminal(token_type::WHERE) && terminal(token_type::WHITESPACE) && where();
+    }
+    if (lookahead_is(token_type::GROUP)) {
+        return terminal(token_type::GROUP) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
+               terminal(token_type::WHITESPACE) && group_by();
+    }
+    if (lookahead_is(token_type::ORDER)) {
+        return terminal(token_type::ORDER) && terminal(token_type::WHITESPACE) && terminal(token_type::BY) &&
+               terminal(token_type::WHITESPACE) && order_by();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::WHERE, token_type::GROUP, token_type::ORDER}, true);
+}
+
 bool Parser::where() {
-    return false;
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return true;
+    }
+    if (lookahead_is(token_type::OPERATOR_NOT)) {
+        return true;
+    }
+    if (lookahead_is(token_type::LEFT_BRACKET)) {
+        return true;
+    }
+    return parse_error({token_type::IDENTIFIER, token_type::OPERATOR_NOT, token_type::LEFT_BRACKET});
 }
 
-bool Parser::selection() {
-    return false;
+bool Parser::group_by() {
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && group_by_id();
+    }
+    return parse_error({token_type::IDENTIFIER});
 }
 
-bool Parser::condition() {
-    return false;
+bool Parser::group_by_id() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && group_by_id_space();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && group_by_id_comma();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA});
 }
 
-bool Parser::comp_op() {
-    return false;
+bool Parser::group_by_id_space() {
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && group_by_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::COMMA}, true);
 }
 
-bool Parser::condition_op() {
-    return false;
+bool Parser::group_by_id_comma() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && group_by_id();
+    }
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && group_by_id();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
-bool Parser::condition_rval() {
-    return false;
+bool Parser::order_by() {
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && order_by_id();
+    }
+    return parse_error({token_type::IDENTIFIER});
 }
 
-bool Parser::condition_end() {
-    return false;
+bool Parser::order_by_id() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && order_by_id_space();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && order_by_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA}, true);
+}
+
+bool Parser::order_by_id_space() {
+    if (lookahead_is(token_type::ASC)) {
+        return terminal(token_type::ASC) && order_by_id_ascdesc();
+    }
+    if (lookahead_is(token_type::DESC)) {
+        return terminal(token_type::DESC) && order_by_id_ascdesc();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && order_by_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::ASC, token_type::DESC, token_type::COMMA}, true);
+}
+
+bool Parser::order_by_id_ascdesc() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && order_by_id_ascdesc_space();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && order_by_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA}, true);
+}
+
+bool Parser::order_by_id_ascdesc_space() {
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && order_by_id_comma();
+    }
+    if (lookahead_is_eof()) {
+        return true;
+    }
+    return parse_error({token_type::COMMA}, true);
+}
+
+bool Parser::order_by_id_comma() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && order_by_id();
+    }
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && order_by_id();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }

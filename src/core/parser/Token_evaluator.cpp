@@ -10,7 +10,6 @@ std::function<Token(std::string &)> Token_evaluator::for_type(token_type token_t
         case token_type::RIGHT_BRACKET:
         case token_type::STAR:
         case token_type::OPERATOR_EQ:
-        case token_type::OPERATOR_NEQ:
         case token_type::OPERATOR_LT:
         case token_type::OPERATOR_LE:
         case token_type::OPERATOR_GE:
@@ -18,13 +17,17 @@ std::function<Token(std::string &)> Token_evaluator::for_type(token_type token_t
         case token_type::OPERATOR_AND:
         case token_type::OPERATOR_OR:
         case token_type::OPERATOR_NOT:
-        case token_type::OPERATOR_IN:
         case token_type::SELECT:
         case token_type::DISTINCT:
         case token_type::COMMA:
         case token_type::AS:
         case token_type::FROM:
         case token_type::WHERE:
+        case token_type::GROUP:
+        case token_type::ORDER:
+        case token_type::BY:
+        case token_type::ASC:
+        case token_type::DESC:
             return [token_type](std::string &) { return Token(token_type); };
         case token_type::INTEGER_LITERAL:
             return [token_type](std::string &token_string) {

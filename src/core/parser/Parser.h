@@ -22,7 +22,7 @@ namespace db07 {
 
         std::string token_to_string(token_type type);
 
-        bool parse_error(std::vector<token_type> expected, bool or_eof);
+        bool parse_error(std::vector<token_type> expected, bool eof_allowed);
 
         bool terminal(token_type type);
 
@@ -50,19 +50,29 @@ namespace db07 {
 
         bool from_id_comma();
 
+        bool after_from();
+
         bool where();
 
-        bool selection();
+        bool group_by();
 
-        bool condition();
+        bool group_by_id();
 
-        bool comp_op();
+        bool group_by_id_space();
 
-        bool condition_op();
+        bool group_by_id_comma();
 
-        bool condition_rval();
+        bool order_by();
 
-        bool condition_end();
+        bool order_by_id();
+
+        bool order_by_id_space();
+
+        bool order_by_id_ascdesc();
+
+        bool order_by_id_ascdesc_space();
+
+        bool order_by_id_comma();
     };
 }
 

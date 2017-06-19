@@ -15,7 +15,6 @@ namespace db07 {
             new String_recognition_rule("(", token_type::LEFT_BRACKET),
             new String_recognition_rule(")", token_type::RIGHT_BRACKET),
             new String_recognition_rule("=", token_type::OPERATOR_EQ),
-            new String_recognition_rule("!=", token_type::OPERATOR_NEQ),
             new String_recognition_rule("<", token_type::OPERATOR_LT),
             new String_recognition_rule("<=", token_type::OPERATOR_LE),
             new String_recognition_rule(">=", token_type::OPERATOR_GE),
@@ -24,13 +23,17 @@ namespace db07 {
             new String_recognition_rule("AND", token_type::OPERATOR_AND),
             new String_recognition_rule("OR", token_type::OPERATOR_OR),
             new String_recognition_rule("NOT", token_type::OPERATOR_NOT),
-            new String_recognition_rule("IN", token_type::OPERATOR_IN),
             new String_recognition_rule("SELECT", token_type::SELECT),
             new String_recognition_rule("DISTINCT", token_type::DISTINCT),
             new String_recognition_rule(",", token_type::COMMA),
             new String_recognition_rule("AS", token_type::AS),
             new String_recognition_rule("FROM", token_type::FROM),
             new String_recognition_rule("WHERE", token_type::WHERE),
+            new String_recognition_rule("GROUP", token_type::GROUP),
+            new String_recognition_rule("ORDER", token_type::ORDER),
+            new String_recognition_rule("BY", token_type::BY),
+            new String_recognition_rule("ASC", token_type::ASC),
+            new String_recognition_rule("DESC", token_type::DESC),
             new Regex_recognition_rule("[0-9]+", token_type::INTEGER_LITERAL, [](const std::string &token_string) {
                 for (const auto &token_chr : token_string) {
                     if (!isdigit(token_chr)) {
