@@ -57,7 +57,9 @@ namespace db07 {
 
         class iterator {
         public:
-            explicit iterator(std::shared_ptr<LeafNode> &current);
+            iterator();
+
+            iterator(std::shared_ptr<LeafNode> &current, const std::vector<std::shared_ptr<Node>> &stack);
 
             iterator &operator++();
 
@@ -73,16 +75,21 @@ namespace db07 {
 
         private:
             std::shared_ptr<LeafNode> current;
-            std::vector<int> index;
+            std::vector<std::shared_ptr<Node>> stack;
         };
 
         Btree();
+
+        iterator begin();
+
+        iterator end();
+
+        iterator indexSeek(int index);
 
         void insert(int index, std::shared_ptr<Row> entries);
 
         void remove(int index);
 
-        iterator indexSeek(int index);
 
         Row *indexScan(Row *values);
     };

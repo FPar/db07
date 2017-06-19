@@ -24,9 +24,25 @@ void Btree::insert(int index, std::shared_ptr<Row> entries) {
     }
 }
 
+Btree::iterator Btree::begin() {
+    vector<shared_ptr<Node>> stack;
+    shared_ptr<Node> ptr = root;
+    while (ptr->level > 0) {
+        stack.push_back(ptr);
+        ptr = ptr->childNodes[0];
+    }
+
+    shared_ptr<LeafNode> leaf = static_pointer_cast<LeafNode>(ptr);
+    return Btree::iterator(leaf, stack);
+}
+
+Btree::iterator Btree::end() {
+    return Btree::iterator();
+}
+
 Btree::iterator Btree::indexSeek(int index) {
     shared_ptr<SearchInfo> newSearchInfo = search(index, root);
-    return Btree::iterator(newSearchInfo->entry);
+    return Btree::iterator(newSearchInfo->entry, newSearchInfo->index);
 }
 
 /**
@@ -341,22 +357,61 @@ bool Btree::removeNode(int index, Btree::Node &node) {
  * key anpassung im node wo ich gerade bin
  */
 
-Btree::iterator::iterator(shared_ptr<Btree::LeafNode> &current) : current(current) {
+Btree::iterator::iterator() : current(nullptr) {
+}
+
+Btree::iterator::iterator(shared_ptr<Btree::LeafNode> &current, const vector<shared_ptr<Node>> &stack) : current(current), stack(stack) {
     shared_ptr<Btree::Node> this_level = current;
     shared_ptr<Btree::Node> upper_level;
-    do {
+    stack.insert(stack.begin(), position);
+    while (this_level->parentNode != nullptr) {
         upper_level = this_level->parentNode;
-        for (int i = 0; i < upper_level->childNodes.size(); ++i) {
+        for (unsigned int i = 0; i < upper_level->childNodes.size(); ++i) {
             if (upper_level->childNodes[i] == this_level) {
-                index.insert(index.begin(), i);
+                stack.insert(stack.begin(), i);
                 break;
             }
         }
         this_level = upper_level;
-    } while (this_level->level != 0);
+    }
 }
 
 Btree::iterator &Btree::iterator::operator++() {
+    unsigned int cur_index = stack.back() + 1;
+    stack.pop_back();
+
+    if (cur_index < current->entries.size()) {
+        stack.push_back(cur_index);
+        return *this;
+    }
+
+    shared_ptr<Btree::Node> ptr = current;
+
+    while (ptr->parentNode != nullptr) {
+        ptr = ptr->parentNode;
+        cur_index = stack.back() + 1;
+        stack.pop_back();
+
+        if (cur_index < ptr->childNodes.size()) {
+            break;
+        }
+    }
+
+    if (cur_index >= ptr->childNodes.size()) {
+        current = nullptr;
+        return *this;
+    }
+
+    stack.push_back(cur_index);
+    ptr = ptr->childNodes[cur_index];
+
+    while (ptr->level > 0) {
+        stack.push_back(0);
+        ptr = ptr->childNodes[0];
+    }
+
+    current = static_pointer_cast<LeafNode>(ptr);
+
     return *this;
 }
 
@@ -365,17 +420,19 @@ Btree::iterator &Btree::iterator::operator--() {
 }
 
 shared_ptr<Row> Btree::iterator::operator->() {
-    return current->entries[index.back()];
+    return current->entries[stack.back()];
 }
 
 shared_ptr<Row> Btree::iterator::operator*() {
-    return current->entries[index.back()];
+    return current->entries[stack.back()];
 }
 
-bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {
-    return false;
-}
+namespace db07 {
+    bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+        return lhs.current == rhs.current;
+    }
 
-bool operator!=(const Btree::iterator &lhs, const Btree::iterator &rhs) {
-    return false;
+    bool operator!=(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+        return !(lhs == rhs);
+    }
 }
