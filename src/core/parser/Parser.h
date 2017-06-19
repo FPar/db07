@@ -26,15 +26,37 @@ namespace db07 {
 
         bool select();
 
-        bool optional_distinct();
+        bool distinct();
 
         bool projection();
 
-        bool projection_list();
+        bool id_projection();
 
-        bool optional_renaming();
+        bool id_space_projection();
 
-        bool optional_projection_list();
+        bool id_comma_projection();
+
+        bool id_as_projection();
+
+        bool id_as_space_projection();
+
+        bool from();
+
+        bool from_id();
+
+        bool where();
+
+        bool selection();
+
+        bool condition();
+
+        bool comp_op();
+
+        bool condition_op();
+
+        bool condition_rval();
+
+        bool condition_end();
     };
 }
 

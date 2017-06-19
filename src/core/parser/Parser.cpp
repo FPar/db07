@@ -105,57 +105,119 @@ bool Parser::terminal(token_type type) {
 
 bool Parser::select() {
     if (lookahead_is(token_type::SELECT)) {
-        return terminal(token_type::SELECT)
-               && terminal(token_type::WHITESPACE)
-               && optional_distinct()
-               && projection()
-               && terminal(token_type::FROM)
-               && terminal(token_type::WHITESPACE)
-               && terminal(token_type::IDENTIFIER);
+        return terminal(token_type::SELECT) && terminal(token_type::WHITESPACE) && distinct();
     }
     return parse_error({token_type::SELECT});
 }
 
-bool Parser::optional_distinct() {
+bool Parser::distinct() {
     if (lookahead_is(token_type::DISTINCT)) {
-        return terminal(token_type::DISTINCT)
-               && terminal(token_type::WHITESPACE);
+        return terminal(token_type::DISTINCT) && terminal(token_type::WHITESPACE) && projection();
     }
-    return true;
+    if (lookahead_is(token_type::STAR) || lookahead_is(token_type::IDENTIFIER)) {
+        return projection();
+    }
+    return parse_error({token_type::DISTINCT, token_type::STAR, token_type::IDENTIFIER});
 }
 
 bool Parser::projection() {
     if (lookahead_is(token_type::STAR)) {
-        return terminal(token_type::STAR)
-               && terminal(token_type::WHITESPACE);
+        return terminal(token_type::STAR) && terminal(token_type::WHITESPACE) && from();
     }
     if (lookahead_is(token_type::IDENTIFIER)) {
-        return projection_list();
+        return terminal(token_type::IDENTIFIER) && id_projection();
     }
-    return parse_error({token_type::STAR, token_type ::IDENTIFIER});
+    return parse_error({token_type::STAR, token_type::IDENTIFIER});
 }
 
-bool Parser::projection_list() {
-    if (lookahead_is(token_type::IDENTIFIER)) {
-        return terminal(token_type::IDENTIFIER)
-               && optional_renaming()
-               && optional_projection_list();
+bool Parser::id_projection() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && id_space_projection();
     }
-    return parse_error({token_type::IDENTIFIER});
-}
-
-bool Parser::optional_renaming() {
-    if (lookahead_is(token_type::AS)) {
-        return terminal(token_type::AS)
-               && terminal(token_type::IDENTIFIER);
-    }
-    return true;
-}
-
-bool Parser::optional_projection_list() {
     if (lookahead_is(token_type::COMMA)) {
-        return terminal(token_type::COMMA)
-               && projection_list();
+        return terminal(token_type::COMMA) && id_comma_projection();
     }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA});
+}
+
+bool Parser::id_space_projection() {
+    if (lookahead_is(token_type::FROM)) {
+        return from();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && id_comma_projection();
+    }
+    if (lookahead_is(token_type::AS)) {
+        return terminal(token_type::AS) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && id_as_projection();
+    }
+    return parse_error({token_type::FROM, token_type::COMMA, token_type::AS});
+}
+
+bool Parser::id_comma_projection() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && id_projection();
+    }
+    if (lookahead_is(token_type::IDENTIFIER)) {
+        return terminal(token_type::IDENTIFIER) && id_projection();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
+}
+
+bool Parser::id_as_projection() {
+    if (lookahead_is(token_type::WHITESPACE)) {
+        return terminal(token_type::WHITESPACE) && id_as_space_projection();
+    }
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && id_comma_projection();
+    }
+    return parse_error({token_type::WHITESPACE, token_type::COMMA});
+}
+
+bool Parser::id_as_space_projection() {
+    if (lookahead_is(token_type::COMMA)) {
+        return terminal(token_type::COMMA) && id_comma_projection();
+    }
+    if (lookahead_is(token_type::FROM)) {
+        return from();
+    }
+    return parse_error({token_type::COMMA, token_type::FROM});
+}
+
+bool Parser::from() {
+    if (lookahead_is(token_type::FROM)) {
+        return terminal(token_type::FROM) && terminal(token_type::WHITESPACE) && terminal(token_type::IDENTIFIER) && from_id();
+    }
+    return parse_error({token_type::FROM});
+}
+
+bool Parser::from_id() {
     return true;
+}
+
+bool Parser::where() {
+    return false;
+}
+
+bool Parser::selection() {
+    return false;
+}
+
+bool Parser::condition() {
+    return false;
+}
+
+bool Parser::comp_op() {
+    return false;
+}
+
+bool Parser::condition_op() {
+    return false;
+}
+
+bool Parser::condition_rval() {
+    return false;
+}
+
+bool Parser::condition_end() {
+    return false;
 }
