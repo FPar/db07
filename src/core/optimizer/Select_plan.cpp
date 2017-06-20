@@ -3,7 +3,7 @@
 using namespace db07;
 
 void Select_plan::execute() {
-    while(_root->has_next()) {
+    while(_root->fetch_next()) {
         _receiver->receive(*_root->next());
     }
 }

@@ -9,7 +9,7 @@ Insert_data_node::Insert_data_node(const shared_ptr<Table_definition> &table_def
     _position = _rows->begin();
 }
 
-bool Insert_data_node::has_next() {
+bool Insert_data_node::fetch_next() {
     return _position != _rows->end();
 }
 

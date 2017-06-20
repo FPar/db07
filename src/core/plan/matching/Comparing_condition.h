@@ -11,7 +11,7 @@ namespace db07 {
                 _column(column), _value(move(value)) {
         }
 
-        bool fulfil(Row &row) const override;
+        bool fulfil(const Row & row) const override;
 
     protected:
         const unsigned int _column;

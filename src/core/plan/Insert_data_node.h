@@ -11,7 +11,7 @@ namespace db07 {
         explicit Insert_data_node(const std::shared_ptr<Table_definition> &table_definition,
                                   std::unique_ptr<std::vector<std::shared_ptr<Row>>> rows);
 
-        bool has_next() override;
+        bool fetch_next() override;
 
         std::shared_ptr<Row> next() override;
 

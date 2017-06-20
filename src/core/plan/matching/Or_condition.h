@@ -15,7 +15,7 @@ namespace db07 {
         {
         }
 
-        bool fulfil(Row &tuple) const;
+        bool fulfil(const Row & tuple) const;
     };
 }
 
