@@ -17,12 +17,12 @@ namespace db07 {
         return _primaryKey;
     }
 
-    std::vector<Query_condition> Query_data::getConditions()const {
+    std::vector<Query_condition> Query_data::getConditions() const {
         return _conditions;
     }
 
-    std::vector<std::pair<std::string, std::string>> Query_data::getColumnValues() {
-        return _columns2value;
+    std::vector<Value*> Query_data::getColumnValues() {
+        return _values;
 
     }
 
