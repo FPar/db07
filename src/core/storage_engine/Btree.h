@@ -14,7 +14,6 @@ namespace db07 {
         struct Node {
             std::vector<int> keys;
             std::vector<std::shared_ptr<Node>> childNodes;
-            std::shared_ptr<Node> parentNode = nullptr;
             int level = 0;
         };
 
@@ -48,7 +47,7 @@ namespace db07 {
 
         std::shared_ptr<SplitInfo> splitLeafNode(LeafNode &leafNode);
 
-        std::shared_ptr<SearchInfo> search(int index, std::shared_ptr<Node> &node);
+        std::shared_ptr<SearchInfo> search(int index, std::shared_ptr<Node> &node, std::vector<std::pair<int, std::shared_ptr<Node>>>& stack);
 
         bool removeNode(int index, Node &node);
 
@@ -59,7 +58,7 @@ namespace db07 {
         public:
             iterator();
 
-            iterator(std::shared_ptr<LeafNode> &current, const std::vector<std::shared_ptr<Node>> &stack);
+            iterator(const std::vector<std::pair<int, std::shared_ptr<Node>>> &stack);
 
             iterator &operator++();
 
@@ -74,8 +73,7 @@ namespace db07 {
             friend bool operator!=(const iterator &lhs, const iterator &rhs);
 
         private:
-            std::shared_ptr<LeafNode> current;
-            std::vector<std::shared_ptr<Node>> stack;
+            std::vector<std::pair<int, std::shared_ptr<Node>>> stack;
         };
 
         Btree();
@@ -89,7 +87,6 @@ namespace db07 {
         void insert(int index, std::shared_ptr<Row> entries);
 
         void remove(int index);
-
 
         Row *indexScan(Row *values);
     };
