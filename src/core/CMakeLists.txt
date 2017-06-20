@@ -59,7 +59,9 @@ set(SOURCES
     plan/matching/Or_condition.h
     plan/matching/Unequals_condition.cpp
     plan/matching/Unequals_condition.h
-
+	
+	plan/Hash_match.cpp
+	plan/Hash_match.h
     plan/Insert_data_node.cpp
     plan/Insert_data_node.h
     plan/Plan_node.h
