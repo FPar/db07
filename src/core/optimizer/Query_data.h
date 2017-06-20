@@ -25,8 +25,7 @@ namespace db07 {
          * Pairing column name with data type,
          * or insert/update a value in a column.
          */
-
-        std::vector<std::pair<std::string, std::string>> _columns2value;
+        std::vector<Value*> _values;
 
     public:
 
@@ -36,20 +35,20 @@ namespace db07 {
 
         std::vector<std::string> getPrimaryKeys();
 
-        std::vector<Query_condition> getConditions()const;
+        std::vector<Query_condition> getConditions() const;
 
-        std::vector<std::pair<std::string, std::string>> getColumnValues();
+        std::vector<Value*> getColumnValues();
 
         const std::vector<std::string> &getColumnName() const;
 
         Query_data(const Query_type queryType, const std::string &tableName, const std::vector<std::string> &columnName,
                    const std::vector<std::string> &primaryKey, std::vector<Query_condition> &conditions,
-                   std::vector <std::pair<std::string, std::string>> &columns2value) : _queryType(queryType),
-                                                                                      _tableName(tableName),
-                                                                                      _columnName(columnName),
-                                                                                      _primaryKey(primaryKey),
-                                                                                      _conditions(conditions),
-                                                                                      _columns2value(columns2value) {}
+                   std::vector<Value*> &values) : _queryType(queryType),
+                                                 _tableName(tableName),
+                                                 _columnName(columnName),
+                                                 _primaryKey(primaryKey),
+                                                 _conditions(conditions),
+                                                 _values(values) {}
 
     };
 
