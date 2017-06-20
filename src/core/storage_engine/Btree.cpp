@@ -10,7 +10,8 @@ using namespace db07;
 Btree::Btree() : root(new LeafNode()) {}
 
 void Btree::insert(int index, std::shared_ptr<Row> entries) {
-    auto newSearchInfo = search(index, root);
+	vector<pair<int, shared_ptr<Node>>> stack;
+    auto newSearchInfo = search(index, root, stack);
     if (!(newSearchInfo->found)) {
         shared_ptr<SplitInfo> newSplitInfo = insertNode(index, entries, *root);
         if (newSplitInfo->insertIndex != -1) {
@@ -24,9 +25,25 @@ void Btree::insert(int index, std::shared_ptr<Row> entries) {
     }
 }
 
+Btree::iterator Btree::begin() {
+	vector<pair<int, shared_ptr<Node>>> stack;
+    shared_ptr<Node> ptr = root;
+    while (ptr->level > 0) {
+        stack.push_back(make_pair(0, ptr));
+        ptr = ptr->childNodes[0];
+    }
+	stack.push_back(make_pair(0, ptr));
+    return Btree::iterator(stack);
+}
+
+Btree::iterator Btree::end() {
+    return Btree::iterator();
+}
+
 Btree::iterator Btree::indexSeek(int index) {
-    shared_ptr<SearchInfo> newSearchInfo = search(index, root);
-    return Btree::iterator(newSearchInfo->entry);
+	vector<pair<int, shared_ptr<Node>>> stack;
+    shared_ptr<SearchInfo> newSearchInfo = search(index, root, stack); 
+    return Btree::iterator(stack);
 }
 
 /**
@@ -162,7 +179,7 @@ shared_ptr<Btree::SplitInfo> Btree::splitLeafNode(Btree::LeafNode &leafNode) {
     return newSplitInfo;
 }
 
-shared_ptr<Btree::SearchInfo> Btree::search(int index, shared_ptr<Node> &node) {
+shared_ptr<Btree::SearchInfo> Btree::search(int index, shared_ptr<Node> &node, vector<pair<int, shared_ptr<Node>>>& stack) {
     if (node->level == 0) {
         shared_ptr<SearchInfo> newSearchInfo(new SearchInfo());
         bool isIndexFound = false;
@@ -173,6 +190,10 @@ shared_ptr<Btree::SearchInfo> Btree::search(int index, shared_ptr<Node> &node) {
                 isIndexFound = true;
                 newSearchInfo->entry = leaf;
                 newSearchInfo->index = counter;
+
+				stack.push_back(make_pair(counter, leaf));
+
+				break;
             }
             counter++;
         }
@@ -182,18 +203,19 @@ shared_ptr<Btree::SearchInfo> Btree::search(int index, shared_ptr<Node> &node) {
         int counter = 0;
         for (auto i = node->keys.cbegin(); i < node->keys.cend(); ++i) {
             if (index < (*i)) {
-                return search(index, node->childNodes[counter]);
+				stack.push_back(make_pair(counter, node));
+                return search(index, node->childNodes[counter], stack);
             }
             counter++;
         }
 
-        return search(index, node->childNodes[counter]);
+        return search(index, node->childNodes[counter], stack);
     }
 }
 
 void Btree::remove(int index) {
-
-    shared_ptr<SearchInfo> newSearchInfo = search(index, root);
+	vector<pair<int, shared_ptr<Node>>> stack;
+    shared_ptr<SearchInfo> newSearchInfo = search(index, root, stack);
     if (newSearchInfo->found) {
         bool result = removeNode(index, *root);
         if (root->level != 0 && result) {
@@ -341,22 +363,53 @@ bool Btree::removeNode(int index, Btree::Node &node) {
  * key anpassung im node wo ich gerade bin
  */
 
-Btree::iterator::iterator(shared_ptr<Btree::LeafNode> &current) : current(current) {
-    shared_ptr<Btree::Node> this_level = current;
-    shared_ptr<Btree::Node> upper_level;
-    do {
-        upper_level = this_level->parentNode;
-        for (int i = 0; i < upper_level->childNodes.size(); ++i) {
-            if (upper_level->childNodes[i] == this_level) {
-                index.insert(index.begin(), i);
-                break;
-            }
-        }
-        this_level = upper_level;
-    } while (this_level->level != 0);
+Btree::iterator::iterator() {
+}
+
+Btree::iterator::iterator(const vector<pair<int, shared_ptr<Node>>>& stack) : stack(stack) {
 }
 
 Btree::iterator &Btree::iterator::operator++() {
+	pair<int, shared_ptr<Node>> top = stack.back();
+	stack.pop_back();
+
+    unsigned int cur_index = top.first + 1;
+
+	{
+		shared_ptr<LeafNode> leaf = static_pointer_cast<LeafNode>(top.second);
+
+		if (cur_index < leaf->entries.size()) {
+			stack.push_back(make_pair(cur_index, leaf));
+			return *this;
+		}
+	}
+
+    shared_ptr<Node> ptr = top.second;
+
+    while (!stack.empty()) {
+		top = stack.back();
+		stack.pop_back();
+
+		cur_index = top.first + 1;
+        ptr = top.second;
+
+        if (cur_index < ptr->childNodes.size()) {
+			stack.push_back(make_pair(cur_index, ptr));
+            break;
+        }
+    }
+
+	if (cur_index >= ptr->childNodes.size()) {
+		return *this;
+	}
+
+	ptr = ptr->childNodes[cur_index];
+	while (ptr->level > 0) {
+		stack.push_back(make_pair(0, ptr));
+		ptr = ptr->childNodes[0];
+	}
+	stack.push_back(make_pair(0, ptr));
+
     return *this;
 }
 
@@ -365,17 +418,19 @@ Btree::iterator &Btree::iterator::operator--() {
 }
 
 shared_ptr<Row> Btree::iterator::operator->() {
-    return current->entries[index.back()];
+    return static_pointer_cast<LeafNode>(stack.back().second)->entries[stack.back().first];
 }
 
 shared_ptr<Row> Btree::iterator::operator*() {
-    return current->entries[index.back()];
+    return static_pointer_cast<LeafNode>(stack.back().second)->entries[stack.back().first];
 }
 
-bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {
-    return false;
-}
+namespace db07 {
+    bool operator==(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+		return lhs.stack.size() == rhs.stack.size() && (lhs.stack.empty() || lhs.stack.back() == rhs.stack.back());
+    }
 
-bool operator!=(const Btree::iterator &lhs, const Btree::iterator &rhs) {
-    return false;
+    bool operator!=(const Btree::iterator &lhs, const Btree::iterator &rhs) {
+        return !(lhs == rhs);
+    }
 }
