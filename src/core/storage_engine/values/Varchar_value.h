@@ -13,9 +13,9 @@ namespace db07 {
     public:
         Varchar_value(const std::string &data) : _data(data) {};
 
-        Type *type();
+        Type *type() const override;
 
-        int compare(const Value &to);
+        int compare(const Value &to) override;
 
         std::string to_string() override;
     };

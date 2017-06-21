@@ -39,7 +39,7 @@ namespace db07 {
         vector<Value *> values = data.getColumnValues();
 
         unique_ptr<vector<shared_ptr<Row>>> rows(new vector<shared_ptr<Row>>());
-        shared_ptr<vector<unique_ptr<Value>>> valueRow(new vector<unique_ptr<Value>>());
+        shared_ptr<vector<shared_ptr<Value>>> valueRow(new vector<shared_ptr<Value>>());
         for (vector<Value *>::iterator it = values.begin(); it != values.end(); ++it) {
             valueRow->push_back(unique_ptr<Value>(it.operator*()));
         }

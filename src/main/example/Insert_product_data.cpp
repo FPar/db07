@@ -14,7 +14,7 @@ unique_ptr<Insert_plan> Insert_product_data::plan(Global_object_store &global_ob
     unique_ptr<vector<shared_ptr<Row>>> rows(new vector<shared_ptr<Row>>());
 
     for (int i = 1; i <= 100; ++i) {
-        shared_ptr<vector<unique_ptr<Value>>> values(new vector<unique_ptr<Value>>());
+        shared_ptr<vector<shared_ptr<Value>>> values(new vector<shared_ptr<Value>>());
         values->push_back(unique_ptr<Value>(new Int_value(i)));
 		values->push_back(unique_ptr<Value>(new Varchar_value("Screw #" + to_string(i))));
         values->push_back(unique_ptr<Value>(new Varchar_value("Holds " + to_string(i)  + " things together.")));

@@ -4,7 +4,7 @@
 
 using namespace db07;
 
-Type *Varchar_value::type() {
+Type *Varchar_value::type() const {
     return &Types::Varchar_type;
 }
 

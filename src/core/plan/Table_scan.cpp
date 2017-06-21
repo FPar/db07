@@ -7,8 +7,7 @@ bool Table_scan::fetch_next() {
     do {
         if (it != nullptr) {
             ++*it;
-        }
-        else {
+        } else {
             it = std::unique_ptr<Btree::iterator>(new Btree::iterator(_table->data().begin()));
         }
     } while (*it != _table->data().end() && !_condition->fulfil(***it));
@@ -17,6 +16,9 @@ bool Table_scan::fetch_next() {
 
 shared_ptr<Row> Table_scan::next() {
     auto row = **it;
-    ++*it;
     return row;
+}
+
+shared_ptr<Table_definition> Table_scan::definition() const {
+    return _table->definition();
 }

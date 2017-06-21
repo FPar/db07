@@ -17,3 +17,7 @@ std::shared_ptr<Row> Insert_data_node::next() {
     return *_position++;
 }
 
+shared_ptr<Table_definition> Insert_data_node::definition() const {
+    return _table_definition;
+}
+

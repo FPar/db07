@@ -2,7 +2,7 @@
 #define HASH_MATCH_H
 
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include "Plan_node.h"
 #include <storage_engine/Table.h>
@@ -10,17 +10,23 @@
 namespace db07 {
     class Hash_match : public Plan_node {
     public:
-        Hash_match(const std::shared_ptr<Table> &a, const std::shared_ptr<Table> &b, int col_key_a, int col_key_b);
+        Hash_match(std::unique_ptr<Plan_node> a, std::unique_ptr<Plan_node> b, unsigned int col_key_a,
+                   unsigned int col_key_b);
 
         bool fetch_next() override;
 
         std::shared_ptr<Row> next() override;
 
-    private:
-        std::shared_ptr<Table> b;
-        int col_key_b;
+        std::shared_ptr<Table_definition> definition() const override;
 
-        std::map<int, std::vector<std::shared_ptr<Row>>> matching;
+    private:
+        std::shared_ptr<Table_definition> _definition;
+
+        std::unique_ptr<Plan_node> b;
+        unsigned int col_key_b;
+
+        std::unordered_multimap<int, std::shared_ptr<Row>> matching;
+        Row *next_row;
     };
 }
 

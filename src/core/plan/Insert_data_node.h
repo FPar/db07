@@ -15,8 +15,10 @@ namespace db07 {
 
         std::shared_ptr<Row> next() override;
 
+        std::shared_ptr<Table_definition> definition() const override;
+
     private:
-        const std::shared_ptr<const Table_definition> _table_definition;
+        const std::shared_ptr<Table_definition> _table_definition;
         const std::unique_ptr<std::vector<std::shared_ptr<Row>>> _rows;
         std::vector<std::shared_ptr<Row>>::iterator _position;
     };

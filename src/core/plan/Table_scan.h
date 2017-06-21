@@ -16,6 +16,8 @@ namespace db07 {
 
         std::shared_ptr<Row> next() override;
 
+        std::shared_ptr<Table_definition> definition() const override;
+
     private:
         const std::shared_ptr<Table> _table;
         const std::unique_ptr<Condition> _condition;

@@ -5,7 +5,7 @@
 using namespace std;
 using namespace db07;
 
-Type *Int_value::type() {
+Type *Int_value::type() const {
     return &Types::Int_type;
 }
 

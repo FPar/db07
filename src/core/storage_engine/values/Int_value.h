@@ -15,7 +15,7 @@ namespace db07 {
             return _data;
         }
 
-        Type *type();
+        Type *type() const;
 
         int compare(const Value &to);
 
@@ -23,4 +23,4 @@ namespace db07 {
     };
 }
 
-#endif // !INT_VALUE_H
+#endif

@@ -9,13 +9,17 @@
 namespace db07 {
     class Row {
     public:
-        Row(const std::shared_ptr<std::vector<std::unique_ptr<Value>>> &values) : _values(values) {
+        Row(const std::shared_ptr<std::vector<std::shared_ptr<Value>>> &values) : _values(values) {
+        }
+
+        std::shared_ptr<std::vector<std::shared_ptr<Value>>> values() {
+            return _values;
         }
 
         Value &get(unsigned int field) const;
 
     private:
-        const std::shared_ptr<std::vector<std::unique_ptr<Value>>> _values;
+        const std::shared_ptr<std::vector<std::shared_ptr<Value>>> _values;
     };
 }
 
