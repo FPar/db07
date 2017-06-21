@@ -63,8 +63,8 @@ namespace db07 {
         std::vector<Query_condition> conditions = data.getConditions();
         for (std::vector<Query_condition>::iterator it = conditions.begin(); it != conditions.end(); ++it) {
             Query_condition next = *it->getNextCondition();
-            if (next.getNextCondition() == NULL) {
-                return getOperation(next.getOperation(), *it.base(), data);
+            if (next.getNextCondition() == nullptr) {
+                return getOperation(next.getOperation(), *it, data);
             }
             //TODO more Conditions
 
