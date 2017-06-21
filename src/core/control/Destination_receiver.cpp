@@ -22,7 +22,7 @@ Destination_receiver::~Destination_receiver() {
 
 void Destination_receiver::receive(Row &row) {
     for (size_t i = 0; i < _description->columns().size(); ++i) {
-        cout << '|' << row.get(i)->to_string();
+        cout << '|' << row.get(i).to_string();
     }
     cout << "|\n";
 }

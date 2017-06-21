@@ -12,7 +12,7 @@ namespace db07 {
         Row(const std::shared_ptr<std::vector<std::unique_ptr<Value>>> &values) : _values(values) {
         }
 
-        const std::unique_ptr<Value> &get(unsigned int field) const;
+        Value &get(unsigned int field) const;
 
     private:
         const std::shared_ptr<std::vector<std::unique_ptr<Value>>> _values;
