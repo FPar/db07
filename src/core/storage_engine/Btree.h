@@ -49,7 +49,12 @@ namespace db07 {
 
         std::shared_ptr<SearchInfo> search(int index, std::shared_ptr<Node> &node, std::vector<std::pair<int, std::shared_ptr<Node>>>& stack);
 
+        bool borrowLeaf(LeafNode &leafNode, Node &parent, std::vector<int>::const_iterator &it_parent, int curr_pos);
+
+        bool borrowNode(Node &innerNode, Node &parent, std::vector<int>::const_iterator &it_parent, int curr_pos);
+
         bool removeNode(int index, Node &node);
+
 
 
     public:
