@@ -2,7 +2,7 @@
 
 using namespace db07;
 
-bool Equals_condition::interpret(int compare_result) const
+bool Equals_condition::interpret(double compare_result) const
 {
 	return compare_result == 0;
 }

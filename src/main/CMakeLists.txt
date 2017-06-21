@@ -3,12 +3,12 @@ include_directories(
 )
 
 set(SOURCES
-    example/Create_products_table.cpp
-    example/Create_products_table.h
-    example/Insert_product_data.cpp
-    example/Insert_product_data.h
-    example/Select_product_by_id.cpp
-    example/Select_product_by_id.h
+    example/Create_tables.cpp
+    example/Create_tables.h
+    example/Insert_data.cpp
+    example/Insert_data.h
+    example/Select_sales.cpp
+    example/Select_sales.h
 
     main.cpp)
 

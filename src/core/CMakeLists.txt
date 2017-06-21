@@ -74,6 +74,8 @@ set(SOURCES
     storage_engine/types/Types.cpp
     storage_engine/types/Types.h
 
+    storage_engine/values/Double_value.cpp
+    storage_engine/values/Double_value.h
     storage_engine/values/Int_value.cpp
     storage_engine/values/Int_value.h
     storage_engine/values/Value.h

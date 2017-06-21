@@ -17,7 +17,7 @@ namespace db07 {
         const unsigned int _column;
         const std::unique_ptr<Value> _value;
 
-        virtual bool interpret(int compare_result) const = 0;
+        virtual bool interpret(double compare_result) const = 0;
     };
 }
 

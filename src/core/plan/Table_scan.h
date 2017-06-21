@@ -12,6 +12,9 @@ namespace db07 {
                 : _table(table), _condition(move(condition)) {
         }
 
+        Table_scan(const std::shared_ptr<Table> &table) : _table(table) {
+        }
+
         bool fetch_next() override;
 
         std::shared_ptr<Row> next() override;

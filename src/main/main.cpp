@@ -3,9 +3,9 @@
 #include <storage_engine/Global_object_store.h>
 #include <optimizer/Query_data.h>
 #include <optimizer/Plan.h>
-#include "example/Create_products_table.h"
-#include "example/Insert_product_data.h"
-#include "example/Select_product_by_id.h"
+#include "example/Create_tables.h"
+#include "example/Insert_data.h"
+#include "example/Select_sales.h"
 
 using namespace std;
 using namespace db07;
@@ -18,16 +18,20 @@ int main(int argc, char **argv) {
     Global_object_store object_store;
 
     {
-        Create_products_table create_table_example;
-        unique_ptr<Create_table_command> c = create_table_example.command();
+        Create_tables create_tables;
+        unique_ptr<Create_table_command> c = create_tables.product();
+        c->execute(object_store);
+        c = create_tables.sales();
         c->execute(object_store);
 
-        Insert_product_data insert_products_data;
-        unique_ptr<Insert_plan> i = insert_products_data.plan(object_store);
+        Insert_data insert_data;
+        unique_ptr<Insert_plan> i = insert_data.product(object_store);
+        i->execute();
+        i = insert_data.sales(object_store);
         i->execute();
 
-        Select_product_by_id select_product_by_id;
-        unique_ptr<Select_plan> s = select_product_by_id.plan(object_store, 1);
+        Select_sales select_sales;
+        unique_ptr<Select_plan> s = select_sales.plan(object_store);
         s->execute();
     }
 

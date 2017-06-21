@@ -11,7 +11,7 @@ namespace db07 {
         }
 
     protected:
-        bool interpret(int compare_result) const override;
+        bool interpret(double compare_result) const override;
     };
 }
 

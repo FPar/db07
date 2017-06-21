@@ -13,7 +13,7 @@ namespace db07 {
 
         Table_definition(Table_definition& a, Table_definition& b);
 
-        int column_id(std::string &name) const;
+        int column_id(const std::string &name) const;
 
         const std::vector<Column> &columns() const {
             return _columns;

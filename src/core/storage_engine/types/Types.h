@@ -7,6 +7,7 @@ namespace db07 {
     class Types {
     public:
         static Type Int_type;
+        static Type Double_type;
         static Type Varchar_type;
     };
     

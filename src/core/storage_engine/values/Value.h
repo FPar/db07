@@ -11,7 +11,7 @@ namespace db07 {
 
         virtual Type *type() const = 0;
 
-        virtual int compare(const Value &to) = 0;
+        virtual double compare(const Value &to) = 0;
 
         virtual std::string to_string() = 0;
     };

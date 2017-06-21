@@ -4,9 +4,9 @@
 #include <optimizer/Select_plan.h>
 #include <storage_engine/Global_object_store.h>
 
-class Select_product_by_id {
+class Select_sales {
 public:
-    std::unique_ptr<db07::Select_plan> plan(db07::Global_object_store &global_object_store, int id);
+    std::unique_ptr<db07::Select_plan> plan(db07::Global_object_store &global_object_store);
 };
 
 

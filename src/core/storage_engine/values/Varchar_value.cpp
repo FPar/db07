@@ -8,7 +8,7 @@ Type *Varchar_value::type() const {
     return &Types::Varchar_type;
 }
 
-int Varchar_value::compare(const Value &to) {
+double Varchar_value::compare(const Value &to) {
     const Varchar_value &varchar_to = static_cast<const Varchar_value &>(to);
     return _data.compare(varchar_to._data);
 }

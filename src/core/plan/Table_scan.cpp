@@ -10,7 +10,7 @@ bool Table_scan::fetch_next() {
         } else {
             it = std::unique_ptr<Btree::iterator>(new Btree::iterator(_table->data().begin()));
         }
-    } while (*it != _table->data().end() && !_condition->fulfil(***it));
+    } while (*it != _table->data().end() && (_condition == nullptr ? false : !_condition->fulfil(***it)));
     return *it != _table->data().end();
 }
 

@@ -24,8 +24,10 @@ bool Hash_match::fetch_next() {
             values->insert(values->end(), match->second->values()->begin(), match->second->values()->end());
             values->insert(values->end(), next->values()->begin(), next->values()->end());
             next_row = new Row(values);
+            return true;
         }
     }
+    return false;
 }
 
 shared_ptr<Row> Hash_match::next() {
