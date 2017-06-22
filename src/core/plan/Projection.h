@@ -12,10 +12,14 @@ namespace db07
 	{
 	public:
 		Projection(Table_definition& input, std::vector<std::string>& columns);
-		std::unique_ptr<Row> project(Row& row);
+		std::shared_ptr<Row> project(Row& row);
+
+        std::shared_ptr<Table_definition> definition() {
+            return _definition;
+        }
 
 	private:
-		const std::vector<std::string> _columns;
+		std::vector<int> _columns;
 		std::shared_ptr<Table_definition> _definition;
 	};
 }
