@@ -34,7 +34,7 @@ namespace db07 {
     }
 
     Insert_plan Build_Plan::planInsert(Query_data &data) {
-        shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName());
+        shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         shared_ptr<Table_definition> table_definition(products_table->definition());
         vector<Value *> values = data.getColumnValues();
 
@@ -51,7 +51,7 @@ namespace db07 {
     }
 
     Select_plan Build_Plan::planSelect(Query_data &data) {
-        shared_ptr<Table> table = _global_object_store->tables().find(data.getTableName());
+        shared_ptr<Table> table = _global_object_store->tables().find(data.getTableName().front());
         std::unique_ptr<Condition> cond = planCondition(data);
         unique_ptr<Plan_node> table_scan(new Table_scan(table, move(cond)));
         Destination_receiver receiver(table->definition());
@@ -74,7 +74,7 @@ namespace db07 {
 
     unique_ptr<Condition>
     Build_Plan::getOperation(std::string &op, Query_condition &condition, Query_data &data) {
-        int col = _global_object_store->tables().find(data.getTableName())->definition()->column_id(
+        int col = _global_object_store->tables().find(data.getTableName().front())->definition()->column_id(
                 condition.getColumn());
 
         if (op == "=") {
