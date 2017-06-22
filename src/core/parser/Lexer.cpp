@@ -36,6 +36,8 @@ namespace db07 {
 
         Token token = Token_evaluator::for_type(token_type)(token_string);
         tokens.push_back(token);
+        std::string end = "\0";
+        tokens.push_back(Token_evaluator::for_type(token_type::END_OF_INPUT)(end));
         return tokens;
     }
 }

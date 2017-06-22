@@ -28,6 +28,7 @@ std::function<Token(std::string &)> Token_evaluator::for_type(token_type token_t
         case token_type::BY:
         case token_type::ASC:
         case token_type::DESC:
+        case token_type::END_OF_INPUT:
             return [token_type](std::string &) { return Token(token_type); };
         case token_type::INTEGER_LITERAL:
             return [token_type](std::string &token_string) {

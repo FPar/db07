@@ -2,6 +2,7 @@
 #define PARSER_H
 
 #include <vector>
+#include <optimizer/Query_data.h>
 #include "Token.h"
 
 namespace db07 {
@@ -14,83 +15,85 @@ namespace db07 {
         void parse(std::vector<Token> &tokens);
 
     private:
-        bool sql();
+        void ensure_token_stream_not_empty();
 
-        bool lookahead_is_eof();
+        bool lookahead_is(token_type candidate);
 
-        bool lookahead_is(token_type type);
+        bool lookahead_is_one_of(std::vector<token_type> candidates);
 
-        std::string token_to_string(token_type type);
+        void parse_error(std::vector<token_type> expected);
 
-        bool parse_error(std::vector<token_type> expected, bool eof_allowed);
+        void terminal(token_type expected);
 
-        bool terminal(token_type type);
+        std::string terminal_string_value(token_type expected);
 
-        bool select();
+        void sql();
 
-        bool distinct();
+        void select();
 
-        bool projection();
+        void distinct();
 
-        bool id_projection();
+        void projection();
 
-        bool id_space_projection();
+        void id_projection();
 
-        bool id_comma_projection();
+        void id_space_projection();
 
-        bool id_as_projection();
+        void id_comma_projection();
 
-        bool id_as_space_projection();
+        void id_as_projection();
 
-        bool from();
+        void id_as_space_projection();
 
-        bool from_id();
+        void from();
 
-        bool from_id_space();
+        void from_id();
 
-        bool from_id_comma();
+        void from_id_space();
 
-        bool after_from();
+        void from_id_comma();
 
-        bool where();
+        void after_from();
 
-        bool where_expr();
+        void where();
 
-        bool where_expr_pos();
+        void where_expr();
 
-        bool where_expr_open();
+        void where_expr_pos();
 
-        bool where_id();
+        void where_expr_open();
 
-        bool where_comp();
+        void where_id();
 
-        bool where_id_comp();
+        void where_comp();
 
-        bool where_rval();
+        void where_id_comp();
 
-        bool where_id_comp_rval();
+        void where_rval();
 
-        bool where_comp_space();
+        void where_id_comp_rval();
 
-        bool group_by();
+        void where_comp_space();
 
-        bool group_by_id();
+        void group_by();
 
-        bool group_by_id_space();
+        void group_by_id();
 
-        bool group_by_id_comma();
+        void group_by_id_space();
 
-        bool order_by();
+        void group_by_id_comma();
 
-        bool order_by_id();
+        void order_by();
 
-        bool order_by_id_space();
+        void order_by_id();
 
-        bool order_by_id_ascdesc();
+        void order_by_id_space();
 
-        bool order_by_id_ascdesc_space();
+        void order_by_id_ascdesc();
 
-        bool order_by_id_comma();
+        void order_by_id_ascdesc_space();
+
+        void order_by_id_comma();
     };
 }
 

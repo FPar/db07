@@ -39,6 +39,7 @@ set(SOURCES
     parser/String_recognition_rule.h
     parser/Regex_recognition_rule.cpp
     parser/Regex_recognition_rule.h
+    parser/parse_error.h
 
     plan/matching/And_condition.cpp
     plan/matching/And_condition.h

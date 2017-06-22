@@ -29,7 +29,8 @@ namespace db07 {
         INTEGER_LITERAL,
         STRING_LITERAL,
         IDENTIFIER,
-        UNRECOGNIZED
+        UNRECOGNIZED,
+        END_OF_INPUT
     };
 }
 
