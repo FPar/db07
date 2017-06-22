@@ -32,7 +32,7 @@ namespace db07 {
 
     public:
 
-        const std::vector<std::string> &get_booleanOperations() const;
+        std::vector<std::string> &get_booleanOperations();
 
         Query_type getQuery_type() const;
 
@@ -40,7 +40,7 @@ namespace db07 {
 
         std::vector<std::string> &getPrimaryKeys();
 
-        Query_condition &getConditions();
+        std::vector<Query_condition> &getConditions();
 
         std::vector<Value *> &getColumnValues();
 
