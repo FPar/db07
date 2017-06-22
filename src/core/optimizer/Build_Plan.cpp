@@ -7,9 +7,7 @@
 #include <plan/matching/Less_condition.h>
 #include <plan/matching/Unequals_condition.h>
 #include <plan/Insert_data_node.h>
-#include <plan/matching/And_condition.h>
 #include "Build_Plan.h"
-#include "Select_plan.h"
 
 using namespace std;
 
@@ -61,16 +59,17 @@ namespace db07 {
     }
 
     std::unique_ptr<Condition> Build_Plan::planCondition(Query_data &data) {
-        Query_condition condition = data.getConditions();
-        while (condition.getNextCondition() != NULL) {
-            unique_ptr<Condition> con = getOperation(condition, data);
-            if(condition.getOperation() == "&&"){
-                condition.getNextCondition();
-                And_condition(con, getOperation(condition.getNextCondition(), data));
-            }else if(condition.getOperation() == "||"){
-
-            }
-        }
+//        TODO CAUSES BUILD FAILURE
+//        Query_condition condition = data.getConditions();
+//        while (condition.getNextCondition() != NULL) {
+//            unique_ptr<Condition> con = getOperation(condition, data);
+//            if(condition.getOperation() == "&&"){
+//                condition.getNextCondition();
+//                And_condition(con, getOperation(condition.getNextCondition(), data));
+//            }else if(condition.getOperation() == "||"){
+//
+//            }
+//        }
     }
 
     unique_ptr<Condition>
