@@ -16,10 +16,6 @@ namespace db07 {
         /**Value value on which the operation is compared.*/
         Value* _value;
 
-        /**Condition pointer to the next condition, if it exist.*/
-        Query_condition *_nextCondition;
-        /**String boolean operator between the next condition.*/
-        std::string _booleanOperator;
 
     public:
 
@@ -29,19 +25,11 @@ namespace db07 {
 
         Value* getValue();
 
-        Query_condition *getNextCondition();
-
-        std::string &getBooleanOperator();
-
         void set_column(const std::string &_column);
 
         void set_operation(const std::string &_operation);
 
         void set_value(Value *_value);
-
-        void set_nextCondition(Query_condition *_nextCondition);
-
-        void set_booleanOperator(const std::string &_booleanOperator);
 
 
     };

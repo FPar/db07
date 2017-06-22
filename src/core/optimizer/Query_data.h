@@ -19,7 +19,8 @@ namespace db07 {
         /**List of primaryKey for the create statement.*/
         std::vector<std::string> _primaryKey;
         /**List of condition in an query statement.*/
-        Query_condition _condition;
+        std::vector<Query_condition> _condition;
+
         /**
          * List of pair of column name and value.
          * Pairing column name with data type,
@@ -27,7 +28,11 @@ namespace db07 {
          */
         std::vector<Value *> _values;
 
+        std::vector<std::string> _booleanOperations;
+
     public:
+
+        const std::vector<std::string> &get_booleanOperations() const;
 
         Query_type getQuery_type() const;
 

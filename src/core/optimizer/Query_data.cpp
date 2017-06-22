@@ -33,4 +33,8 @@ namespace db07 {
     void Query_data::set_queryType(Query_type _queryType) {
         Query_data::_queryType = _queryType;
     }
+
+    const std::vector<std::string> &Query_data::get_booleanOperations() const {
+        return _booleanOperations;
+    }
 }

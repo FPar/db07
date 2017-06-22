@@ -14,14 +14,6 @@ namespace db07 {
         return _value;
     }
 
-     Query_condition *Query_condition::getNextCondition()  {
-        return _nextCondition;
-    }
-
-     std::string &Query_condition::getBooleanOperator()  {
-        return _booleanOperator;
-    }
-
     void Query_condition::set_column(const std::string &_column) {
         Query_condition::_column = _column;
     }
@@ -34,13 +26,6 @@ namespace db07 {
         Query_condition::_value = _value;
     }
 
-    void Query_condition::set_nextCondition(Query_condition *_nextCondition) {
-        Query_condition::_nextCondition = _nextCondition;
-    }
-
-    void Query_condition::set_booleanOperator(const std::string &_booleanOperator) {
-        Query_condition::_booleanOperator = _booleanOperator;
-    }
 
 
 }

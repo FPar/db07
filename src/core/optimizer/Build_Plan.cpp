@@ -7,6 +7,7 @@
 #include <plan/matching/Less_condition.h>
 #include <plan/matching/Unequals_condition.h>
 #include <plan/Insert_data_node.h>
+#include <plan/matching/And_condition.h>
 #include "Build_Plan.h"
 #include "Select_plan.h"
 
@@ -60,23 +61,24 @@ namespace db07 {
     }
 
     std::unique_ptr<Condition> Build_Plan::planCondition(Query_data &data) {
-        std::vector<Query_condition> conditions = data.getConditions();
-        for (std::vector<Query_condition>::iterator it = conditions.begin(); it != conditions.end(); ++it) {
-            Query_condition next = *it->getNextCondition();
-            if (next.getNextCondition() == nullptr) {
-                return getOperation(next.getOperation(), *it, data);
+        Query_condition condition = data.getConditions();
+        while (condition.getNextCondition() != NULL) {
+            unique_ptr<Condition> con = getOperation(condition, data);
+            if(condition.getOperation() == "&&"){
+                condition.getNextCondition();
+                And_condition(con, getOperation(condition.getNextCondition(), data));
+            }else if(condition.getOperation() == "||"){
+
             }
-            //TODO more Conditions
-
-
         }
     }
 
     unique_ptr<Condition>
-    Build_Plan::getOperation(std::string &op, Query_condition &condition, Query_data &data) {
+    Build_Plan::getOperation(Query_condition &condition, Query_data &data) {
         int col = _global_object_store->tables().find(data.getTableName().front())->definition()->column_id(
                 condition.getColumn());
 
+        string &op = condition.getOperation();
         if (op == "=") {
             return unique_ptr<Condition>(new Equals_condition(col, unique_ptr<Value>(condition.getValue())));
         }

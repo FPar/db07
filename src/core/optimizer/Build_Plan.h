@@ -32,7 +32,7 @@ namespace db07 {
 
         std::unique_ptr<Condition>
 
-        getOperation(std::string &op, Query_condition &condition, Query_data &data);
+        getOperation(Query_condition &condition, Query_data &data);
     };
 }
 
