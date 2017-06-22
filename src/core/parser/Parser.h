@@ -10,9 +10,13 @@ namespace db07 {
     private:
         std::vector<Token>::const_iterator _lookahead;
         std::vector<Token>::const_iterator _end;
+        Query_data _query_data;
+        Query_condition _query_condition;
 
     public:
         void parse(std::vector<Token> &tokens);
+
+        Query_data &query_data();
 
     private:
         void ensure_token_stream_not_empty();
@@ -26,6 +30,8 @@ namespace db07 {
         void terminal(token_type expected);
 
         std::string terminal_string_value(token_type expected);
+
+        int terminal_int_value(token_type expected);
 
         void sql();
 
