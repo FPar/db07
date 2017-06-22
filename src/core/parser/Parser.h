@@ -21,7 +21,7 @@ namespace db07 {
 
         bool lookahead_is_one_of(std::vector<token_type> candidates);
 
-        void parse_error(std::vector<token_type> expected);
+        void throw_parse_error(std::vector<token_type> expected);
 
         void terminal(token_type expected);
 

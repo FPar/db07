@@ -33,7 +33,7 @@ bool Parser::lookahead_is_one_of(std::vector<token_type> candidates) {
     return false;
 }
 
-void Parser::parse_error(std::vector<token_type> expected) {
+void Parser::throw_parse_error(std::vector<token_type> expected) {
     ensure_token_stream_not_empty();
     throw parse_error(expected, _lookahead->type());
 }
@@ -68,7 +68,7 @@ void Parser::select() {
         terminal(token_type::WHITESPACE);
         distinct();
     }
-    parse_error({token_type::SELECT});
+    throw_parse_error({token_type::SELECT});
 }
 
 void Parser::distinct() {
@@ -79,7 +79,7 @@ void Parser::distinct() {
     } else if (lookahead_is_one_of({token_type::STAR, token_type::IDENTIFIER})) {
         projection();
     }
-    parse_error({token_type::DISTINCT, token_type::STAR, token_type::IDENTIFIER});
+    throw_parse_error({token_type::DISTINCT, token_type::STAR, token_type::IDENTIFIER});
 }
 
 void Parser::projection() {
@@ -91,7 +91,7 @@ void Parser::projection() {
         terminal(token_type::IDENTIFIER);
         id_projection();
     }
-    parse_error({token_type::STAR, token_type::IDENTIFIER});
+    throw_parse_error({token_type::STAR, token_type::IDENTIFIER});
 }
 
 void Parser::id_projection() {
@@ -102,7 +102,7 @@ void Parser::id_projection() {
         terminal(token_type::COMMA);
         id_comma_projection();
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA});
+    throw_parse_error({token_type::WHITESPACE, token_type::COMMA});
 }
 
 void Parser::id_space_projection() {
@@ -117,7 +117,7 @@ void Parser::id_space_projection() {
         terminal(token_type::IDENTIFIER);
         id_as_projection();
     }
-    parse_error({token_type::FROM, token_type::COMMA, token_type::AS});
+    throw_parse_error({token_type::FROM, token_type::COMMA, token_type::AS});
 }
 
 void Parser::id_comma_projection() {
@@ -129,7 +129,7 @@ void Parser::id_comma_projection() {
         terminal(token_type::IDENTIFIER);
         id_projection();
     }
-    parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
+    throw_parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
 void Parser::id_as_projection() {
@@ -140,7 +140,7 @@ void Parser::id_as_projection() {
         terminal(token_type::COMMA);
         id_comma_projection();
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA});
+    throw_parse_error({token_type::WHITESPACE, token_type::COMMA});
 }
 
 void Parser::id_as_space_projection() {
@@ -150,7 +150,7 @@ void Parser::id_as_space_projection() {
     } else if (lookahead_is(token_type::FROM)) {
         from();
     }
-    parse_error({token_type::COMMA, token_type::FROM});
+    throw_parse_error({token_type::COMMA, token_type::FROM});
 }
 
 void Parser::from() {
@@ -160,7 +160,7 @@ void Parser::from() {
         terminal_string_value(token_type::IDENTIFIER);
         from_id();
     }
-    parse_error({token_type::FROM});
+    throw_parse_error({token_type::FROM});
 }
 
 void Parser::from_id() {
@@ -174,8 +174,9 @@ void Parser::from_id() {
                lookahead_is(token_type::END_OF_INPUT)) {
         after_from();
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP,
-                 token_type::END_OF_INPUT});
+    throw_parse_error(
+            {token_type::WHITESPACE, token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP,
+             token_type::END_OF_INPUT});
 }
 
 void Parser::from_id_space() {
@@ -186,7 +187,8 @@ void Parser::from_id_space() {
                lookahead_is(token_type::END_OF_INPUT)) {
         after_from();
     }
-    parse_error({token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP, token_type::END_OF_INPUT});
+    throw_parse_error(
+            {token_type::COMMA, token_type::WHERE, token_type::ORDER, token_type::GROUP, token_type::END_OF_INPUT});
 }
 
 void Parser::from_id_comma() {
@@ -198,7 +200,7 @@ void Parser::from_id_comma() {
         terminal(token_type::IDENTIFIER);
         from_id();
     }
-    parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
+    throw_parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
 void Parser::after_from() {
@@ -211,7 +213,7 @@ void Parser::after_from() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::WHERE, token_type::GROUP, token_type::ORDER, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::WHERE, token_type::GROUP, token_type::ORDER, token_type::END_OF_INPUT});
 }
 
 void Parser::where() {
@@ -220,7 +222,7 @@ void Parser::where() {
         terminal(token_type::WHITESPACE);
         where_expr();
     }
-    parse_error({token_type::WHERE});
+    throw_parse_error({token_type::WHERE});
 }
 
 void Parser::where_expr() {
@@ -231,7 +233,7 @@ void Parser::where_expr() {
     } else if (lookahead_is_one_of({token_type::LEFT_BRACKET, token_type::IDENTIFIER})) {
         where_expr_pos();
     }
-    parse_error({token_type::OPERATOR_NOT, token_type::LEFT_BRACKET, token_type::IDENTIFIER});
+    throw_parse_error({token_type::OPERATOR_NOT, token_type::LEFT_BRACKET, token_type::IDENTIFIER});
 }
 
 void Parser::where_expr_pos() {
@@ -244,7 +246,7 @@ void Parser::where_expr_pos() {
         where_id_comp();
         where_id_comp_rval();
     }
-    parse_error({token_type::LEFT_BRACKET, token_type::IDENTIFIER});
+    throw_parse_error({token_type::LEFT_BRACKET, token_type::IDENTIFIER});
 }
 
 void Parser::where_expr_open() {
@@ -257,7 +259,7 @@ void Parser::where_expr_open() {
         where_expr();
         terminal(token_type::RIGHT_BRACKET);
     }
-    parse_error(
+    throw_parse_error(
             {token_type::WHITESPACE, token_type::OPERATOR_NOT, token_type::LEFT_BRACKET, token_type::IDENTIFIER});
 }
 
@@ -270,7 +272,7 @@ void Parser::where_id() {
                lookahead_is(token_type::OPERATOR_GE)) {
         where_comp();
     }
-    parse_error(
+    throw_parse_error(
             {token_type::WHITESPACE, token_type::OPERATOR_EQ, token_type::OPERATOR_LE, token_type::OPERATOR_LT,
              token_type::OPERATOR_GT, token_type::OPERATOR_GE});
 }
@@ -287,7 +289,7 @@ void Parser::where_comp() {
     } else if (lookahead_is(token_type::OPERATOR_GE)) {
         terminal(token_type::OPERATOR_GE);
     }
-    parse_error(
+    throw_parse_error(
             {token_type::OPERATOR_EQ, token_type::OPERATOR_LE, token_type::OPERATOR_LT, token_type::OPERATOR_GT,
              token_type::OPERATOR_GE});
 }
@@ -300,7 +302,7 @@ void Parser::where_id_comp() {
                lookahead_is(token_type::INTEGER_LITERAL)) {
         where_rval();
     }
-    parse_error(
+    throw_parse_error(
             {token_type::WHITESPACE, token_type::IDENTIFIER, token_type::STRING_LITERAL, token_type::INTEGER_LITERAL});
 }
 
@@ -312,7 +314,7 @@ void Parser::where_rval() {
     } else if (lookahead_is(token_type::INTEGER_LITERAL)) {
         terminal(token_type::INTEGER_LITERAL);
     }
-    parse_error({token_type::IDENTIFIER, token_type::STRING_LITERAL, token_type::INTEGER_LITERAL});
+    throw_parse_error({token_type::IDENTIFIER, token_type::STRING_LITERAL, token_type::INTEGER_LITERAL});
 }
 
 void Parser::where_id_comp_rval() {
@@ -322,7 +324,7 @@ void Parser::where_id_comp_rval() {
     } else if (lookahead_is_one_of({token_type::RIGHT_BRACKET, token_type::END_OF_INPUT})) {
         return;
     }
-    parse_error({token_type::WHITESPACE, token_type::RIGHT_BRACKET, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::WHITESPACE, token_type::RIGHT_BRACKET, token_type::END_OF_INPUT});
 }
 
 void Parser::where_comp_space() {
@@ -337,8 +339,9 @@ void Parser::where_comp_space() {
     } else if (lookahead_is_one_of({token_type::RIGHT_BRACKET, token_type::END_OF_INPUT})) {
         return;
     }
-    parse_error({token_type::OPERATOR_AND, token_type::OPERATOR_OR, token_type::WHITESPACE, token_type::RIGHT_BRACKET,
-                 token_type::END_OF_INPUT});
+    throw_parse_error(
+            {token_type::OPERATOR_AND, token_type::OPERATOR_OR, token_type::WHITESPACE, token_type::RIGHT_BRACKET,
+             token_type::END_OF_INPUT});
 }
 
 void Parser::group_by() {
@@ -350,7 +353,7 @@ void Parser::group_by() {
         terminal(token_type::IDENTIFIER);
         group_by_id();
     }
-    parse_error({token_type::GROUP});
+    throw_parse_error({token_type::GROUP});
 }
 
 void Parser::group_by_id() {
@@ -361,7 +364,7 @@ void Parser::group_by_id() {
         terminal(token_type::COMMA);
         group_by_id_comma();
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA});
+    throw_parse_error({token_type::WHITESPACE, token_type::COMMA});
 }
 
 void Parser::group_by_id_space() {
@@ -373,7 +376,7 @@ void Parser::group_by_id_space() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::COMMA, token_type::ORDER, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::COMMA, token_type::ORDER, token_type::END_OF_INPUT});
 }
 
 void Parser::group_by_id_comma() {
@@ -385,7 +388,7 @@ void Parser::group_by_id_comma() {
         terminal(token_type::IDENTIFIER);
         group_by_id();
     }
-    parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
+    throw_parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
 
 void Parser::order_by() {
@@ -397,7 +400,7 @@ void Parser::order_by() {
         terminal(token_type::IDENTIFIER);
         order_by_id();
     }
-    parse_error({token_type::ORDER});
+    throw_parse_error({token_type::ORDER});
 }
 
 void Parser::order_by_id() {
@@ -410,7 +413,7 @@ void Parser::order_by_id() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::WHITESPACE, token_type::COMMA, token_type::END_OF_INPUT});
 }
 
 void Parser::order_by_id_space() {
@@ -426,7 +429,7 @@ void Parser::order_by_id_space() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::ASC, token_type::DESC, token_type::COMMA, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::ASC, token_type::DESC, token_type::COMMA, token_type::END_OF_INPUT});
 }
 
 void Parser::order_by_id_ascdesc() {
@@ -439,7 +442,7 @@ void Parser::order_by_id_ascdesc() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::WHITESPACE, token_type::COMMA, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::WHITESPACE, token_type::COMMA, token_type::END_OF_INPUT});
 }
 
 void Parser::order_by_id_ascdesc_space() {
@@ -449,7 +452,7 @@ void Parser::order_by_id_ascdesc_space() {
     } else if (lookahead_is(token_type::END_OF_INPUT)) {
         return;
     }
-    parse_error({token_type::COMMA, token_type::END_OF_INPUT});
+    throw_parse_error({token_type::COMMA, token_type::END_OF_INPUT});
 }
 
 void Parser::order_by_id_comma() {
@@ -461,5 +464,5 @@ void Parser::order_by_id_comma() {
         terminal(token_type::IDENTIFIER);
         order_by_id();
     }
-    parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
+    throw_parse_error({token_type::WHITESPACE, token_type::IDENTIFIER});
 }
