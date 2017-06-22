@@ -273,7 +273,7 @@ bool Btree::borrowLeaf(Btree::LeafNode &leafNode, Btree::Node &parent, std::vect
 bool Btree::borrowNode(Btree::Node &innerNode, Btree::Node &parent, std::vector<int>::const_iterator &it_parent,
                        int curr_pos) {
 
-    if (it_parent + 1 != parent.keys.cbegin()) {
+    if (it_parent + 1 != parent.keys.cend()) {
         Node &rightSibling = *parent.childNodes[curr_pos + 1];
         if (rightSibling.keys.size() > MIN_CHILDS) {
             //Borrow LeafNode entry from rightSibling
@@ -315,6 +315,31 @@ bool Btree::borrowNode(Btree::Node &innerNode, Btree::Node &parent, std::vector<
     return false;
 }
 
+
+bool Btree::mergeLeaf(Btree::LeafNode &leafNode, Btree::Node &parent, std::vector<int>::const_iterator &it_parent,
+                      int curr_pos) {
+    if(it_parent != parent.keys.cbegin()){
+        LeafNode &leftSibling = (LeafNode &) parent.childNodes[curr_pos - 1];
+
+        //Insert leafNode values into left sibling
+        leftSibling.keys.push_back(leafNode.keys[0]);
+        leftSibling.entries.push_back(leafNode.entries[0]);
+
+        //Delete the leaf node that has been merged
+        parent.keys.erase(it_parent -1);
+        parent.childNodes.erase(parent.childNodes.cbegin() + curr_pos);
+
+        return true;
+    }
+
+    if(it_parent + 1 != parent.keys.cend()){
+
+    }
+
+
+    return false;
+}
+
 bool Btree::removeNode(int index, Btree::Node &node) {
     int counter = 0;
     if (node.level == 0) {
@@ -341,7 +366,13 @@ bool Btree::removeNode(int index, Btree::Node &node) {
                     //Check if underlying Node is a LeafNode
                     if (rmNode.level == 0) {
                         LeafNode &rmLeafNode = (LeafNode &) node.childNodes[counter];
-                        return borrowLeaf(rmLeafNode, node, i, counter);
+                        bool res = borrowLeaf(rmLeafNode, node, i, counter);
+
+                        if(res){
+                            return res;
+                        }
+
+                        return mergeLeaf(rmLeafNode, node, i, counter);
 
                         //Merge Mechanism
                     } else { //If underlying node is an internal Node

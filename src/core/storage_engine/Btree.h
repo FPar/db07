@@ -51,6 +51,8 @@ namespace db07 {
 
         bool borrowLeaf(LeafNode &leafNode, Node &parent, std::vector<int>::const_iterator &it_parent, int curr_pos);
 
+        bool mergeLeaf(LeafNode &leafNode, Node &parent, std::vector<int>::const_iterator &it_parent, int curr_pos);
+
         bool borrowNode(Node &innerNode, Node &parent, std::vector<int>::const_iterator &it_parent, int curr_pos);
 
         bool removeNode(int index, Node &node);
