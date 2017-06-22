@@ -16,7 +16,7 @@ namespace db07 {
             return _values;
         }
 
-        Value &get(unsigned int field) const;
+        std::shared_ptr<Value> get(unsigned int field) const;
 
     private:
         const std::shared_ptr<std::vector<std::shared_ptr<Value>>> _values;

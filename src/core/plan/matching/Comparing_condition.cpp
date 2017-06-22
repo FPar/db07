@@ -4,5 +4,5 @@ using namespace db07;
 
 bool Comparing_condition::fulfil(const Row & row) const
 {
-    return interpret(row.get(_column).compare(*_value));
+    return interpret(row.get(_column)->compare(*_value));
 }

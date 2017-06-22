@@ -11,44 +11,37 @@ namespace db07 {
 
     private:
         /**Query_type defines the type of the query.*/
-        const Query_type _queryType;
+        Query_type _queryType;
         /**String table on where the query will be executed.*/
-        const std::string _tableName;
+        std::vector<std::string> _tableName;
         /**String column which is needed for the select statement.*/
-        const std::vector<std::string> _columnName;
+        std::vector<std::string> _columnNames;
         /**List of primaryKey for the create statement.*/
         std::vector<std::string> _primaryKey;
         /**List of condition in an query statement.*/
-        std::vector<Query_condition> _conditions;
+        Query_condition _condition;
         /**
          * List of pair of column name and value.
          * Pairing column name with data type,
          * or insert/update a value in a column.
          */
-        std::vector<Value*> _values;
+        std::vector<Value *> _values;
 
     public:
 
-        const Query_type getQuery_type() const;
+        Query_type getQuery_type() const;
 
-        std::string getTableName();
+        std::vector<std::string> &getTableName();
 
-        std::vector<std::string> getPrimaryKeys();
+        std::vector<std::string> &getPrimaryKeys();
 
-        std::vector<Query_condition> getConditions() const;
+        Query_condition &getConditions();
 
-        std::vector<Value*> getColumnValues();
+        std::vector<Value *> &getColumnValues();
 
-        const std::vector<std::string> &getColumnName() const;
+        std::vector<std::string> &getColumnNames();
 
-        Query_data(const Query_type queryType, const std::string &tableName, const std::vector<std::string> &columnName,
-                   const std::vector<std::string> &primaryKey, std::vector<Query_condition> &conditions,
-                   std::vector<Value*> &values) : _queryType(queryType),
-                                                 _tableName(tableName),
-                                                 _columnName(columnName),
-                                                 _primaryKey(primaryKey),
-                                                 _conditions(conditions),
-                                                 _values(values) {}
+        void set_queryType(Query_type _queryType);
 
     };
 

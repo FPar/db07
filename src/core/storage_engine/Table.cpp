@@ -5,6 +5,6 @@ using namespace std;
 using namespace db07;
 
 void Table::insert(std::shared_ptr<Row> &row) {
-    auto &id = static_cast<Int_value &>(row->get(0));
-    _data.insert(id.data(), row);
+    auto id = static_pointer_cast<Int_value>(row->get(0));
+    _data.insert(id->data(), row);
 }
