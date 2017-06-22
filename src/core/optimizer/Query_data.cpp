@@ -17,8 +17,8 @@ namespace db07 {
         return _primaryKey;
     }
 
-    std::vector<Query_condition> &Query_data::getConditions()  {
-        return _conditions;
+    Query_condition &Query_data::getConditions()  {
+        return _condition;
     }
 
     std::vector<Value*> &Query_data::getColumnValues() {

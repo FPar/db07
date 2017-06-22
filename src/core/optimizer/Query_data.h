@@ -15,17 +15,17 @@ namespace db07 {
         /**String table on where the query will be executed.*/
         std::vector<std::string> _tableName;
         /**String column which is needed for the select statement.*/
-         std::vector<std::string> _columnNames;
+        std::vector<std::string> _columnNames;
         /**List of primaryKey for the create statement.*/
         std::vector<std::string> _primaryKey;
         /**List of condition in an query statement.*/
-        std::vector<Query_condition> _conditions;
+        Query_condition _condition;
         /**
          * List of pair of column name and value.
          * Pairing column name with data type,
          * or insert/update a value in a column.
          */
-        std::vector<Value*> _values;
+        std::vector<Value *> _values;
 
     public:
 
@@ -35,9 +35,9 @@ namespace db07 {
 
         std::vector<std::string> &getPrimaryKeys();
 
-        std::vector<Query_condition> &getConditions();
+        Query_condition &getConditions();
 
-        std::vector<Value*> &getColumnValues();
+        std::vector<Value *> &getColumnValues();
 
         std::vector<std::string> &getColumnNames();
 
