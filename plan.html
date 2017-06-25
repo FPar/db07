@@ -36,6 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Suche" href="search.html"/>
     <link rel="top" title="db07 1.0 Dokumentation" href="index.html"/>
+        <link rel="next" title="Data Store" href="storage.html"/>
         <link rel="prev" title="Optimizer" href="optimizer.html"/> 
 
   
@@ -92,10 +93,20 @@
               <p class="caption"><span class="caption-text">Inhaltsverzeichnis:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Übersicht</a></li>
-<li class="toctree-l1"><a class="reference internal" href="storage.html">Data Store</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parser.html">Parser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizer.html">Optimizer</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Plan</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Plan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nodes">Nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#table-scan">Table Scan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hash-match">Hash Match</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#insert-data-node">Insert data node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#select">SELECT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#insert">INSERT</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">Data Store</a></li>
 </ul>
 
             
@@ -161,6 +172,54 @@
             
   <div class="section" id="plan">
 <h1>Plan<a class="headerlink" href="#plan" title="Link zu dieser Überschrift">¶</a></h1>
+<p>Es können zwei Arten von Plänen unterschieden werden: Pläne, die Daten Abfragen und Pläne,
+die Daten ändern. Im Rahmen dieses Projektes wurde der Plan für <code class="docutils literal"><span class="pre">SELECT</span></code>- und
+<code class="docutils literal"><span class="pre">Insert</span></code>-Abfragen implementiert.</p>
+<p>Alle Pläne, bei denen Daten gelesen werden sollen, greifen dafür auf einen Exeuction Tree
+aus einzelnen Nodes zu. Dieser wird vom Optimizer generiert und liefert einen linearen
+Datenstrom.</p>
+<div class="section" id="nodes">
+<h2>Nodes<a class="headerlink" href="#nodes" title="Link zu dieser Überschrift">¶</a></h2>
+<p>Nachfolgend eine Auflistung implementierter Nodes.</p>
+<div class="section" id="table-scan">
+<h3>Table Scan<a class="headerlink" href="#table-scan" title="Link zu dieser Überschrift">¶</a></h3>
+<p>Dieser Node iteriert durch eine Tabelle vom Anfang bis zum Ende und kann dabei nach Einträgen
+filtern, welche eine bestimmte Bedinungung erfüllen. Die Bedingung liegt selbst in Form eines
+Matching Baums vor, welcher auf Grundlage des Typesystems Werte des gleichen Datentypes
+vergleichen kann.</p>
+</div>
+<div class="section" id="hash-match">
+<h3>Hash Match<a class="headerlink" href="#hash-match" title="Link zu dieser Überschrift">¶</a></h3>
+<p>Um zwei Tabellen miteinander zu verknüpfen, kann naiv das kartesische Produkt der beiden
+Tabellen gebildet werden und dieses mit einer Verknüpfungsbedingung auf das gewünschte
+Ergebnis reduziert werden. Eine effizientere Variante, welche von diesem Node umgesetzt
+wird, ist das Hashen des Schlüssels der ersten Tabelle und dann für jeden Eintrag in
+der zweiten Tabelle über den Schlüsselhash den zugehörigen Eintrag in der ersten Tabelle
+zuzuordnen und zu verknüpfen. Das Hash Match führt diese Operation über zwei beliebige
+untergeordnete Nodes durch.</p>
+</div>
+<div class="section" id="insert-data-node">
+<h3>Insert data node<a class="headerlink" href="#insert-data-node" title="Link zu dieser Überschrift">¶</a></h3>
+<p>Dieser Node wird für das Einfügen von Daten verwendet und liefert Einträge basierend
+auf einer in-Memory Collection.</p>
+</div>
+</div>
+<div class="section" id="select">
+<h2>SELECT<a class="headerlink" href="#select" title="Link zu dieser Überschrift">¶</a></h2>
+<p>Ein <code class="docutils literal"><span class="pre">SELECT</span></code>-Plan besteht aus drei Komponenten: der Root-Node eines Execution Trees,
+eine Projektions-Instruktion und ein Ziel, an welches die abgefragten Daten übergeben
+werden. Die Tabellenbeschreibung der Projektions-Definition wird aus der Tabellenbeschreibung
+des Root Nodes des Execution Trees und einer Liste von Spaltennamen gebildet. Damit kann die
+Projektion als letzter Schritt auf jeden beliebigen Query angewendet werden.</p>
+</div>
+<div class="section" id="insert">
+<h2>INSERT<a class="headerlink" href="#insert" title="Link zu dieser Überschrift">¶</a></h2>
+<p>Ein <code class="docutils literal"><span class="pre">INSERT</span></code>-Plan fügt Daten, welche von einem Execution-Tree bereitgestellt werden, in
+eine beliebige Tabelle (wenn die Tabellen-Definition es zulässt) ein. Für reguläre <code class="docutils literal"><span class="pre">INSERT</span></code>-
+Abfragen stellt ein Insert data node die zu einfügenden Daten bereit. Aber auch komplexere
+Abfragen könnten durchgeführt werden, wenn Daten aus einer anderen Tabelle eingefügt werden
+sollen.</p>
+</div>
 </div>
 
 
@@ -172,6 +231,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="storage.html" class="btn btn-neutral float-right" title="Data Store" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="optimizer.html" class="btn btn-neutral" title="Optimizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

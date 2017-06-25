@@ -37,7 +37,7 @@
         <link rel="search" title="Suche" href="search.html"/>
     <link rel="top" title="db07 1.0 Dokumentation" href="index.html"/>
         <link rel="next" title="Optimizer" href="optimizer.html"/>
-        <link rel="prev" title="Data Store" href="storage.html"/> 
+        <link rel="prev" title="Übersicht" href="overview.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -93,10 +93,10 @@
               <p class="caption"><span class="caption-text">Inhaltsverzeichnis:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Übersicht</a></li>
-<li class="toctree-l1"><a class="reference internal" href="storage.html">Data Store</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizer.html">Optimizer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="plan.html">Plan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">Data Store</a></li>
 </ul>
 
             
@@ -162,6 +162,22 @@
             
   <div class="section" id="parser">
 <h1>Parser<a class="headerlink" href="#parser" title="Link zu dieser Überschrift">¶</a></h1>
+<p>Anfragen an die Datenbank werden in SQL formuliert und als Zeichenkette eingegeben.
+Das Parsen von Anfragen erfolgt dabei in zwei Schritten:</p>
+<ul class="simple">
+<li>Lexikalische Analyse</li>
+<li>Syntaktische Analyse</li>
+</ul>
+<p>Bei der lexikalischen Analyse wird die Eingabe durch Anwendung regulärer Ausdrücke zunächst in einen Token-Strom
+umgewandelt. Dieser wird anschließend durch einen Recursive descent parser ohne Backtracking auf korrekte Syntax
+geprüft. Das Ergebnis der Parse-Phase ist eine abstrakte Repräsentation der Anfrage.</p>
+<p>Die abstrakte Abfrage enthält:</p>
+<ul class="simple">
+<li>den Typ der Abfrage (Abruf, Einfügen, Löschen von Einträgen, Erstellen einer Tabelle)</li>
+<li>die Namen der Tabellen von denen Einträge abgefragt werden</li>
+<li>die Namen der Spalten die projeziert werden</li>
+<li>eine (aus mehreren Teilbedingungen zusammengesetzte) Selektions-Bedingung</li>
+</ul>
 </div>
 
 
@@ -177,7 +193,7 @@
         <a href="optimizer.html" class="btn btn-neutral float-right" title="Optimizer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="storage.html" class="btn btn-neutral" title="Data Store" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="overview.html" class="btn btn-neutral" title="Übersicht" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
