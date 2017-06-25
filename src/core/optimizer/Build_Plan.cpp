@@ -7,6 +7,8 @@
 #include <plan/matching/Less_condition.h>
 #include <plan/matching/Unequals_condition.h>
 #include <plan/Insert_data_node.h>
+#include <plan/matching/And_condition.h>
+#include <plan/matching/Or_condition.h>
 #include "Build_Plan.h"
 
 using namespace std;
@@ -35,7 +37,7 @@ namespace db07 {
     Insert_plan Build_Plan::planInsert(Query_data &data) {
         shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         shared_ptr<Table_definition> table_definition(products_table->definition());
-        vector<Value *> values = data.getColumnValues();
+        vector<Value *> values = (vector<Value *> &&) data.getColumnValues();
 
         unique_ptr<vector<shared_ptr<Row>>> rows(new vector<shared_ptr<Row>>());
         shared_ptr<vector<shared_ptr<Value>>> valueRow(new vector<shared_ptr<Value>>());
@@ -59,17 +61,17 @@ namespace db07 {
     }
 
     std::unique_ptr<Condition> Build_Plan::planCondition(Query_data &data) {
-//        TODO CAUSES BUILD FAILURE
-//        Query_condition condition = data.getConditions();
-//        while (condition.getNextCondition() != NULL) {
-//            unique_ptr<Condition> con = getOperation(condition, data);
-//            if(condition.getOperation() == "&&"){
-//                condition.getNextCondition();
-//                And_condition(con, getOperation(condition.getNextCondition(), data));
-//            }else if(condition.getOperation() == "||"){
-//
-//            }
-//        }
+        vector<Query_condition> &condition = data.getConditions();
+        vector<string> &booleanOperations = data.get_booleanOperations();
+        unique_ptr<Condition> current = getOperation(condition[0], data);
+        for (int i = 0; i < condition.size(); i++) {
+            if (booleanOperations[i] == "and") {
+                current = unique_ptr<Condition>(new And_condition(&*current, &*getOperation(condition[i + 1], data)));
+            } else if (booleanOperations[i] == "or") {
+                current = unique_ptr<Condition>(new Or_condition(&*current, &*getOperation(condition[i + 1], data)));
+            }
+        }
+        return current;
     }
 
     unique_ptr<Condition>
