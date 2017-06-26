@@ -14,8 +14,8 @@ std::unique_ptr<db07::Select_plan> Select_sales::plan(db07::Global_object_store 
     shared_ptr<Table> sales_table = global_object_store.tables().find("sales");
 
     unique_ptr<Condition> product_cond(
-        new And_condition(new Greater_equals_condition(0, unique_ptr<Value>(new Int_value(3))),
-            new Less_equals_condition(0, unique_ptr<Value>(new Int_value(11)))));
+        new And_condition(unique_ptr<Condition>(new Greater_equals_condition(0, unique_ptr<Value>(new Int_value(3)))),
+            unique_ptr<Condition>(new Less_equals_condition(0, unique_ptr<Value>(new Int_value(11))))));
     unique_ptr<Plan_node> product_node(new Table_scan(products_table, move(product_cond)));
 
     unique_ptr<Plan_node> sales_node(new Table_scan(sales_table));

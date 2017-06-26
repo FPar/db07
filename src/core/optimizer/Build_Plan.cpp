@@ -75,10 +75,10 @@ namespace db07 {
         unique_ptr<Condition> current = getOperation(condition[0], data);
         for (int i = 0; i < condition.size(); i++) {
             if (booleanOperations[i] == "and") {
-                current = unique_ptr<Condition>(new And_condition(&*current, &*getOperation(condition[i + 1], data)));
+                current = unique_ptr<Condition>(new And_condition(move(current), move(getOperation(condition[i + 1], data))));
             }
             else if (booleanOperations[i] == "or") {
-                current = unique_ptr<Condition>(new Or_condition(&*current, &*getOperation(condition[i + 1], data)));
+                current = unique_ptr<Condition>(new Or_condition(move(current), move(getOperation(condition[i + 1], data))));
             }
         }
         return current;
