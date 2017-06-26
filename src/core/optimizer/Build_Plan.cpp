@@ -105,7 +105,7 @@ namespace db07 {
 
         vector<string> &booleanOperations = data.get_booleanOperations();
         unique_ptr<Condition> current(getOperation(condition[0], data));
-        for (unsigned int i = 0; i < condition.size(); i++) {
+        for (unsigned int i = 0; i < condition.size() - 1; i++) {
             if (!booleanOperations.empty()) {
                 if (booleanOperations[i] == "and") {
                     unique_ptr<Condition> secondCondition(getOperation(condition[i + 1], data));
