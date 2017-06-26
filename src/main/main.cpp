@@ -54,6 +54,6 @@ int main(int argc, char **argv) {
 string read_command() {
     string command;
     cout << "db07 > " << flush;
-    cin >> command;
+    getline(cin, command);
     return command;
 }

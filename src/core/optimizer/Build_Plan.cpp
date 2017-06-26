@@ -16,26 +16,26 @@ using namespace std;
 namespace db07 {
 
 
-	unique_ptr<Plan> Build_Plan::build(Query_data &data) {
+    unique_ptr<Plan> Build_Plan::build(Query_data &data) {
         const Query_type type = data.getQuery_type();
 
         switch (type) {
-            case SELECT:
-                return planSelect(data);
-            case INSERT:
-                return planInsert(data);
-                break;
-            case DELETE:
-                break;
-            case UPDATE:
-                break;
-            case CREATE:
-                break;
+        case SELECT:
+            return planSelect(data);
+        case INSERT:
+            return planInsert(data);
+            break;
+        case DELETE:
+            break;
+        case UPDATE:
+            break;
+        case CREATE:
+            break;
         }
-		return unique_ptr<Plan>();
+        return unique_ptr<Plan>();
     }
 
-	unique_ptr<Insert_plan> Build_Plan::planInsert(Query_data &data) {
+    unique_ptr<Insert_plan> Build_Plan::planInsert(Query_data &data) {
         shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         shared_ptr<Table_definition> table_definition(products_table->definition());
         vector<Value *> values = (vector<Value *> &&) data.getColumnValues();
@@ -51,21 +51,33 @@ namespace db07 {
         return unique_ptr<Insert_plan>(new Insert_plan(move(source), products_table));
     }
 
-	unique_ptr<Select_plan> Build_Plan::planSelect(Query_data &data) {
+    unique_ptr<Select_plan> Build_Plan::planSelect(Query_data &data) {
         shared_ptr<Table> table = _global_object_store->tables().find(data.getTableName().front());
         std::unique_ptr<Condition> cond = planCondition(data);
-        unique_ptr<Plan_node> table_scan(new Table_scan(table, move(cond)));
+
+        Table_scan* ts;
+        if (cond == nullptr)
+            ts = new Table_scan(table, move(cond));
+        else
+            ts = new Table_scan(table);
+
+        unique_ptr<Plan_node> table_scan(ts);
         return unique_ptr<Select_plan>(new Select_plan(unique_ptr<Destination_receiver>(new Destination_receiver()), move(table_scan)));
     }
 
     std::unique_ptr<Condition> Build_Plan::planCondition(Query_data &data) {
         vector<Query_condition> &condition = data.getConditions();
+
+        if (condition.empty())
+            return unique_ptr<Condition>();
+
         vector<string> &booleanOperations = data.get_booleanOperations();
         unique_ptr<Condition> current = getOperation(condition[0], data);
         for (int i = 0; i < condition.size(); i++) {
             if (booleanOperations[i] == "and") {
                 current = unique_ptr<Condition>(new And_condition(&*current, &*getOperation(condition[i + 1], data)));
-            } else if (booleanOperations[i] == "or") {
+            }
+            else if (booleanOperations[i] == "or") {
                 current = unique_ptr<Condition>(new Or_condition(&*current, &*getOperation(condition[i + 1], data)));
             }
         }
@@ -73,9 +85,9 @@ namespace db07 {
     }
 
     unique_ptr<Condition>
-    Build_Plan::getOperation(Query_condition &condition, Query_data &data) {
+        Build_Plan::getOperation(Query_condition &condition, Query_data &data) {
         int col = _global_object_store->tables().find(data.getTableName().front())->definition()->column_id(
-                condition.getColumn());
+            condition.getColumn());
 
         string &op = condition.getOperation();
         if (op == "=") {
