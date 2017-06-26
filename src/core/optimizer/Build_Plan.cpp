@@ -16,14 +16,14 @@ using namespace std;
 namespace db07 {
 
 
-    void Build_Plan::build(Query_data &data) {
+	unique_ptr<Plan> Build_Plan::build(Query_data &data) {
         const Query_type type = data.getQuery_type();
 
         switch (type) {
             case SELECT:
-                planSelect(data);
+                return planSelect(data);
             case INSERT:
-                planInsert(data);
+                return planInsert(data);
                 break;
             case DELETE:
                 break;
@@ -32,9 +32,10 @@ namespace db07 {
             case CREATE:
                 break;
         }
+		return unique_ptr<Plan>();
     }
 
-    Insert_plan Build_Plan::planInsert(Query_data &data) {
+	unique_ptr<Insert_plan> Build_Plan::planInsert(Query_data &data) {
         shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         shared_ptr<Table_definition> table_definition(products_table->definition());
         vector<Value *> values = (vector<Value *> &&) data.getColumnValues();
@@ -47,17 +48,14 @@ namespace db07 {
         rows->push_back(unique_ptr<Row>(new Row(valueRow)));
 
         unique_ptr<Plan_node> source(new Insert_data_node(table_definition, move(rows)));
-        Insert_plan plan(Insert_plan(move(source), products_table));
-        return plan;
+        return unique_ptr<Insert_plan>(new Insert_plan(move(source), products_table));
     }
 
-    Select_plan Build_Plan::planSelect(Query_data &data) {
+	unique_ptr<Select_plan> Build_Plan::planSelect(Query_data &data) {
         shared_ptr<Table> table = _global_object_store->tables().find(data.getTableName().front());
         std::unique_ptr<Condition> cond = planCondition(data);
         unique_ptr<Plan_node> table_scan(new Table_scan(table, move(cond)));
-        Destination_receiver receiver(table->definition());
-        Select_plan select_plan(unique_ptr<Destination_receiver>(_receiver), move(table_scan));
-        return select_plan;
+        return unique_ptr<Select_plan>(new Select_plan(unique_ptr<Destination_receiver>(new Destination_receiver()), move(table_scan)));
     }
 
     std::unique_ptr<Condition> Build_Plan::planCondition(Query_data &data) {
