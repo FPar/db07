@@ -2,4 +2,5 @@
 /cmake-build-debug/
 /build/
 /.vs/
+/api/
 .DS_Store
