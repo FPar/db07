@@ -141,7 +141,7 @@ namespace db07 {
         if (op == "<=") {
             return unique_ptr<Condition>(new Less_equals_condition(col, unique_ptr<Value>(condition.getValue())));
         }
-        if (op == "<=") {
+        if (op == ">=") {
             return unique_ptr<Condition>(new Greater_equals_condition(col, unique_ptr<Value>(condition.getValue())));
         }
         if (op == "<") {
