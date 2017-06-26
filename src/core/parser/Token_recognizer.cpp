@@ -53,7 +53,7 @@ namespace db07 {
             new Regex_recognition_rule("[a-z][a-z0-9_]*", token_type::IDENTIFIER, [](const std::string &token_string) {
                 for (auto token_chr = token_string.begin(); token_chr != token_string.end(); token_chr++) {
                     if ((token_chr == token_string.begin() && !isalpha(*token_chr))
-                        || !isalnum(*token_chr)) {
+                        || !(isalnum(*token_chr) || *token_chr == '_')) {
                         return false;
                     }
                 }

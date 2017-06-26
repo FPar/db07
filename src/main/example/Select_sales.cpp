@@ -14,8 +14,8 @@ std::unique_ptr<db07::Select_plan> Select_sales::plan(db07::Global_object_store 
     shared_ptr<Table> sales_table = global_object_store.tables().find("sales");
 
     unique_ptr<Condition> product_cond(
-        new And_condition(new Greater_equals_condition(0, unique_ptr<Value>(new Int_value(3))),
-            new Less_equals_condition(0, unique_ptr<Value>(new Int_value(11)))));
+        new And_condition(unique_ptr<Condition>(new Greater_equals_condition(0, unique_ptr<Value>(new Int_value(3)))),
+            unique_ptr<Condition>(new Less_equals_condition(0, unique_ptr<Value>(new Int_value(11))))));
     unique_ptr<Plan_node> product_node(new Table_scan(products_table, move(product_cond)));
 
     unique_ptr<Plan_node> sales_node(new Table_scan(sales_table));
@@ -28,7 +28,7 @@ std::unique_ptr<db07::Select_plan> Select_sales::plan(db07::Global_object_store 
     vector<string> proj_columns{ "product_id", "product_name", "product_price", "sales_cust_id", "sales_cust_name", "sales_units" };
     unique_ptr<Projection> proj(new Projection(*join_node->definition(), proj_columns));
 
-    unique_ptr<Destination_receiver> destination_receiver(new Destination_receiver(proj->definition()));
+    unique_ptr<Destination_receiver> destination_receiver(new Destination_receiver());
 
     unique_ptr<Select_plan> plan(new Select_plan(move(destination_receiver), move(join_node), move(proj)));
     return plan;

@@ -1,17 +1,18 @@
 #ifndef AND_CONDITION_H
 #define AND_CONDITION_H
 
+#include <memory>
 #include "Condition.h"
 
 namespace db07 {
     class And_condition : public Condition {
     private:
-        Condition *_a;
-        Condition *_b;
+        std::unique_ptr<Condition> _a;
+        std::unique_ptr<Condition> _b;
 
     public:
-        And_condition(Condition *a, Condition *b)
-            : _a(a), _b(b)
+        And_condition(std::unique_ptr<Condition> a, std::unique_ptr<Condition> b) :
+            _a(move(a)), _b(move(b))
         {
         }
 

@@ -5,7 +5,7 @@
 
 namespace db07 {
 
-     Query_type Query_data::getQuery_type() const {
+    Query_type Query_data::getQuery_type() const {
         return _queryType;
     }
 
@@ -17,8 +17,8 @@ namespace db07 {
         return _primaryKey;
     }
 
-    std::vector<Query_condition> &Query_data::getConditions()  {
-        return _condition;
+    std::vector<Query_condition> &Query_data::getConditions() {
+        return _conditions;
     }
 
     std::vector<Value*> &Query_data::getColumnValues() {
@@ -26,7 +26,7 @@ namespace db07 {
 
     }
 
-     std::vector<std::string> &Query_data::getColumnNames() {
+    std::vector<std::string> &Query_data::getColumnNames() {
         return _columnNames;
     }
 
@@ -34,7 +34,7 @@ namespace db07 {
         Query_data::_queryType = _queryType;
     }
 
-    std::vector<std::string> &Query_data::get_booleanOperations() {
+    std::vector<std::string> &Query_data::get_booleanOperations()  {
         return _booleanOperations;
     }
 }

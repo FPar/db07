@@ -8,14 +8,14 @@
 namespace db07 {
     class Destination_receiver {
     private:
-        const std::shared_ptr<Table_definition> _description;
+        std::shared_ptr<Table_definition> _description;
 
         void horizontal_line();
 
     public:
-        Destination_receiver(const std::shared_ptr<Table_definition> &description);
-
         ~Destination_receiver();
+
+		void init(const std::shared_ptr<Table_definition> &description);
 
         void receive(Row &row);
     };

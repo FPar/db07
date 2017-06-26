@@ -19,7 +19,7 @@ namespace db07 {
         /**List of primaryKey for the create statement.*/
         std::vector<std::string> _primaryKey;
         /**List of condition in an query statement.*/
-        std::vector<Query_condition> _condition;
+        std::vector<Query_condition> _conditions;
 
         /**
          * List of pair of column name and value.
