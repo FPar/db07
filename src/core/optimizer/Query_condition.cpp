@@ -2,16 +2,12 @@
 #include "optimizer/Query_condition.h"
 
 namespace db07 {
-     std::string &Query_condition::getColumn()  {
+    std::string &Query_condition::getColumn() {
         return _column;
     }
 
-     std::string &Query_condition::getOperation()  {
+    std::string &Query_condition::getOperation() {
         return _operation;
-    }
-
-    Value* Query_condition::getValue()  {
-        return _value;
     }
 
     void Query_condition::set_column(const std::string &_column) {
@@ -22,10 +18,18 @@ namespace db07 {
         Query_condition::_operation = _operation;
     }
 
-    void Query_condition::set_value(Value *_value) {
-        Query_condition::_value = _value;
+
+    Value *Query_condition::getValue() {
+        return Query_condition::_value;
     }
 
+    void Query_condition::set_value(Value *value) {
+        if (value->type()->name() == "Int") {
+            Query_condition::_value = (new Int_value(((Int_value *) value)->data()));
+        } else if (value->type()->name() == "Varchar") {
+            Query_condition::_value = (new Varchar_value(((Varchar_value *) value)->to_string()));
+        }
+    }
 
 
 }

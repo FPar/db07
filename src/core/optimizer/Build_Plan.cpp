@@ -60,6 +60,8 @@ namespace db07 {
         shared_ptr<Table> table = _global_object_store->tables().find(data.getTableName().front());
         std::unique_ptr<Condition> cond = planCondition(data);
 
+        unique_ptr<Condition> product_cond(
+                unique_ptr<Condition>(new Equals_condition(0, unique_ptr<Value>(new Int_value(20)))));
 
         Table_scan *ts;
         if (cond != nullptr)
@@ -69,8 +71,9 @@ namespace db07 {
 
         unique_ptr<Plan_node> table_scan(ts);
         unique_ptr<Projection> proj = planProjection(*table_scan, data);
+        unique_ptr<Destination_receiver> destination_receiver(new Destination_receiver());
         unique_ptr<Plan> select_plan(
-                new Select_plan(unique_ptr<Destination_receiver>(new Destination_receiver()), move(table_scan),
+                new Select_plan(move(destination_receiver), move(table_scan),
                                 move(proj)));
         return select_plan;
     }
@@ -81,7 +84,7 @@ namespace db07 {
      * @param data Query data contains the column names needed for the projection
      * @return  unique pointer of a projection
      */
-    unique_ptr<Projection> Build_Plan::planProjection(Plan_node& table_scan, Query_data &data) {
+    unique_ptr<Projection> Build_Plan::planProjection(Plan_node &table_scan, Query_data &data) {
         shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         vector<string> proj_columns = (vector<string> &&) data.getColumnNames();
         unique_ptr<Projection> proj(new Projection(*table_scan.definition(), proj_columns));
@@ -101,15 +104,17 @@ namespace db07 {
             return unique_ptr<Condition>();
 
         vector<string> &booleanOperations = data.get_booleanOperations();
-        unique_ptr<Condition> current = getOperation(condition[0], data);
+        unique_ptr<Condition> current(getOperation(condition[0], data));
         for (unsigned int i = 0; i < condition.size(); i++) {
             if (!booleanOperations.empty()) {
                 if (booleanOperations[i] == "and") {
+                    unique_ptr<Condition> secondCondition(getOperation(condition[i + 1], data));
                     current = unique_ptr<Condition>(
-                            new And_condition(move(current), move(getOperation(condition[i + 1], data))));
+                            new And_condition(move(current), move(secondCondition)));
                 } else if (booleanOperations[i] == "or") {
+                    unique_ptr<Condition> secondCondition(getOperation(condition[i + 1], data));
                     current = unique_ptr<Condition>(
-                            new Or_condition(move(current), move(getOperation(condition[i + 1], data))));
+                            new Or_condition(move(current), move(secondCondition)));
                 }
             }
         }
@@ -126,7 +131,6 @@ namespace db07 {
     Build_Plan::getOperation(Query_condition &condition, Query_data &data) {
         int col = _global_object_store->tables().find(data.getTableName().front())->definition()->column_id(
                 condition.getColumn());
-
         string &op = condition.getOperation();
         if (op == "=") {
             return unique_ptr<Condition>(new Equals_condition(col, unique_ptr<Value>(condition.getValue())));
