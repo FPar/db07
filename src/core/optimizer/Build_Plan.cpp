@@ -62,13 +62,13 @@ namespace db07 {
 
 
         Table_scan *ts;
-        if (cond == nullptr)
+        if (cond != nullptr)
             ts = new Table_scan(table, move(cond));
         else
             ts = new Table_scan(table);
 
         unique_ptr<Plan_node> table_scan(ts);
-        unique_ptr<Projection> proj = planProjection(move(table_scan), data);
+        unique_ptr<Projection> proj = planProjection(*table_scan, data);
         unique_ptr<Plan> select_plan(
                 new Select_plan(unique_ptr<Destination_receiver>(new Destination_receiver()), move(table_scan),
                                 move(proj)));
@@ -81,10 +81,10 @@ namespace db07 {
      * @param data Query data contains the column names needed for the projection
      * @return  unique pointer of a projection
      */
-    unique_ptr<Projection> Build_Plan::planProjection(unique_ptr<Plan_node> table_scan, Query_data &data) {
+    unique_ptr<Projection> Build_Plan::planProjection(Plan_node& table_scan, Query_data &data) {
         shared_ptr<Table> products_table = _global_object_store->tables().find(data.getTableName().front());
         vector<string> proj_columns = (vector<string> &&) data.getColumnNames();
-        unique_ptr<Projection> proj(new Projection(*table_scan->definition(), proj_columns));
+        unique_ptr<Projection> proj(new Projection(*table_scan.definition(), proj_columns));
         return proj;
     }
 

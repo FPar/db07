@@ -33,7 +33,7 @@ namespace db07 {
 
         std::unique_ptr<Condition> getOperation(Query_condition &condition, Query_data &data);
 
-        std::unique_ptr<Projection> planProjection(std::unique_ptr<Plan_node> table_scan, Query_data &data);
+        std::unique_ptr<Projection> planProjection(Plan_node& table_scan, Query_data &data);
     };
 }
 
