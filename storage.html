@@ -161,6 +161,18 @@
             
   <div class="section" id="data-store">
 <h1>Data Store<a class="headerlink" href="#data-store" title="Link zu dieser Überschrift">¶</a></h1>
+<ul class="simple">
+<li>Die Daten werden abgespeichert in einem B+Tree.</li>
+<li>Dabei handelt es sich um einen vollständig balancierten Baum.</li>
+<li>Die Daten sind in den Leafnodes enthalten. Jedes Leafnode enthält vier Datensätze.</li>
+<li>Es wird im voraus schon festgelegt wie viele Elemente in einem Knoten enthalten sein darf. In Aktuelle Implementierung enthält jeder Knoten vier keys und fünf Pointer auf seine Kindelemente</li>
+<li>Bereits beim Löschen und Einfügen wird der Baum balanciert.</li>
+<li>Durch das Balancieren wächst der Baum erst nach dem kompletten Füllen einer Breitenebene um eine Ebene in die Tiefe. Dadurch werden Operationen wie der IndexScan stark beschleunigt.</li>
+</ul>
+<div class="figure align-center" id="id1">
+<img alt="_images/B+tree.png" src="_images/B+tree.png" />
+<p class="caption"><span class="caption-text">Beispielhafte Darstellung eines B+Trees.</span></p>
+</div>
 </div>
 
 
