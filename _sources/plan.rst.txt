@@ -48,6 +48,11 @@ werden. Die Tabellenbeschreibung der Projektions-Definition wird aus der Tabelle
 des Root Nodes des Execution Trees und einer Liste von Spaltennamen gebildet. Damit kann die
 Projektion als letzter Schritt auf jeden beliebigen Query angewendet werden.
 
+.. figure::  join_plan.png
+   :align:   center
+   
+   Der Plan eines Joins mit zwei Tabellen.
+
 INSERT
 ------
 
