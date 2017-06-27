@@ -30,22 +30,26 @@ int main(int argc, char **argv) {
         i->execute();
         i = insert_data.sales(object_store);
         i->execute();
-
-        Select_sales select_sales;
-        unique_ptr<Select_plan> s = select_sales.plan(object_store);
-        s->execute();
     }
 
     string command;
     while ((command = read_command()) != "exit") {
-        Lexer l;
-        auto tokens = l.tokenize(command);
-        Parser p;
-        p.parse(tokens);
-        auto query = p.query_data();
-        Build_Plan b(&object_store, new Destination_receiver());
-        unique_ptr<Plan> plan = b.build(query);
-        plan->execute();
+        if (command == "join_example") {
+            Select_sales select_sales;
+            unique_ptr<Select_plan> s = select_sales.plan(object_store);
+            s->execute();
+        }
+        else
+        {
+            Lexer l;
+            auto tokens = l.tokenize(command);
+            Parser p;
+            p.parse(tokens);
+            auto query = p.query_data();
+            Build_Plan b(&object_store, new Destination_receiver());
+            unique_ptr<Plan> plan = b.build(query);
+            plan->execute();
+        }
     }
 
     return 0;
